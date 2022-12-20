@@ -1,0 +1,42 @@
+### get all
+GET  http://localhost:3000/jobs/
+
+### search for a word
+GET  http://localhost:3000/jobs/?q=de7k
+
+
+### get scpecific one correct
+GET  http://localhost:3000/jobs/63a1dbb8b4a47f5e085b9dbf
+
+### get scpecific one not correct
+GET  http://localhost:3000/jobs/639b7c4511f314399db24111
+
+### create one
+POST http://localhost:3000/jobs/
+Content-Type: application/json
+
+{
+  "posted_by_id": 2,
+  "job_type_id": 2,
+  "job_description": "i need a professional cashier for 2 days",
+  "job_location_id": 2
+}
+
+
+### delete one
+DELETE http://localhost:3000/jobs/63a1e1aced38843b5f4a3512
+
+### update one
+PATCH http://localhost:3000/jobs/63a1b483331082f6889e4862
+Content-Type: application/json
+
+{
+"is_active" : false
+}
+
+###
+
+
+
+
+
