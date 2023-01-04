@@ -18,6 +18,8 @@ db.on('open', (error) => console.log("Connected to MongoDB"))
 
 //json middleware
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+
 
 // todo: adding authentication / authorization middlewares
 

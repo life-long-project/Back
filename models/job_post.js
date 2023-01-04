@@ -13,7 +13,7 @@ const job_post_schema = new mongoose.Schema({
         job_description: {
             type: String,
             required: true,
-            // index:true
+            default: "this is a test description, don't judge, um just fake one."
         },
         job_location_id: {
             type: String,
@@ -29,13 +29,43 @@ const job_post_schema = new mongoose.Schema({
             required: true,
             default: false
         },
+
+        // example data below not for real db just for initial testing
+        job_name: {
+            type: String,
+            required: true,
+            default: "Test job"
+        },
+        publisher: {
+            type: String,
+            required: true,
+            default: "TEST PUBLISHER"
+
+        },
+        job_type: {
+            type: String,
+            required: true,
+            default: "Full job"
+        },
+        salary: {
+            type: String,
+            required: true,
+            default: "1000"
+        },
+        //todo: don't forget handle the size of images max < 16MB when upload it to our cloud or server
+        //todo: we can use CDN (s3 aws, cloudnary) after some developing
+        job_img_url: {
+            type: String,
+            required: true,
+            default: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
+        }
     },
     {
         timestamps: true,
-        autoIndex:true
+        autoIndex: true
     }
 )
-job_post_schema.index({job_description:'text'})
+job_post_schema.index({job_description: 'text'})
 const job_post_model = mongoose.model("job_post", job_post_schema)
 job_post_model.createIndexes()
 module.exports = job_post_model

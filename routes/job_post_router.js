@@ -3,13 +3,35 @@ const router = express.Router()
 const Job_post = require("../models/job_post")
 const {isValidObjectId} = require("mongoose");
 
+// const multer = require('multer')
+
+// const upload = multer({
+//     dest: '../uploads/',
+//     // todo: adding some limits to files
+//     limits: {
+//         fieldSize : 16e6, // 16MB
+//         files:1,
+//
+//     }
+// })
+
+// router.post('/img', upload.single('job_img'), (req, res) => {
+//     // req.file is the name of your file in the form above, here 'uploaded_file'
+//     // req.body will hold the text fields, if there were any
+//     console.log(req.file, req.body)
+//     res.send(req.file)
+//
+// })
+
 //todo: don't forget to make an index in your collection to search for a word
 
 
 //getting all data for home page or search with ?q=query
 router.get('/', async (req, res) => {
     console.log(req.query.q)
+
     if (req.query.q != null) {
+        //search for a word in description or title
         try {
             const jobs = await Job_post.find({
                 $text: {
@@ -31,8 +53,6 @@ router.get('/', async (req, res) => {
 
 })
 
-//search for a word in description or title
-
 
 //create new job post
 router.post('/', async (req, res) => {
@@ -40,7 +60,13 @@ router.post('/', async (req, res) => {
         posted_by_id: req.body.posted_by_id,
         job_type_id: req.body.job_type_id,
         job_description: req.body.job_description,
-        job_location_id: req.body.job_location_id
+        job_location_id: req.body.job_location_id,
+        // for testing not db
+        job_name: req.job_name,
+        publisher: req.publisher,
+        job_type: req.job_type,
+        salary: req.salary,
+        job_img_url: req.job_img_url,
     })
     try {
         const new_job_post = await job.save()
@@ -74,6 +100,22 @@ router.patch('/:id', get_job_post, async (req, res) => {
     }
     if (req.body.is_hidden != null) {
         res.job_post.is_hidden = req.body.is_hidden
+    }
+    // for testing not db
+    if (req.body.job_name != null) {
+        res.job_post.job_name = req.body.job_name
+    }
+    if (req.body.publisher != null) {
+        res.job_post.publisher = req.body.publisher
+    }
+    if (req.body.job_type != null) {
+        res.job_post.job_type = req.body.job_type
+    }
+    if (req.body.salary != null) {
+        res.job_post.salary = req.body.salary
+    }
+    if (req.body.job_img_url != null) {
+        res.job_post.job_img_url = req.body.job_img_url
     }
     try {
         const updated_jop_post = await res.job_post.save()
