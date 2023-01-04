@@ -19,7 +19,7 @@ GET  http://back-ph2h.onrender.com/jobs/
 ``` 
 search for a word
 -----------------
-GET  http://back-ph2h.onrender.com/jobs/?q=de7k
+GET  http://back-ph2h.onrender.com/jobs/?q=word
 ```
 
 ```
