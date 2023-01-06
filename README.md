@@ -1,6 +1,6 @@
 ## Back
 
-#### update 1/5/2023
+#### update 5/1/2023
 
 we made a deploying for this repo
 ` https://back-ph2h.onrender.com/jobs `
@@ -13,12 +13,14 @@ we made a deploying for this repo
 ```
 get all jobs
 ------------
+
 GET  http://back-ph2h.onrender.com/jobs/
 ```
 
 ``` 
 search for a word
 -----------------
+
 GET  http://back-ph2h.onrender.com/jobs/?q=word
 ```
 
