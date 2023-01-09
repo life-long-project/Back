@@ -2,7 +2,7 @@ require("dotenv").config()
 
 const express = require('express')
 const app = express()
-
+const cors = require('cors')
 const mongoose = require("mongoose")
 
 // Mongo db
@@ -13,26 +13,25 @@ db.on('error', (error) => console.error(error))
 db.on('open', (error) => console.log("Connected to MongoDB"))
 
 
-
 //back-end magic
+//todo: don't forget to delete CORS
 
-app.use((req,res,next)=>{
-    res.header("Access-Control-Allow-Origin","*")
-    res.header("Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-    )
-    if(req.method === 'OPTIONS'){
-        res.header("Access-Control-Allow-Methods","GET, POST, PATCH, DELETE")
+// CORS is enabled for all origins
+app.use(cors());
+
+// middleware for OPTIONS method
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
         return res.status(200).json();
     }
     next()
 })
 
 
-
 //json middleware
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 
 // todo: adding authentication / authorization middlewares
