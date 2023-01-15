@@ -2,7 +2,7 @@
 GET  http://localhost:3000/jobs/
 
 ### search for a word
-GET  http://localhost:3000/jobs/?q=de7k
+GET  http://localhost:3000/jobs/?q=word
 
 
 ### get scpecific one correct
