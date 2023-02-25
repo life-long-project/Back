@@ -5,31 +5,87 @@ const {isValidObjectId} = require("mongoose");
 
 
 
-
 //getting all data for home page or search with ?q=query
 router.get('/', async (req, res) => {
-    console.log(req.query.q)
 
-    if (req.query.q != null) {
-        //search for a word in description or title
-        try {
-            const jobs = await Job_post.find({
-                $text: {
-                    $search: req.query.q
+
+    try {
+
+        // getting skills from job_post collection
+        const skills_db = await Job_post.aggregate([
+            {$unwind: '$job_skills'},
+            {
+                $group: {
+                    _id: "$job_skills",
+                    count: {$sum: 1},
                 }
-            })
-            res.json(jobs)
-        } catch (err) {
-            res.status(500).json({message: err.message})
+            },
+            {
+                $sort: { count : -1}
+            }
+        ]).exec()
+        let skills_arr = []
+        skills_db.forEach((skill) => {
+            skills_arr.push(skill._id)
+        })
+        if (skills_arr.length === 0) {
+            skills_arr = [""]
         }
-    } else {
-        try {
-            const jobs = await Job_post.find()
-            res.json(jobs)
-        } catch (err) {
-            res.status(500).json({message: err.message})
+
+
+        const page = parseInt(req.query.page) - 1 || 0
+        const limit = parseInt(req.query.limit) || 10
+        const search = req.query.search || ""
+        let sort = req.query.sort || "createdAt"
+        let skills = req.query.skills || "ALL"
+
+        skills === "ALL" ? (skills = [...skills_arr]) : (skills = req.query.skills.split(","))
+        req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort])
+
+        let sortBy = {}
+        if (sort[1]) {
+            sortBy[sort[0]] = sort[1]
+        } else {
+            sortBy[sort[0]] = "desc"
         }
+
+
+        const jobs = await Job_post.find({
+            $or: [
+                {job_name: {$regex: search, $options: "i"}},
+                {job_description: {$regex: search, $options: "i"}}
+            ]
+        })
+            .where("job_skills")
+            .in([...skills])
+            .sort(sortBy)
+            .skip(page * limit)
+            .limit(limit)
+
+        const total = await Job_post.countDocuments({
+            $or: [
+                {job_name: {$regex: search, $options: "i"}},
+                {job_description: {$regex: search, $options: "i"}}
+            ],
+            job_skills: {$in: [...skills]},
+        })
+
+        const response = {
+            error:false,
+            search,
+            page:page+1,
+            limit,
+            total,
+            skills,
+            jobs,
+        }
+
+        res.json(response)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({message: err.message})
     }
+
 
 })
 

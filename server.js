@@ -9,7 +9,7 @@ const mongoose = require("mongoose")
 mongoose.set("strictQuery", false);
 mongoose.connect(process.env.DB_URL);
 const db = mongoose.connection
-db.on('error', (error) => console.error(error))
+db.on('error', (error) => console.error("Error while connecting to mongodb " + error))
 db.on('open', (error) => console.log("Connected to MongoDB"))
 
 
@@ -43,4 +43,5 @@ app.use('/jobs', job_post_router)
 
 
 // deploy server
-app.listen(3000, () => console.log("server had started"))
+const port = process.env.PORT || 3000
+app.listen(port, () => console.log(`server had started on port: ${port}`))

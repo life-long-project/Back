@@ -1,0 +1,55 @@
+### get all
+GET   http://back-ph2h.onrender.com/jobs/
+
+### search for a word
+GET   http://back-ph2h.onrender.com/jobs/?q=Barista
+
+### search for a word 2
+GET   http://back-ph2h.onrender.com/jobs/?is_hidden=false
+
+
+### get scpecific one correct
+GET   http://back-ph2h.onrender.com/jobs/63f9336d071672ad1cbb1bdc
+
+### get scpecific one not correct
+GET   http://back-ph2h.onrender.com/jobs/not_correct_id
+
+### create one
+POST  http://back-ph2h.onrender.com/jobs/
+Content-Type: application/json
+
+{
+  "posted_by_id": "2",
+  "job_name": "barista job",
+  "job_description": "i need a professional barista.",
+  "job_skills": [
+    "javascript",
+    "angular",
+    "coffee"
+  ],
+  "job_type": "part job",
+  "job_location": "test",
+  "salary": "50",
+  "job_duration": "2 hours",
+  "job_img_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
+}
+
+
+### delete one
+DELETE  http://back-ph2h.onrender.com/jobs/63f93318071672ad1cbb1bd5
+
+### update one
+PATCH  http://back-ph2h.onrender.com/jobs/63f93300f125a58f66f223c7
+Content-Type: application/json
+
+{
+  "is_active": false,
+  "job_name": "Test Name changed"
+}
+
+###
+
+
+
+
+

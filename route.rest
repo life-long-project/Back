@@ -4,6 +4,11 @@ GET   http://localhost:3000/jobs/
 ### search for a word
 GET   http://localhost:3000/jobs/?q=Barista
 
+### search for a word 2
+GET   http://localhost:3000/jobs/?is_hidden=false
+
+### all attributes you can use when retrieving jobs
+GET   http://localhost:3000/jobs/?page=4&limit=3&skills=sum,add&sort=job_name,asc&search=calc
 
 ### get scpecific one correct
 GET   http://localhost:3000/jobs/63f90e617142864d0104f59d
@@ -17,12 +22,12 @@ Content-Type: application/json
 
 {
   "posted_by_id": "2",
-  "job_name": "barista job",
-  "job_description": "i need a professional barista.",
+  "job_name": "cashier job",
+  "job_description": "i need a calculator man.",
   "job_skills": [
-    "javascript",
-    "angular",
-    "coffee"
+    "calc",
+    "sum",
+    "add"
   ],
   "job_type": "part job",
   "job_location": "test",
