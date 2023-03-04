@@ -1,0 +1,17 @@
+### get all profiles for admin : 
+
+
+
+
+
+### get one profile : 
+
+
+
+
+### update user profile :
+
+
+
+
+### delete user profile for admin :
