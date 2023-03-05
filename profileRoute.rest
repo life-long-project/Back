@@ -1,17 +1,53 @@
 ### get all profiles for admin : 
 
+ get request
+https://jobseeker-profile-api.onrender.com/profile
 
 
 
-
-### get one profile : 
-
-
-
-
-### update user profile :
+###### get one profile : 
+ 
+ get request
+https://jobseeker-profile-api.onrender.com/profile/6403c7ddc6e353894f3ae9e8
 
 
+###### update user profile :
+https://jobseeker-profile-api.onrender.com/profile/6403c7ddc6e353894f3ae9e8
+content type : application/json
+
+patch request
+{
+    "userName": "our best user",
+    "bio": " test test test ",
+}
 
 
-### delete user profile for admin :
+
+###### create new profile with signUp 
+https://jobseeker-profile-api.onrender.com/profile
+ 
+ post request 
+ {
+        "is_reported": false,
+        "is_admin": false,
+        "userName": "khaled yasser",
+        "bio": "i'am a professional photographer",
+        "age": 23,
+        "following": false,
+        "location": "tanta",
+        "skills": [
+            "wedding,party,product marketing"
+        ],
+        "past_jobs": ["i have worked as a photographer for my shot company for two years"],
+        "rate_quantity": 2,
+        "rate_average": 3.5,
+        "feed_back": [
+            "this user doesn't have any feedback yet "
+        ]
+    }
+
+
+###### delete user profile for admin :
+delete request
+https://jobseeker-profile-api.onrender.com/profile/64025a13ce6b430d475f250a
+
