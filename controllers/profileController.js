@@ -12,7 +12,7 @@ exports.createProfile = async (req, res, next) => {
   } catch (err) {
     res.status(400).json({
       status: "failed",
-      message: err,
+      message: err.message,
     });
   }
 };
