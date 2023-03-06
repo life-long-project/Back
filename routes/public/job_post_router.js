@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Job_post = require("../models/job_post")
+const Job_post = require("../../models/job_post")
 const {isValidObjectId} = require("mongoose");
 
 

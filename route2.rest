@@ -7,12 +7,14 @@ GET   http://back-ph2h.onrender.com/jobs/?q=Barista
 ### search for a word 2
 GET   http://back-ph2h.onrender.com/jobs/?is_hidden=false
 
+### all attributes you can use when retrieving jobs
+GET   http://back-ph2h.onrender.com/jobs/?page=4&limit=3&skills=sum,add&sort=job_name,asc&search=calc
 
 ### get scpecific one correct
-GET   http://back-ph2h.onrender.com/jobs/63f9336d071672ad1cbb1bdc
+GET   http://back-ph2h.onrender.com/jobs/63f90e617142864d0104f59d
 
 ### get scpecific one not correct
-GET   http://back-ph2h.onrender.com/jobs/not_correct_id
+GET   http://back-ph2h.onrender.com/jobs/63f90e617142864d0104f59
 
 ### create one
 POST  http://back-ph2h.onrender.com/jobs/
@@ -20,12 +22,12 @@ Content-Type: application/json
 
 {
   "posted_by_id": "2",
-  "job_name": "barista job",
-  "job_description": "i need a professional barista.",
+  "job_name": "cashier job",
+  "job_description": "i need a calculator man.",
   "job_skills": [
-    "javascript",
-    "angular",
-    "coffee"
+    "calc",
+    "sum",
+    "add"
   ],
   "job_type": "part job",
   "job_location": "test",
@@ -36,10 +38,10 @@ Content-Type: application/json
 
 
 ### delete one
-DELETE  http://back-ph2h.onrender.com/jobs/63f93318071672ad1cbb1bd5
+DELETE  http://back-ph2h.onrender.com/jobs/63b6046a8b09739ef4262a97
 
 ### update one
-PATCH  http://back-ph2h.onrender.com/jobs/63f93300f125a58f66f223c7
+PATCH  http://back-ph2h.onrender.com/jobs/63f90e617142864d0104f59d
 Content-Type: application/json
 
 {
@@ -47,7 +49,45 @@ Content-Type: application/json
   "job_name": "Test Name changed"
 }
 
-###
+### ALL profile
+GET  http://back-ph2h.onrender.com/profile/
+
+### specific profile
+GET  http://back-ph2h.onrender.com/profile/6404cd479927546a009aeee0
+
+### delete profile
+DELETE http://back-ph2h.onrender.com/profile/6404cd479927546a009aeee0
+
+### update profile
+PATCH  http://back-ph2h.onrender.com/profile/
+Content-Type: application/json
+
+{
+  "userName": "our best user",
+  "bio": " test test test "
+}
+
+### create profile
+POST  http://back-ph2h.onrender.com/profile/
+Content-Type: application/json
+
+{
+  "userName": "khaled yasser",
+  "bio": "i'am a professional photographer",
+  "age": 23,
+  "location": "tanta",
+  "skills": [
+    "wedding",
+    "party",
+    "product",
+    "marketing"
+  ],
+  "past_jobs": [
+    "i have worked as a photographer for my shot company for two years"
+  ]
+}
+
+
 
 
 
