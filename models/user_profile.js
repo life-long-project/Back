@@ -72,11 +72,11 @@ const user_profile_schema = new mongoose.Schema(
       // required: true,
       default: 0,
     },
-    profile_image: {
+    profilePicture: {
       type: String,
       //   required: [true, "a user must have an image"],
     },
-    user_image_url: {
+    profilePictureUrl: {
       type: String,
       // required: false,
       default:

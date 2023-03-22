@@ -1,11 +1,46 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const userSchema = require("./user_schema");
 
-const user_types_schema = new mongoose.Schema({
-    // user_types attributes
-    type:{
-        type : String,
-        required: true,
-    },
-})
+// Admin schema
+const adminSchema = new mongoose.Schema({
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
+  role: {
+    type: String,
+    default: "admin",
+  },
+  permissions: {
+    type: [String],
+    default: ["read", "write", "delete"],
+  },
+  user: {
+    type: userSchema,
+    required: true,
+  },
+});
 
-module.exports = mongoose.model("user_types",user_types_schema)
+// jobSeeker schema
+const seekerSchema = new mongoose.Schema({
+  isSeeker: {
+    type: Boolean,
+    default: true,
+  },
+  user: {
+    type: userSchema,
+    required: true,
+  },
+});
+
+// Employer schema
+const employerSchema = new mongoose.Schema({
+  isEmployer: {
+    type: Boolean,
+    default: true,
+  },
+  user: {
+    type: userSchema,
+    required: true,
+  },
+});

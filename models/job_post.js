@@ -56,6 +56,11 @@ const job_post_schema = new mongoose.Schema(
       required: true,
       default: "1",
     },
+    is_reported: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
 
     //todo: don't forget handle the size of images max < 16MB when upload it to our cloud or server
     //todo: we can use CDN (s3 aws, cloudnary) after some developing
