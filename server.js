@@ -3,9 +3,6 @@ require('./auth/auth');
 const routes = require('./routes/auth/auth_routes');
 const secureRoute = require('./routes/secure/secure_routes');
 
-
-
-
 const express = require("express");
 const app = express();
 const cors = require("cors");

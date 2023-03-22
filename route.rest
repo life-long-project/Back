@@ -88,15 +88,15 @@ Content-Type: application/json
 }
 
 ### secure profile
-GET  http://localhost:3000/user/profile/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MDVmY2U3MDM5YTUxNmYzNzZlNjA5MiIsImVtYWlsIjoidGVzdCJ9LCJpYXQiOjE2NzgxMTQwNDZ9.xQ_9t-mscHPKi7Op17qllTGGYz4Qufu3oH6wB__PRDU
+GET  http://localhost:3000/user/profile/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NDk3MTU5fQ.DkYRR-1u_ixbRdGqP5MPSVUviGn9tcYyL9HLAUy4KvE
 
 ### signup
 POST  http://localhost:3000/signup
 Content-Type: application/json
 
 {
-"email":"test",
-"password":"test"
+"email":"test3",
+"password":"test3"
 }
 
 ### login
@@ -104,8 +104,8 @@ POST  http://localhost:3000/login
 Content-Type: application/json
 
 {
-"email":"test",
-"password":"test"
+"email":"test3",
+"password":"test3"
 }
 
 

@@ -1,12 +1,13 @@
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const jwt_secret = process.env.JWT_SECRET || 'jwt_secret';
 
 const router = express.Router();
 
 router.post(
     '/signup',
-    passport.authenticate('signup', { session: false }),
+    passport.authenticate('signup', {session: false}),
     async (req, res, next) => {
         res.json({
             message: 'Signup successful',
@@ -29,14 +30,14 @@ router.post(
 
                     req.login(
                         user,
-                        { session: false },
+                        {session: false},
                         async (error) => {
                             if (error) return next(error);
 
-                            const body = { _id: user._id, email: user.email };
-                            const token = jwt.sign({ user: body }, 'TOP_SECRET');
+                            const body = {_id: user._id, email: user.email};
+                            const token = jwt.sign({user: body}, jwt_secret);
 
-                            return res.json({ token });
+                            return res.json({"Authorization": token});
                         }
                     );
                 } catch (error) {
