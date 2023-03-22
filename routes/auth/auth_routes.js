@@ -37,7 +37,7 @@ router.post(
                             const body = {_id: user._id, email: user.email};
                             const token = jwt.sign({user: body}, jwt_secret);
 
-                            return res.json({"Authorization": token});
+                            return res.json({"authorization": token});
                         }
                     );
                 } catch (error) {

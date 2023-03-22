@@ -87,8 +87,12 @@ Content-Type: application/json
   ]
 }
 
-### secure profile
+### secure profile with correct token
 GET  http://localhost:3000/user/profile/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NDk3MTU5fQ.DkYRR-1u_ixbRdGqP5MPSVUviGn9tcYyL9HLAUy4KvE
+
+### secure profile without token / incorrect token
+GET  http://localhost:3000/user/profile/
+
 
 ### signup
 POST  http://localhost:3000/signup
@@ -104,8 +108,8 @@ POST  http://localhost:3000/login
 Content-Type: application/json
 
 {
-"email":"test3",
-"password":"test3"
+"email":"test2",
+"password":"test2"
 }
 
 
