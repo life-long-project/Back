@@ -4,14 +4,14 @@ GET   http://localhost:3000/jobs/
 ### search for a word
 GET   http://localhost:3000/jobs/?search=barista
 
-### search for a word 2
-GET   http://localhost:3000/jobs/?is_hidden=false
+### sort using some attributes
+GET   http://localhost:3000/jobs/?sort=createdAt
 
 ### get jobs with skills filter
 GET   http://localhost:3000/jobs/?skills=coffee
 
 ### all attributes you can use when retrieving jobs
-GET   http://localhost:3000/jobs/?page=4&limit=3&skills=sum,add&sort=job_name,asc&search=calc
+GET   http://localhost:3000/jobs/?page=1&limit=5&skills=sum,add&sort=job_name,asc&search=calc
 
 ### get scpecific one correct
 GET   http://localhost:3000/jobs/6440024b06c9ae600b36a5e3
@@ -20,17 +20,14 @@ GET   http://localhost:3000/jobs/6440024b06c9ae600b36a5e3
 GET   http://localhost:3000/jobs/63f90e617142864d0104f59
 
 ### create one
-POST  http://localhost:3000/jobs/
+POST  http://localhost:3000/jobs/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NTAwOTA2fQ.UmyRgxbPRfjvx2lCfGaR2x4udn8IobwR8-3A2sbNb6c
 Content-Type: application/json
 
 {
-  "posted_by_id": "640746b8a08ee2dd516ce782",
-  "job_name": "cashier job",
-  "job_description": "i need a calculator man.",
+  "job_name": "test autherization",
+  "job_description": "barista autherization.",
   "job_skills": [
-    "calc",
-    "sum",
-    "add"
+    "noop"
   ],
   "job_type": "part job",
   "job_location": "test",

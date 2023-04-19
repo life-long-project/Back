@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const {ObjectId} = require('mongodb');
 
 const job_post_schema = new mongoose.Schema(
   {
     // job_location attributes
     posted_by_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       required: true,
     },
     job_name: {
@@ -71,7 +72,6 @@ job_post_schema.index({job_name:'text',job_description: 'text'})
 job_post_schema.index({ posted_by_id: 1 });
 
 const job_post_model = mongoose.model("job_post", job_post_schema);
-// job_post_model.createIndexes();
 module.exports = job_post_model;
 
 

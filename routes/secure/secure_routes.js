@@ -10,6 +10,8 @@ router.get(
             user: req.user,
             token: req.query.secret_token
         })
+        // to print the user token extraction
+        console.log(req.user);
     }
 );
 

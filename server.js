@@ -1,5 +1,4 @@
 require("dotenv").config();
-require('./auth/auth');
 
 const express = require("express");
 const app = express();
@@ -35,8 +34,11 @@ app.use(express.urlencoded({extended: false}));
 
 
 // authentication routes
+require('./auth/auth');
 const routes = require('./routes/auth/auth_routes');
 app.use('/', routes);
+
+
 
 // secure routes
 const secureRoute = require('./routes/secure/secure_routes');

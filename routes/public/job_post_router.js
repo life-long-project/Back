@@ -5,6 +5,8 @@ const {isValidObjectId} = require("mongoose");
 const mongoose = require("mongoose");
 const {MongoClient} = require('mongodb');
 const {ObjectId} = require('mongodb');
+const passport = require('passport');
+
 
 /* query to get jobpost
 then get the foreign key from users collection
@@ -79,13 +81,12 @@ router.get('/', async (req, res) => {
         req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort])
 
         let sortBy = {}
-        if (sort[1]) {
-            sortBy[sort[0]] = sort[1]
+        if (sort[1] && sort[1] === "asc") {
+            sortBy[sort[0]] = 1
         } else {
-            sortBy[sort[0]] = "desc"
+            sortBy[sort[0]] = -1
         }
 
-// todo: don't forget adding aggregation to handle join jop post with users then filter
         const agg = [
             {
                 '$match': {
@@ -115,20 +116,19 @@ router.get('/', async (req, res) => {
                 '$unwind': {
                     'path': '$user'
                 }
+            },
+            {
+                '$sort': sortBy
+            },
+            {
+                '$skip': page * limit
+            },
+            {
+                '$limit': limit
             }
         ];
         const jobs = await Job_post.aggregate(agg)
-            .sort(sortBy)
-            .skip(page * limit)
-            .limit(limit)
-
-        const total = await Job_post.countDocuments({
-            $or: [
-                {job_name: {$regex: search, $options: "i"}},
-                {job_description: {$regex: search, $options: "i"}}
-            ],
-            job_skills: {$in: [...skills]},
-        })
+        const total = Object(jobs).length
 
         const response = {
             error: false,
@@ -151,9 +151,9 @@ router.get('/', async (req, res) => {
 
 
 //create new job post
-router.post('/', async (req, res) => {
+router.post('/',  passport.authenticate('jwt', {session: false}),async (req, res) => {
     const job = new Job_post({
-        posted_by_id: req.body.posted_by_id,
+        posted_by_id: new ObjectId(req.user._id || "641b0c2e95e465087359ee93"),
         job_name: req.body.job_name,
         job_description: req.body.job_description,
         job_skills: req.body.job_skills,
@@ -233,6 +233,9 @@ router.delete('/:id', get_job_post, async (req, res) => {
     }
 
 })
+
+
+
 
 
 // function as middleware to get job using id to use all object again
