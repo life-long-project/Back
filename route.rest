@@ -2,16 +2,19 @@
 GET   http://localhost:3000/jobs/
 
 ### search for a word
-GET   http://localhost:3000/jobs/?q=Barista
+GET   http://localhost:3000/jobs/?search=barista
 
 ### search for a word 2
 GET   http://localhost:3000/jobs/?is_hidden=false
+
+### get jobs with skills filter
+GET   http://localhost:3000/jobs/?skills=coffee
 
 ### all attributes you can use when retrieving jobs
 GET   http://localhost:3000/jobs/?page=4&limit=3&skills=sum,add&sort=job_name,asc&search=calc
 
 ### get scpecific one correct
-GET   http://localhost:3000/jobs/63f90e617142864d0104f59d
+GET   http://localhost:3000/jobs/6440024b06c9ae600b36a5e3
 
 ### get scpecific one not correct
 GET   http://localhost:3000/jobs/63f90e617142864d0104f59
@@ -21,7 +24,7 @@ POST  http://localhost:3000/jobs/
 Content-Type: application/json
 
 {
-  "posted_by_id": "2",
+  "posted_by_id": "640746b8a08ee2dd516ce782",
   "job_name": "cashier job",
   "job_description": "i need a calculator man.",
   "job_skills": [
@@ -87,12 +90,8 @@ Content-Type: application/json
   ]
 }
 
-### secure profile with correct token
-GET  http://localhost:3000/user/profile/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NDk3MTU5fQ.DkYRR-1u_ixbRdGqP5MPSVUviGn9tcYyL9HLAUy4KvE
-
-### secure profile without token / incorrect token
-GET  http://localhost:3000/user/profile/
-
+### secure profile
+GET  http://localhost:3000/user/profile/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NTAwOTA2fQ.UmyRgxbPRfjvx2lCfGaR2x4udn8IobwR8-3A2sbNb6c
 
 ### signup
 POST  http://localhost:3000/signup
@@ -108,8 +107,8 @@ POST  http://localhost:3000/login
 Content-Type: application/json
 
 {
-"email":"test2",
-"password":"test2"
+"email":"test3",
+"password":"test3"
 }
 
 

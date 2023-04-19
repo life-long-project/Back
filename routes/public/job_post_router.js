@@ -2,7 +2,43 @@ const express = require('express')
 const router = express.Router()
 const Job_post = require("../../models/job_post")
 const {isValidObjectId} = require("mongoose");
+const mongoose = require("mongoose");
+const {MongoClient} = require('mongodb');
+const {ObjectId} = require('mongodb');
 
+/* query to get jobpost
+then get the foreign key from users collection
+then get only the username from output => $project
+
+ */
+
+/*
+const result = Job_post.aggregate([
+    {
+        $lookup: {
+            from: "users",
+            localField: "posted_by_id",
+            foreignField: "_id",
+            as: "user"
+        }
+    },
+    {
+        $unwind: "$user"
+    },
+    {
+        $project: {
+            _id: 0,
+            id: "$_id",
+            title: 1,
+            body: 1,
+            username: "$user.username"
+        }
+    }
+]);
+
+console.log(result);
+
+*/
 
 
 //getting all data for home page or search with ?q=query
@@ -21,7 +57,7 @@ router.get('/', async (req, res) => {
                 }
             },
             {
-                $sort: { count : -1}
+                $sort: {count: -1}
             }
         ]).exec()
         let skills_arr = []
@@ -49,15 +85,39 @@ router.get('/', async (req, res) => {
             sortBy[sort[0]] = "desc"
         }
 
-
-        const jobs = await Job_post.find({
-            $or: [
-                {job_name: {$regex: search, $options: "i"}},
-                {job_description: {$regex: search, $options: "i"}}
-            ]
-        })
-            .where("job_skills")
-            .in([...skills])
+// todo: don't forget adding aggregation to handle join jop post with users then filter
+        const agg = [
+            {
+                '$match': {
+                    '$or': [
+                        {
+                            'job_name': {
+                                '$regex': search,
+                                '$options': 'i'
+                            }
+                        }, {
+                            'job_description': {
+                                '$regex': search,
+                                '$options': 'i'
+                            }
+                        }
+                    ],
+                    job_skills: {$in: [...skills]}
+                }
+            }, {
+                '$lookup': {
+                    'from': 'users',
+                    'localField': 'posted_by_id',
+                    'foreignField': '_id',
+                    'as': 'user'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$user'
+                }
+            }
+        ];
+        const jobs = await Job_post.aggregate(agg)
             .sort(sortBy)
             .skip(page * limit)
             .limit(limit)
@@ -71,9 +131,9 @@ router.get('/', async (req, res) => {
         })
 
         const response = {
-            error:false,
+            error: false,
             search,
-            page:page+1,
+            page: page + 1,
             limit,
             total,
             skills,
@@ -182,7 +242,26 @@ async function get_job_post(req, res, next) {
     if (req.params.id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(req.params.id)) {
         let job_post;
         try {
-            job_post = await Job_post.findById(req.params.id)
+            // job_post = await Job_post.findById(req.params.id)
+            job_post = await Job_post.aggregate([
+                {
+                    '$match': {
+                        '_id': new ObjectId(req.params.id)
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'users',
+                        'localField': 'posted_by_id',
+                        'foreignField': '_id',
+                        'as': 'user'
+                    }
+                }, {
+                    '$unwind': {
+                        'path': '$user'
+                    }
+                }
+            ])
+
             if (job_post == null) {
                 return res.status(404).json({message: "cannot found job post using this id"})
             }

@@ -4,11 +4,7 @@ const job_post_schema = new mongoose.Schema(
   {
     // job_location attributes
     posted_by_id: {
-      type: String,
-      required: true,
-    },
-    posted_by_name: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     job_name: {
@@ -71,7 +67,12 @@ const job_post_schema = new mongoose.Schema(
     autoIndex: true,
   }
 );
-// job_post_schema.index({job_name:'text',job_description: 'text'})
+job_post_schema.index({job_name:'text',job_description: 'text'})
+job_post_schema.index({ posted_by_id: 1 });
+
 const job_post_model = mongoose.model("job_post", job_post_schema);
-job_post_model.createIndexes();
+// job_post_model.createIndexes();
 module.exports = job_post_model;
+
+
+
