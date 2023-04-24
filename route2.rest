@@ -1,53 +1,76 @@
-### get all
-GET   http://back-ph2h.onrender.com/jobs/
+### get all GET http://localhost:3000/jobs/
 
-### search for a word
-GET   http://back-ph2h.onrender.com/jobs/?q=Barista
+### search for a word GET http://localhost:3000/jobs/?search=barista
 
-### search for a word 2
-GET   http://back-ph2h.onrender.com/jobs/?is_hidden=false
+### sort using some attributes GET http://localhost:3000/jobs/?sort=createdAt
 
-### all attributes you can use when retrieving jobs
-GET   http://back-ph2h.onrender.com/jobs/?page=4&limit=3&skills=sum,add&sort=job_name,asc&search=calc
+### get jobs with skills filter GET http://localhost:3000/jobs/?skills=coffee
 
-### get scpecific one correct
-GET   http://back-ph2h.onrender.com/jobs/63f90e617142864d0104f59d
+### all attributes you can use when retrieving jobs GET http://localhost:3000/jobs/?page=1&limit=5&skills=sum,add&sort=job_name,asc&search=calc
 
-### get scpecific one not correct
-GET   http://back-ph2h.onrender.com/jobs/63f90e617142864d0104f59
+### get scpecific one correct GET http://localhost:3000/jobs/6440024b06c9ae600b36a5e3
 
-### create one
-POST  http://back-ph2h.onrender.com/jobs/
-Content-Type: application/json
+### get scpecific one not correct GET http://localhost:3000/jobs/63f90e617142864d0104f59
+
+### create one POST http://localhost:3000/jobs/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NTAwOTA2fQ.UmyRgxbPRfjvx2lCfGaR2x4udn8IobwR8-3A2sbNb6c Content-Type: application/json
 
 {
-  "posted_by_id": "2",
-  "job_name": "cashier job",
-  "job_description": "i need a calculator man.",
-  "job_skills": [
-    "calc",
-    "sum",
-    "add"
-  ],
-  "job_type": "part job",
-  "job_location": "test",
-  "salary": "50",
-  "job_duration": "2 hours",
-  "job_img_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
+"job_name": "test autherization", "job_description": "barista autherization.", "job_skills": [
+
+"noop"
+], "job_type": "part job", "job_location": "test", "salary": "50", "job_duration": "2 hours", "job_img_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
+
 }
 
+### delete one DELETE http://localhost:3000/jobs/63b6046a8b09739ef4262a97
 
-### delete one
-DELETE  http://back-ph2h.onrender.com/jobs/63b6046a8b09739ef4262a97
-
-### update one
-PATCH  http://back-ph2h.onrender.com/jobs/63f90e617142864d0104f59d
-Content-Type: application/json
+### update one PATCH http://localhost:3000/jobs/63f90e617142864d0104f59d Content-Type: application/json
 
 {
-  "is_active": false,
-  "job_name": "Test Name changed"
+"is_active": false, "job_name": "Test Name changed"
 }
+
+### ALL profile GET http://localhost:3000/profile/
+
+### specific profile GET http://localhost:3000/profile/6404cd479927546a009aeee0
+
+### delete profile DELETE http://localhost:3000/profile/6404cd479927546a009aeee0
+
+### update profile PATCH http://localhost:3000/profile/ Content-Type: application/json
+
+{
+"userName": "our best user", "bio": " test test test "
+}
+
+### create profile POST http://localhost:3000/profile/ Content-Type: application/json
+
+{
+"userName": "khaled yasser", "bio": "i'am a professional photographer", "age": 23, "location": "tanta", "skills": [
+
+"wedding", "party", "product", "marketing"
+], "past_jobs": [
+
+"i have worked as a photographer for my shot company for two years"
+]
+
+}
+
+### secure profile GET http://localhost:3000/user/profile/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NTAwOTA2fQ.UmyRgxbPRfjvx2lCfGaR2x4udn8IobwR8-3A2sbNb6c
+
+### signup POST http://localhost:3000/signup Content-Type: application/json
+
+{ "email":"test3", "password":"test3" }
+
+### login POST http://localhost:3000/login Content-Type: application/json
+
+{ "email":"test3", "password":"test3" }
+
+### to upload images POST /upload/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NTAwOTA2fQ.UmyRgxbPRfjvx2lCfGaR2x4udn8IobwR8-3A2sbNb6c HTTP/1.1 Content-Type: multipart/form-data; boundary=---011000010111000001101001 Host: 127.0.0.1:3000 Content-Length: 165
+
+-----011000010111000001101001 Content-Disposition: form-data; name="images"; filename="Desktop/Untitled.png" Content-Type: image/png
+
+-----011000010111000001101001--
+
 
 ### ALL profile
 GET  http://back-ph2h.onrender.com/profile/
