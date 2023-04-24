@@ -16,7 +16,14 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    is_verified: {
+        type: Boolean,
+        default: false
     }
+}, {
+    timestamps: true,
+    autoIndex: true,
 });
 
 UserSchema.pre(
