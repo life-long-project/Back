@@ -135,7 +135,7 @@ router.get('/', async (req, res) => {
         ])
 
 
-        const total = Object(jobs2).length
+        const total = Object(jobs).length
 
         const response = {
             error: false,
