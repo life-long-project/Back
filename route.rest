@@ -110,7 +110,7 @@ Content-Type: application/json
 
 
 ### to upload images
-POST /upload/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NTAwOTA2fQ.UmyRgxbPRfjvx2lCfGaR2x4udn8IobwR8-3A2sbNb6c HTTP/1.1
+POST /upload/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NTAwOTA2fQ.UmyRgxbPRfjvx2lCfGaR2x4udn8IobwR8-3A2sbNb6c
 Content-Type: multipart/form-data; boundary=---011000010111000001101001
 Host: 127.0.0.1:3000
 Content-Length: 165

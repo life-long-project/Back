@@ -8,41 +8,6 @@ const {ObjectId} = require('mongodb');
 const passport = require('passport');
 
 
-/* query to get jobpost
-then get the foreign key from users collection
-then get only the username from output => $project
-
- */
-
-/*
-const result = Job_post.aggregate([
-    {
-        $lookup: {
-            from: "users",
-            localField: "posted_by_id",
-            foreignField: "_id",
-            as: "user"
-        }
-    },
-    {
-        $unwind: "$user"
-    },
-    {
-        $project: {
-            _id: 0,
-            id: "$_id",
-            title: 1,
-            body: 1,
-            username: "$user.username"
-        }
-    }
-]);
-
-console.log(result);
-
-*/
-
-
 //getting all data for home page or search with ?q=query
 router.get('/', async (req, res) => {
 
@@ -81,13 +46,27 @@ router.get('/', async (req, res) => {
         req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort])
 
         let sortBy = {}
-        if (sort[1] && sort[1] === "asc") {
+        if (sort[1] && sort[1].toLowerCase() === "asc") {
             sortBy[sort[0]] = 1
         } else {
             sortBy[sort[0]] = -1
         }
 
-        const agg = [
+
+        // const jobs2 = await Job_post.find({
+        //     $or: [
+        //         {job_name: {$regex: search, $options: "i"}},
+        //         {job_description: {$regex: search, $options: "i"}}
+        //     ]
+        // })
+        //     .where("job_skills")
+        //     .in([...skills])
+        //     .sort(sortBy)
+        //     .skip(page * limit)
+        //     .limit(limit)
+
+
+        const jobs = await Job_post.aggregate([
             {
                 '$match': {
                     '$or': [
@@ -102,19 +81,14 @@ router.get('/', async (req, res) => {
                                 '$options': 'i'
                             }
                         }
-                    ],
-                    job_skills: {$in: [...skills]}
+                    ]
                 }
-            }, {
-                '$lookup': {
-                    'from': 'users',
-                    'localField': 'posted_by_id',
-                    'foreignField': '_id',
-                    'as': 'user'
-                }
-            }, {
-                '$unwind': {
-                    'path': '$user'
+            },
+            {
+                '$match': {
+                    'job_skills': {
+                        '$in': [...skills]
+                    }
                 }
             },
             {
@@ -125,10 +99,43 @@ router.get('/', async (req, res) => {
             },
             {
                 '$limit': limit
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "posted_by_id",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: "$user"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    id: "$_id",
+                    job_name: 1,
+                    job_description: 1,
+                    job_skills: 1,
+                    job_type: 1,
+                    job_location: 1,
+                    is_active: 1,
+                    is_hidden: 1,
+                    salary: 1,
+                    job_duration: 1,
+                    job_img_url: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    author: "$user.username",
+                    user_id: "$user._id",
+                    is_verified: "$user.is_verified",
+                }
             }
-        ];
-        const jobs = await Job_post.aggregate(agg)
-        const total = Object(jobs).length
+        ])
+
+
+        const total = Object(jobs2).length
 
         const response = {
             error: false,
@@ -151,7 +158,7 @@ router.get('/', async (req, res) => {
 
 
 //create new job post
-router.post('/',  passport.authenticate('jwt', {session: false}),async (req, res) => {
+router.post('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
     const job = new Job_post({
         posted_by_id: new ObjectId(req.user._id || "641b0c2e95e465087359ee93"),
         job_name: req.body.job_name,
@@ -217,7 +224,7 @@ router.patch('/:id', get_job_post, async (req, res) => {
 })
 
 //getting one job
-router.get("/:id", get_job_post, (req, res) => {
+router.get("/:id", get_job_post_details, (req, res) => {
     res.json(res.job_post)
 })
 
@@ -235,23 +242,45 @@ router.delete('/:id', get_job_post, async (req, res) => {
 })
 
 
-
-
-
 // function as middleware to get job using id to use all object again
 async function get_job_post(req, res, next) {
+    const job_id = req.params.id
+    console.log(isValidObjectId(job_id), job_id)
 
-    console.log(isValidObjectId(req.params.id), req.params.id)
-    if (req.params.id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(req.params.id)) {
+    if (job_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(job_id)) {
         let job_post;
         try {
-            // job_post = await Job_post.findById(req.params.id)
+            job_post = await Job_post.findById(req.params.id)
+
+            if (job_post == null) {
+                return res.status(404).json({message: "cannot found job post using this id"})
+            }
+        } catch (err) {
+            return res.status(500).json({message: err.message})
+        }
+        res.job_post = job_post
+        next()
+    } else {
+        return res.status(400).json({message: "invalid job id"})
+    }
+}
+
+async function get_job_post_details(req, res, next) {
+    const job_id = req.params.id
+    console.log(isValidObjectId(job_id), job_id)
+
+    if (job_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(job_id)) {
+        let job_post;
+        try {
             job_post = await Job_post.aggregate([
+                // Match job post
                 {
                     '$match': {
-                        '_id': new ObjectId(req.params.id)
+                        '_id': new ObjectId(job_id)
                     }
-                }, {
+                },
+                // Join with users collection
+                {
                     '$lookup': {
                         'from': 'users',
                         'localField': 'posted_by_id',
@@ -262,9 +291,35 @@ async function get_job_post(req, res, next) {
                     '$unwind': {
                         'path': '$user'
                     }
+                }, {
+                    '$project': {
+                        '_id': 0,
+                        'job_id': '$_id',
+                        'job_name': 1,
+                        'job_description': 1,
+                        'job_skills': 1,
+                        'job_type': 1,
+                        'job_location': 1,
+                        'is_active': 1,
+                        'is_hidden': 1,
+                        'salary': 1,
+                        'job_duration': 1,
+                        'job_img_url': 1,
+                        'createdAt': 1,
+                        'updatedAt': 1,
+                        'author_username': '$user.username',
+                        'author_id': '$user._id',
+                        'author_is_verified': '$user.is_verified'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'comments',
+                        'localField': 'job_id',
+                        'foreignField': 'job_id',
+                        'as': 'comments'
+                    }
                 }
-            ])
-
+            ]);
             if (job_post == null) {
                 return res.status(404).json({message: "cannot found job post using this id"})
             }

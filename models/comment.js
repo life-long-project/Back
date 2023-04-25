@@ -2,9 +2,18 @@ const mongoose = require("mongoose");
 const {ObjectId} = require('mongodb');
 
 const commentSchema = new mongoose.Schema({
-    author: {
+    posted_by_id: {
         type: ObjectId,
         ref: 'User',
+        required: true
+    },
+    username: {
+        type: String,
+        required: true
+    },
+    job_id: {
+        type: ObjectId,
+        ref: 'job_post',
         required: true
     },
     content: {
@@ -13,8 +22,20 @@ const commentSchema = new mongoose.Schema({
     },
     replies: [
         {
-            type: ObjectId,
-            ref: 'Reply'
+            posted_by_id: {
+                type: ObjectId,
+            },
+            username: {
+                type: String,
+                required: true
+            },
+            content: {
+                type: String
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
+            },
         }
     ],
 }, {

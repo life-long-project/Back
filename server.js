@@ -82,6 +82,10 @@ app.post('/upload', passport.authenticate('jwt', {session: false}) ,upload, (req
 });
 
 
+//comments
+const commentRouter = require('./routes/public/comment_router');
+app.use('/comment', commentRouter);
+
 
 
 

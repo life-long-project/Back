@@ -23,25 +23,24 @@ router.post(
             async (err, user, info) => {
                 try {
                     if (err || !user) {
-                        const error = new Error('An error occurred.');
-
-                        return next(error);
+                        return res.status(500).json({message: (err.message || "An error occurred.")})
+                        // return next(new Error("An error occurred."));
                     }
-
                     req.login(
                         user,
                         {session: false},
                         async (error) => {
                             if (error) return next(error);
 
-                            const body = {_id: user._id, email: user.email};
+                            const body = {_id: user._id, email: user.email, username: user.username};
                             const token = jwt.sign({user: body}, jwt_secret);
 
                             return res.json({"authorization": token});
                         }
                     );
                 } catch (error) {
-                    return next(error);
+                    return res.status(500).json({message: (err|| "An error occurred.")})
+                    // return next(error);
                 }
             }
         )(req, res, next);
