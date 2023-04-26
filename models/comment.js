@@ -4,7 +4,6 @@ const {ObjectId} = require('mongodb');
 const commentSchema = new mongoose.Schema({
     posted_by_id: {
         type: ObjectId,
-        ref: 'User',
         required: true
     },
     username: {
@@ -13,7 +12,6 @@ const commentSchema = new mongoose.Schema({
     },
     job_id: {
         type: ObjectId,
-        ref: 'job_post',
         required: true
     },
     content: {

@@ -5,34 +5,6 @@ const {isValidObjectId} = require("mongoose");
 const {ObjectId} = require('mongodb');
 const passport = require('passport');
 
-// router.get('/:job_id', async (req, res) => {
-//     const job_id = req.params.job_id;
-//     console.log(isValidObjectId(job_id), job_id)
-//     if (job_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(job_id)) {
-//         const comments = await Comment.aggregate([
-//             {
-//                 '$match': {
-//                     'job_id': new ObjectId(job_id)
-//                 }
-//             }, {
-//                 '$lookup': {
-//                     'from': 'job_posts',
-//                     'localField': 'job_id',
-//                     'foreignField': '_id',
-//                     'as': 'job_post'
-//                 }
-//             }, {
-//                 '$unwind': {
-//                     'path': '$job_post'
-//                 }
-//             }
-//         ])
-//         return res.json(comments)
-//     } else {
-//         return res.status(400).json({message: "invalid job id"})
-//     }
-//
-// })
 
 //create comment
 router.post('/:job_id', passport.authenticate('jwt', {session: false}), async (req, res) => {

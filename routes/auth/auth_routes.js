@@ -32,10 +32,10 @@ router.post(
                         async (error) => {
                             if (error) return next(error);
 
-                            const body = {_id: user._id, email: user.email, username: user.username};
+                            const body = {_id: user._id, email: user.email, username: user.username,is_admin: user.is_admin,profile_url: user.profile_url};
                             const token = jwt.sign({user: body}, jwt_secret);
 
-                            return res.json({"authorization": token});
+                            return res.json({"auth_token": token});
                         }
                     );
                 } catch (error) {

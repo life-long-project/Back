@@ -52,7 +52,7 @@ app.use('/user', passport.authenticate('jwt', {session: false}), secureRoute)
 
 
 // image upload
-//multi middleware
+// todo: make a middleware for upload profile image and id and job post images
 app.post('/upload', passport.authenticate('jwt', {session: false}) ,upload, (req, res) => {
     const files = req.files;
     const responses = [];
