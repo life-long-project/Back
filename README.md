@@ -1,25 +1,22 @@
-## Back
+# Back Repository
 
-#### update 24/02/2023
-
-we made a deploying for this repo
-`https://back-ph2h.onrender.com/jobs`
-<br>
-<br>
-
-#### explanation for the way and the request method and if there is any header or json data
+---
+###### update 24/02/2023
+##### we made a deploying for this repo `https://back-ph2h.onrender.com/jobs`
 
 ---
 
+###  There json files in ```json``` folder can import them and run with ```Insomia``` or ```Postman``` to test the apis
+
+---
+###### Explanation for the way and the request method and if there is any header or json data
+
+## Job posts
 ##### get all jobs with default (page=1, limit =10, sort=created_at, descending order ,skills =ALL)
 
 ```
 GET  http://back-ph2h.onrender.com/jobs/
 ```
-
----
-
-- let's list our attributes which can provide in our api
 
 ##### search for a word in the job name or the job description
 
@@ -65,7 +62,7 @@ GET  http://back-ph2h.onrender.com/jobs/?page=4&limit=3&skills=sum,add&sort=job_
 
 ---
 
-##### Get scpecific job
+##### Get specific job with its comments and replies
 
 ```
 GET  http://back-ph2h.onrender.com/jobs/63a1dbb8b4a47f5e085b9dbf
@@ -113,12 +110,65 @@ Content-Type: application/json
 ```
 
 ---
+## Authentication
+#### signup
+```
+POST  http://back-ph2h.onrender.com/signup
+Content-Type: application/json
 
+{
+"email":"test",
+"password":"test",
+"username":"test-user",
+"age":"23",
+"city":"Tanta",
+"country":"EGYPT"
+}
+```
+#### login
+```
+
+POST  http://back-ph2h.onrender.com/login
+Content-Type: application/json
+
+{
+  "email":"test",
+  "password":"test"
+}
+```
+#### to access secure path as (/user/profile) require authentication
+```
+GET  http://back-ph2h.onrender.com/user/profile/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+```
+---
+## Comments & replies
+
+#### create a comment for a job post (require authentication)
+```
+                                            /---------job_id---------/
+POST  http://back-ph2h.onrender.com/comment/643ff4d6e008206b6ecae1fd/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+Content-Type: application/json
+
+{
+"content":"test-comment"
+}
+```
+
+#### create a reply for specific comment for a job post (require authentication)
+```
+                                            /------comment_id--------/
+POST  http://back-ph2h.onrender.com/comment/644e3d2b6e5c5b8ee0a665e8/reply/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+Content-Type: application/json
+
+{
+"content":"test-reply"
+}
+```
 ---
 
 ---
 
-###### the profile api contains :
+#### the profile api contains :
 
 - getting one profile (by direct click on the user_name or by search method)
 - updating the user profile
@@ -127,17 +177,17 @@ Content-Type: application/json
 - creating a new profile (only in sign up)
 
 ### get all profiles for admin :
-
+```
 get request
 https://jobseeker-profile-api.onrender.com/profile
-
-###### get one profile :
-
+```
+##### get one profile :
+```
 get request
 https://jobseeker-profile-api.onrender.com/profile/6403c7ddc6e353894f3ae9e8
-
-###### update user profile :
-
+```
+##### update user profile :
+```
 https://jobseeker-profile-api.onrender.com/profile/6403c7ddc6e353894f3ae9e8
 content type : application/json
 
@@ -146,9 +196,9 @@ patch request
 "userName": "our best user",
 "bio": " test test test ",
 }
-
-###### create new profile with signUp
-
+```
+##### create new profile with signUp
+```
 https://jobseeker-profile-api.onrender.com/profile
 
 post request
@@ -162,10 +212,12 @@ post request
 ],
 "past_jobs": ["i have worked as a photographer for my shot company for two years"],
 }
+```
 
-###### delete user profile for admin :
+##### delete user profile for admin :
 
+```
 delete request
 https://jobseeker-profile-api.onrender.com/profile/64025a13ce6b430d475f250a
-
+```
 

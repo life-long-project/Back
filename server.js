@@ -59,6 +59,7 @@ app.post('/upload', passport.authenticate('jwt', {session: false}) ,upload, (req
     const f_response = [];
 
     // Upload images to Cloudinary
+    // todo: can make this function just return the url as img_url in the req to continue your proccess
     files.forEach((file) => {
         uploadImage(file, (err, result) => {
             if (err) {

@@ -158,7 +158,7 @@ router.get('/', async (req, res) => {
 
 
 //create new job post
-router.post('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.post('/', /* todo: make authentication check */ /* passport.authenticate('jwt', {session: false}), */ async (req, res) => {
     const job = new Job_post({
         posted_by_id: new ObjectId(req.user._id || "641b0c2e95e465087359ee93"),
         job_name: req.body.job_name,

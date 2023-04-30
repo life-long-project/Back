@@ -87,16 +87,18 @@ Content-Type: application/json
   ]
 }
 
-### secure profile
-GET  http://localhost:3000/user/profile/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NTAwOTA2fQ.UmyRgxbPRfjvx2lCfGaR2x4udn8IobwR8-3A2sbNb6c
 
 ### signup
 POST  http://localhost:3000/signup
 Content-Type: application/json
 
 {
-"email":"test3",
-"password":"test3"
+  "email":"test",
+  "password":"test",
+  "username":"test-user",
+  "age":"23",
+  "city":"Tanta",
+  "country":"EGYPT"
 }
 
 ### login
@@ -104,23 +106,31 @@ POST  http://localhost:3000/login
 Content-Type: application/json
 
 {
-"email":"test3",
-"password":"test3"
+  "email":"test",
+  "password":"test"
 }
 
-
-### to upload images
-POST /upload/?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0MWIwYzJlOTVlNDY1MDg3MzU5ZWU5MyIsImVtYWlsIjoidGVzdDMifSwiaWF0IjoxNjc5NTAwOTA2fQ.UmyRgxbPRfjvx2lCfGaR2x4udn8IobwR8-3A2sbNb6c
-Content-Type: multipart/form-data; boundary=---011000010111000001101001
-Host: 127.0.0.1:3000
-Content-Length: 165
-
------011000010111000001101001
-Content-Disposition: form-data; name="images"; filename="Desktop/Untitled.png"
-Content-Type: image/png
+### secure profile
+GET  http://localhost:3000/user/profile/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
 
 
------011000010111000001101001--
+### create a comment for a job post (require authentication)
+###                                 /job_id
+POST  http://localhost:3000/comment/643ff4d6e008206b6ecae1fd/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+Content-Type: application/json
+
+{
+  "content":"test-comment"
+}
+
+### create a reply for specific comment for a job post (require authentication)
+###                                 /comment_id
+POST  http://localhost:3000/comment/644e3d2b6e5c5b8ee0a665e8/reply/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+Content-Type: application/json
+
+{
+  "content":"test-reply"
+}
 
 
 
