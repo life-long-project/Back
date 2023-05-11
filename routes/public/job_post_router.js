@@ -51,19 +51,7 @@ router.get('/', async (req, res) => {
         } else {
             sortBy[sort[0]] = -1
         }
-
-
-        // const jobs2 = await Job_post.find({
-        //     $or: [
-        //         {job_name: {$regex: search, $options: "i"}},
-        //         {job_description: {$regex: search, $options: "i"}}
-        //     ]
-        // })
-        //     .where("job_skills")
-        //     .in([...skills])
-        //     .sort(sortBy)
-        //     .skip(page * limit)
-        //     .limit(limit)
+        
 
 
         const jobs = await Job_post.aggregate([
@@ -160,7 +148,7 @@ router.get('/', async (req, res) => {
 //create new job post
 router.post('/', /* todo: make authentication check */ /* passport.authenticate('jwt', {session: false}), */ async (req, res) => {
     const job = new Job_post({
-        posted_by_id: new ObjectId(req.user._id || "641b0c2e95e465087359ee93"),
+        posted_by_id: new ObjectId(/* req.user._id ||*/ "641b0c2e95e465087359ee93"),
         job_name: req.body.job_name,
         job_description: req.body.job_description,
         job_skills: req.body.job_skills,
@@ -271,6 +259,7 @@ async function get_job_post_details(req, res, next) {
 
     if (job_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(job_id)) {
         let job_post;
+
         try {
             job_post = await Job_post.aggregate([
                 // Match job post
