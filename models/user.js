@@ -25,6 +25,10 @@ const UserSchema = new Schema({
         type: Boolean,
         default: false
     },
+    is_blocked: {
+        type: Boolean,
+        default: false
+    },
     age: {
         type: Number
     },
@@ -59,6 +63,14 @@ const UserSchema = new Schema({
     skills: {
         type: Array,
         default: []
+    },
+    rating:{
+        type: Number,
+        default: 0
+    },
+    total_rating:{
+        type: Number,
+        default: 0
     }
 
 

@@ -1,5 +1,8 @@
+const Notification = require("./notification")
+
 const mongoose = require("mongoose");
 const {ObjectId} = require('mongodb');
+const User = require("./user");
 
 const offerSchema = new mongoose.Schema(
     {
@@ -9,8 +12,10 @@ const offerSchema = new mongoose.Schema(
         },
         message: {
             type: String,
+            required:false,
+            default: "",
         },
-        fromUser: {
+        applicant_id: {
             type: ObjectId,
             ref: 'user',
             required: true
@@ -26,6 +31,16 @@ const offerSchema = new mongoose.Schema(
         autoIndex: true,
     }
 )
+
+offerSchema.pre('save', async function (next) {
+    const notification = new Notification({
+        action: 'offering',
+        from_id: this.applicant_id,
+        job_post_id: this.job_post_id
+    })
+    await notification.save()
+    next()
+})
 
 const offer_model = mongoose.model("Offer", offerSchema);
 module.exports = offer_model;

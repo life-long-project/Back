@@ -63,6 +63,14 @@ const job_post_schema = new mongoose.Schema(
             default:
                 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png",
         },
+        rating:{
+            type: Number,
+            default: 0
+        },
+        total_rating:{
+            type: Number,
+            default: 0
+        }
 
     },
     {

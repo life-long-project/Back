@@ -1,37 +1,43 @@
+const User = require("./user")
 const mongoose = require("mongoose")
+const {ObjectId} = require('mongodb');
+
 
 const reported_users_schema = new mongoose.Schema({
         // reported_users attributes
         reported_id: {
-            type: String,
+            type: ObjectId,
             required: true,
         },
         reporter_id: {
-            type: String,
+            type: ObjectId,
             required: true,
         },
         title: {
-            type: Text,
+            type: String,
             required: true,
         },
         report: {
-            type: Text,
+            type: String,
             required: true,
         },
-        is_active: {
-            type: Boolean,
+        status: {
+            type: String,
             required: true,
-            default: true
-        },
-        is_hidden: {
-            type: Boolean,
-            required: true,
-            default: false
+            default: 'pending'
         },
     },
     {
         timestamps: true
     }
 )
+
+reported_users_schema.pre('update', async function (next) {
+    if (this.getUpdate().$set.status === 'blocked') {
+        const user_id = this.reported_id
+        User.findByIdAndUpdate(user_id, {is_blocked: true})
+    }
+    next()
+})
 
 module.exports = mongoose.model("reported_users", reported_users_schema)

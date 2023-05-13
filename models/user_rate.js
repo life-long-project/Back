@@ -1,13 +1,16 @@
+const User = require('./user');
+const Notification = require("./notification")
+
 const mongoose = require("mongoose");
 const {ObjectId} = require('mongodb');
 
 const user_rate_Schema = new mongoose.Schema({
-    ratedBy_id: {
+    rater_id: {
         type: ObjectId,
         required: true
     },
-    ratedBy_username: {
-        type: String,
+    rated_id: {
+        type: ObjectId,
         required: true
     },
     rating: {
@@ -21,14 +24,43 @@ const user_rate_Schema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    ratedUser: {
-        type: ObjectId,
-        required: true
-    },
+
 }, {
     timestamps: true,
     autoIndex: true,
 });
+
+user_rate_Schema.pre('save', async function (next) {
+    try {
+        const user = await User.findOne(this.rated_id)
+        const total_rating = (user.total_rating || 0) + 1
+        const new_rating = this.rating
+        const current_rating = (user.rating || 0)
+        const updated_rating = (current_rating * user.total_rating + new_rating) / total_rating
+
+        console.log("user: "+user,"total_rating:"+total_rating,"new_rating:"+new_rating,"current_rating:"+current_rating,"updated_rating:"+updated_rating)
+
+        await User.findByIdAndUpdate(this.rated_id,{
+            rating: updated_rating,
+            total_rating: total_rating
+        })
+        next()
+    }catch (err) {
+        next(err)
+    }
+})
+
+user_rate_Schema.pre('save', async function (next) {
+    const notification = new Notification({
+        action: 'rating',
+        from_id: this.rater_id,
+        for_id: this.rated_id,
+    })
+    await notification.save()
+    next()
+})
+
+
 
 const User_rateModel = mongoose.model('User_rate', user_rate_Schema);
 module.exports = User_rateModel;

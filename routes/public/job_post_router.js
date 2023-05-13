@@ -1,10 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Job_post = require("../../models/job_post")
-const {isValidObjectId} = require("mongoose");
 const mongoose = require("mongoose");
 const {MongoClient} = require('mongodb');
-const {ObjectId} = require('mongodb');
+const {isValidObjectId ,ObjectId} = require("mongoose");
 const passport = require('passport');
 
 
@@ -51,10 +50,16 @@ router.get('/', async (req, res) => {
         } else {
             sortBy[sort[0]] = -1
         }
-        
 
 
         const jobs = await Job_post.aggregate([
+            {
+                '$match': {
+                    'is_hidden': {
+                        '$ne': true
+                    }
+                }
+            },
             {
                 '$match': {
                     '$or': [
@@ -263,6 +268,13 @@ async function get_job_post_details(req, res, next) {
         try {
             job_post = await Job_post.aggregate([
                 // Match job post
+                {
+                    '$match': {
+                        'is_hidden': {
+                            '$ne': True
+                        }
+                    }
+                },
                 {
                     '$match': {
                         '_id': new ObjectId(job_id)

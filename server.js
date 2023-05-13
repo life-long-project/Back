@@ -50,6 +50,18 @@ app.use('/', routes);
 const secureRoute = require('./routes/secure/secure_routes');
 app.use('/user', passport.authenticate('jwt', {session: false}), secureRoute)
 
+//admin routes
+const adminRoute = require('./routes/admin/admin_router');
+app.use('/admin', passport.authenticate('jwt', {session: false}),adminRoute);
+
+//rate routes
+const rateRoute = require('./routes/secure/rate_router');
+app.use('/rate', passport.authenticate('jwt', {session: false}), rateRoute);
+
+// offer routes
+const offerRoute = require('./routes/secure/offer_router');
+app.use('/offer', passport.authenticate('jwt', {session: false}), offerRoute);
+
 
 // image upload
 // todo: make a middleware for upload profile image and id and job post images
