@@ -116,6 +116,10 @@ router.post('/user/:user_id/:action', async (req, res) => {
         }
     }
 })
+// todo: verify & unverify users
+// todo: list verified users
+// todo: list verifing request and make them
+
 
 // todo: control jobs
 router.post('/job/:job_id/:action', async (req, res) => {

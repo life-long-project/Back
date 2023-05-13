@@ -5,63 +5,36 @@ const jwt_secret = process.env.JWT_SECRET || 'jwt_secret';
 
 const router = express.Router();
 
-router.post(
-    '/signup',
-    passport.authenticate('signup', {session: false}),
-    async (req, res, next) => {
-        const user = req.user
-        let token = ''
-        let message ='failed to login'
-        req.login(
-            user,
-            {session: false},
-            async (error) => {
-                if (error) return next(error);
-                const body = {_id: user._id, email: user.email, username: user.username,is_admin: user.is_admin};
-                token = jwt.sign({user: body}, jwt_secret);
-                message = "Signup ,Login successful"
-            }
-        )
-        res.json({
-            message: message,
-            user: req.user,
-            auth_token: token
-        });
+
+// Route for user signup
+router.post('/signup', passport.authenticate('signup', { session: false }), (req, res) => {
+    res.status(201).json({ message: 'Signup & Login successful', user: req.user });
+});
+
+
+router.post('/login', passport.authenticate('login', { session: false }), async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = {
+            _id: user._id,
+            email: user.email,
+            username: user.username,
+            is_admin: user.is_admin
+        };
+        const token = jwt.sign({ user: body }, jwt_secret);
+        return res.json({ "auth_token": token });
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
-);
-router.post(
-    '/login',
-    async (req, res, next) => {
-        passport.authenticate(
-            'login',
-            async (err, user, info) => {
-                try {
-                    if (err || !user) {
-                        return res.status(500).json({message: (err.message || "An error occurred.")})
-                        // return next(new Error("An error occurred."));
-                    }
-                    req.login(
-                        user,
-                        {session: false},
-                        async (error) => {
-                            if (error) return next(error);
+});
 
-                            const body = {_id: user._id, email: user.email, username: user.username,is_admin: user.is_admin};
-                            const token = jwt.sign({user: body}, jwt_secret);
-
-                            return res.json({"auth_token": token});
-                        }
-                    );
-                } catch (error) {
-                    return res.status(500).json({message: (err|| "An error occurred.")})
-                    // return next(error);
-                }
-            }
-        )(req, res, next);
+// Error handling middleware
+router.use((err, req, res, next) => {
+    if (err.name === 'ValidationError') {
+        return res.status(400).json({ message: err.message });
     }
-);
-
-
+    return res.status(500).json({ message: err.message });
+});
 
 
 module.exports = router;
