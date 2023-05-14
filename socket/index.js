@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
       text 
     })
 
-  }
+  })
   
   ;
   socket.on("disconnect", () => {
