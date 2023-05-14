@@ -1,9 +1,11 @@
 const passport = require('passport');
-const UserModel = require('../models/user');
+const User = require('../models/user');
 const LocalStrategy = require('passport-local').Strategy;
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 const jwt_secret = process.env.JWT_SECRET || 'jwt_secret';
+
+const bcrypt = require('bcrypt');
 
 
 passport.use(
@@ -22,24 +24,30 @@ passport.use(
     )
 );
 
-// Passport middleware for local strategy
+// Passport middlewares for local strategy
 passport.use('signup', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true,
 }, async (req, email, password, done) => {
     try {
-        const user = await UserModel.findOne({ email });
+        const user = await User.findOne({email});
         if (user) {
-            return done(null, false, { message: 'User already exists' });
+            return done(null, false, {message: 'User already exists'});
         }
-        const new_user = await UserModel.create({
+        const new_user = await User.create({
+            f_name: req.body.f_name,
+            l_name: req.body.l_name,
             email: email,
             password: password,
-            username: req.body.username,
-            age: req.body.age,
-            city: req.body.city,
-            country: req.body.country
+            phone: req.body.phone,
+            gender: req.body.gender,
+
+            age: req.body.age || 20,
+            cities: [req.body.city || "Cairo"],
+            country: req.body.country || "Egypt",
+            past_experience: req.body.past_experience || "No Experience",
+            skills: req.body.skills || [],
         });
         await new_user.save();
         return done(null, new_user);
@@ -49,33 +57,29 @@ passport.use('signup', new LocalStrategy({
 }));
 
 
-passport.use(
-    'login',
-    new LocalStrategy(
-        {
+// there a bug for correct and incorrect password
+
+passport.use('login',
+    new LocalStrategy({
             usernameField: 'email',
-            passwordField: 'password'
+            passwordField: 'password',
         },
         async (email, password, done) => {
-            try {
-                const user = await UserModel.findOne({email});
+            const user = await User.findOne({email: email});
+            console.log(user['password'])
 
-                if (!user) {
-                    return done(null, false, {message: 'User not found'});
-                }
-
-                const validate = await user.isValidPassword(password);
-
-                if (!validate) {
-                    return done(null, false, {message: 'Wrong Password'});
-                }
-
-                return done(null, user, {message: 'Logged in Successfully'});
-            } catch (error) {
-                return done(error);
+            if (!user) {
+                return done(null, false);
             }
+
+            if (!user.isValidPassword(password)) {
+                return done(null, false, {message: 'Wrong Password'});
+            }
+
+            return done(null, user);
         }
     )
-);
+)
+
 
 

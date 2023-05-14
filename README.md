@@ -15,49 +15,49 @@
 ##### get all jobs with default (page=1, limit =10, sort=created_at, descending order ,skills =ALL)
 
 ```
-GET  http://back-ph2h.onrender.com/jobs/
+GET  https://back-ph2h.onrender.com/jobs/
 ```
 
 ##### search for a word in the job name or the job description
 
 ```
-GET  http://back-ph2h.onrender.com/jobs/?search=word
+GET  https://back-ph2h.onrender.com/jobs/?search=word
 ```
 
 ##### for change the limit of jobs which want to return
 
 ```
-GET  http://back-ph2h.onrender.com/jobs/?limit=3
+GET  https://back-ph2h.onrender.com/jobs/?limit=3
 ```
 
 ##### for change the page of the jobs we work on
 
 ```
-GET  http://back-ph2h.onrender.com/jobs/?page=2
+GET  https://back-ph2h.onrender.com/jobs/?page=2
 ```
 
 ##### to filter the jobs with a certain skill or more
 
 ```
-GET  http://back-ph2h.onrender.com/jobs/?skills=sum,add
+GET  https://back-ph2h.onrender.com/jobs/?skills=sum,add
 ```
 
 ##### to sort the jobs by specific column and ascending order
 
 ```
-GET  http://back-ph2h.onrender.com/jobs/?sort=job_name,asc
+GET  https://back-ph2h.onrender.com/jobs/?sort=job_name,asc
 ```
 
 ##### to sort the jobs by specific column and (default descending order)
 
 ```
-GET  http://back-ph2h.onrender.com/jobs/?sort=job_name
+GET  https://back-ph2h.onrender.com/jobs/?sort=job_name
 ```
 
 ##### let's merge all this attributes into one
 
 ```
-GET  http://back-ph2h.onrender.com/jobs/?page=4&limit=3&skills=sum,add&sort=job_name,asc&search=calc
+GET  https://back-ph2h.onrender.com/jobs/?page=4&limit=3&skills=sum,add&sort=job_name,asc&search=calc
 ```
 
 ---
@@ -65,13 +65,25 @@ GET  http://back-ph2h.onrender.com/jobs/?page=4&limit=3&skills=sum,add&sort=job_
 ##### Get specific job with its comments and replies
 
 ```
-GET  http://back-ph2h.onrender.com/jobs/63a1dbb8b4a47f5e085b9dbf
+GET  https://back-ph2h.onrender.com/jobs/63a1dbb8b4a47f5e085b9dbf
 ```
+
+#### Creating job validation pattern
+```
+title (string, required),
+description (string, required),
+skills (array, required),
+type (string['full time', 'part time', 'service'], required),
+location (string, required),
+salary (integer, required),
+duration (integer, required),
+```
+
 
 ##### Create new job
 
 ```
-POST http://back-ph2h.onrender.com/jobs/
+POST https://back-ph2h.onrender.com/jobs/
 Content-Type: application/json
 
 {
@@ -94,13 +106,13 @@ Content-Type: application/json
 ##### Delete job
 
 ```
-DELETE http://back-ph2h.onrender.com/jobs/63a1e1aced38843b5f4a3512
+DELETE https://back-ph2h.onrender.com/jobs/63a1e1aced38843b5f4a3512
 ```
 
 ##### Update job
 
 ```
-PATCH http://back-ph2h.onrender.com/jobs/63b604852e043ba4d05c2469
+PATCH https://back-ph2h.onrender.com/jobs/63b604852e043ba4d05c2469
 Content-Type: application/json
 
 {
@@ -111,24 +123,41 @@ Content-Type: application/json
 
 ---
 ## Authentication
+
+#### Signup user validation pattern
+```
+f_name (string, required),
+l_name (string, required),
+email (string[correct email], required),
+password (string, required),
+confirm_password (string, required),
+phone (string, required),
+city (string, optional),
+country (string, optional),
+age (integer, optional),
+gender (string, required),
+past_experience (string, optional),
+skills (array, required),
+```
+
 #### signup
 ```
-POST  http://back-ph2h.onrender.com/signup
+POST  https://back-ph2h.onrender.com/signup
 Content-Type: application/json
 
 {
-"email":"test",
-"password":"test",
-"username":"test-user",
-"age":"23",
-"city":"Tanta",
-"country":"EGYPT"
+"f_name": "Mahmoud",
+"l_name": "Mosbah",
+"email": "xmosb7@gmail.com",
+"password": "12345678",
+"confirm_password": "12345678",
+"phone": "01210662977",
+"gender" : "male"
 }
 ```
 #### login
 ```
-
-POST  http://back-ph2h.onrender.com/login
+POST  https://back-ph2h.onrender.com/login
 Content-Type: application/json
 
 {
@@ -138,7 +167,7 @@ Content-Type: application/json
 ```
 #### to access secure path as (/user/profile) require authentication
 ```
-GET  http://back-ph2h.onrender.com/user/profile/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+GET  https://back-ph2h.onrender.com/user/profile/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
 ```
 ---
 ## Comments & replies
@@ -146,7 +175,7 @@ GET  http://back-ph2h.onrender.com/user/profile/?auth_token=eyJhbGciOiJIUzI1NiIs
 #### create a comment for a job post (require authentication)
 ```
                                             /---------job_id---------/
-POST  http://back-ph2h.onrender.com/comment/643ff4d6e008206b6ecae1fd/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+POST  https://back-ph2h.onrender.com/comment/643ff4d6e008206b6ecae1fd/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
 Content-Type: application/json
 
 {
@@ -157,7 +186,7 @@ Content-Type: application/json
 #### create a reply for specific comment for a job post (require authentication)
 ```
                                             /------comment_id--------/
-POST  http://back-ph2h.onrender.com/comment/644e3d2b6e5c5b8ee0a665e8/reply/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+POST  https://back-ph2h.onrender.com/comment/644e3d2b6e5c5b8ee0a665e8/reply/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
 Content-Type: application/json
 
 {

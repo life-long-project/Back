@@ -29,11 +29,11 @@ const job_post_schema = new mongoose.Schema(
             required: true,
             default: "full-time",
         },
-        // job_location: {
-        //     type: String,
-        //     required: true,
-        //     default: "test",
-        // },
+        job_location: {
+            type: String,
+            required: true,
+            default: "test",
+        },
         is_active: {
             type: Boolean,
             required: false,
@@ -45,21 +45,20 @@ const job_post_schema = new mongoose.Schema(
             default: false,
         },
         salary: {
-            type: String,
+            type: Number,
             required: true,
-            default: "1000",
+            default: 100,
         },
         job_duration: {
-            type: String,
+            type: Number,
             required: false,
-            default: "1",
+            default: 1,
         },
 
         //todo: don't forget handle the size of images max < 16MB when upload it to our cloud or server
         //todo: we can use CDN (s3 aws, cloudnary) after some developing
         job_img_url: {
             type: String,
-            required: true,
             default:
                 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png",
         },
