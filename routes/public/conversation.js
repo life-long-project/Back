@@ -4,7 +4,7 @@ const { route } = require("./messeges");
 const Conversation = require("../../models/conversation");
 //create new conversation
 router.post("/", async (req, res) => {
-  const newConversation = new conversation({
+  const newConversation = new Conversation({
     members: [req.body.senderId, req.body.recieverId],
     messages: [],
   });
@@ -24,7 +24,7 @@ router.get("/:userId", async (req, res) => {
     });
     res.status(200).json(conversation);
   } catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 
