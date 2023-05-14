@@ -29,11 +29,11 @@ const job_post_schema = new mongoose.Schema(
             required: true,
             default: "full-time",
         },
-        job_location: {
-            type: String,
-            required: true,
-            default: "test",
-        },
+        // job_location: {
+        //     type: String,
+        //     required: true,
+        //     default: "test",
+        // },
         is_active: {
             type: Boolean,
             required: false,
@@ -51,7 +51,7 @@ const job_post_schema = new mongoose.Schema(
         },
         job_duration: {
             type: String,
-            required: true,
+            required: false,
             default: "1",
         },
 

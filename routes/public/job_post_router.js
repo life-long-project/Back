@@ -68,7 +68,8 @@ router.get('/', async (req, res) => {
                                 '$regex': search,
                                 '$options': 'i'
                             }
-                        }, {
+                        },
+                        {
                             'job_description': {
                                 '$regex': search,
                                 '$options': 'i'
@@ -106,8 +107,7 @@ router.get('/', async (req, res) => {
             },
             {
                 $project: {
-                    _id: 0,
-                    id: "$_id",
+                    _id: 1,
                     job_name: 1,
                     job_description: 1,
                     job_skills: 1,
@@ -118,11 +118,11 @@ router.get('/', async (req, res) => {
                     salary: 1,
                     job_duration: 1,
                     job_img_url: 1,
+                    rating:1,
+                    total_rating:1,
                     createdAt: 1,
                     updatedAt: 1,
-                    author: "$user.username",
-                    user_id: "$user._id",
-                    is_verified: "$user.is_verified",
+                    user: "$user",
                 }
             }
         ])
@@ -153,7 +153,7 @@ router.get('/', async (req, res) => {
 //create new job post
 router.post('/', /* todo: make authentication check */ /* passport.authenticate('jwt', {session: false}), */ async (req, res) => {
     const job = new Job_post({
-        posted_by_id: new ObjectId(/* req.user._id ||*/ "641b0c2e95e465087359ee93"),
+        posted_by_id: mongoose.Types.ObjectId(/* req.user._id ||*/ "641b0c2e95e465087359ee93"),
         job_name: req.body.job_name,
         job_description: req.body.job_description,
         job_skills: req.body.job_skills,
@@ -271,13 +271,13 @@ async function get_job_post_details(req, res, next) {
                 {
                     '$match': {
                         'is_hidden': {
-                            '$ne': True
+                            '$ne': true
                         }
                     }
                 },
                 {
                     '$match': {
-                        '_id': new ObjectId(job_id)
+                        '_id': new mongoose.Types.ObjectId(job_id)
                     }
                 },
                 // Join with users collection
@@ -294,23 +294,22 @@ async function get_job_post_details(req, res, next) {
                     }
                 }, {
                     '$project': {
-                        '_id': 0,
-                        'job_id': '$_id',
-                        'job_name': 1,
-                        'job_description': 1,
-                        'job_skills': 1,
-                        'job_type': 1,
-                        'job_location': 1,
-                        'is_active': 1,
-                        'is_hidden': 1,
-                        'salary': 1,
-                        'job_duration': 1,
-                        'job_img_url': 1,
-                        'createdAt': 1,
-                        'updatedAt': 1,
-                        'author_username': '$user.username',
-                        'author_id': '$user._id',
-                        'author_is_verified': '$user.is_verified'
+                        _id: 1,
+                        job_name: 1,
+                        job_description: 1,
+                        job_skills: 1,
+                        job_type: 1,
+                        job_location: 1,
+                        is_active: 1,
+                        is_hidden: 1,
+                        salary: 1,
+                        job_duration: 1,
+                        job_img_url: 1,
+                        rating:1,
+                        total_rating:1,
+                        createdAt: 1,
+                        updatedAt: 1,
+                        user: "$user",
                     }
                 }, {
                     '$lookup': {
