@@ -4,9 +4,13 @@ const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    username: {
+    f_name: {
         type: String,
-        default: "Temp-Username"
+        required: true
+    },
+    l_name: {
+        type: String,
+        required: true
     },
     email: {
         type: String,
@@ -16,6 +20,33 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    phone: {
+        type: String,
+    },
+    gender: {
+        type: String,
+        default: "male",
+        enum: ["male", "female"]
+    },
+    age: {
+        type: Number
+    },
+    cities: {
+        type: Array,
+        default: ["Cairo"]
+    },
+    country: {
+        type: String,
+        default: "Egypt"
+    },
+    past_experience: {
+        type: String,
+        default: ""
+    },
+    skills: {
+        type: [String],
+        default: []
     },
     is_verified: {
         type: Boolean,
@@ -29,25 +60,6 @@ const UserSchema = new Schema({
         type: Boolean,
         default: false
     },
-    age: {
-        type: Number
-    },
-    gender: {
-        type: String,
-        default: "male",
-        enum: ["male", "female"]
-    },
-    cities: {
-        type: Array,
-        default: ["Cairo"]
-    },
-    country: {
-        type: String,
-        default: "Egypt"
-    },
-    phone: {
-        type: String,
-    },
     profile_url: {
         type: String,
         default: "https://res.cloudinary.com/dwnvh8vn4/image/upload/v1682517154/images/ntn03pogiz3nxlmbq7be.png"
@@ -56,19 +68,11 @@ const UserSchema = new Schema({
         type: String,
         default: ""
     },
-    past_experience: {
-        type: String,
-        default: ""
-    },
-    skills: {
-        type: Array,
-        default: []
-    },
-    rating:{
+    rating: {
         type: Number,
         default: 0
     },
-    total_rating:{
+    total_rating: {
         type: Number,
         default: 0
     }
@@ -83,18 +87,19 @@ UserSchema.pre(
     'save',
     async function (next) {
         const user = this;
-        const hash = await bcrypt.hash(this.password, 10);
-
-        this.password = hash;
+        this.password = await bcrypt.hash(this.password, 10);
         next();
     }
 );
-UserSchema.methods.isValidPassword = async function (password) {
-    const user = this;
-    const compare = await bcrypt.compare(password, user.password);
 
-    return compare;
-}
+
+UserSchema.methods.isValidPassword = async function(password) {
+    try {
+        return await bcrypt.compare(password, this.password);
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 
 const UserModel = mongoose.model('user', UserSchema);
 

@@ -1,4 +1,4 @@
-const io = require("socket.io")(3000, {
+const io = require("socket.io")(8900, {
   cors: {
     origin: "http://localhost:3000",
   },
@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
       text 
     })
 
-  }
+  })
   
   ;
   socket.on("disconnect", () => {

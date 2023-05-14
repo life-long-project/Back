@@ -3,8 +3,9 @@ const router = express.Router()
 const Job_post = require("../../models/job_post")
 const mongoose = require("mongoose");
 const {MongoClient} = require('mongodb');
-const {isValidObjectId ,ObjectId} = require("mongoose");
+const {isValidObjectId, ObjectId} = require("mongoose");
 const passport = require('passport');
+const {validate_job_post_create, job_post_validation} = require('../../middlewares/validation/job_post')
 
 
 //getting all data for home page or search with ?q=query
@@ -118,8 +119,8 @@ router.get('/', async (req, res) => {
                     salary: 1,
                     job_duration: 1,
                     job_img_url: 1,
-                    rating:1,
-                    total_rating:1,
+                    rating: 1,
+                    total_rating: 1,
                     createdAt: 1,
                     updatedAt: 1,
                     user: "$user",
@@ -151,26 +152,30 @@ router.get('/', async (req, res) => {
 
 
 //create new job post
-router.post('/', /* todo: make authentication check */ /* passport.authenticate('jwt', {session: false}), */ async (req, res) => {
-    const job = new Job_post({
-        posted_by_id: mongoose.Types.ObjectId(/* req.user._id ||*/ "641b0c2e95e465087359ee93"),
-        job_name: req.body.job_name,
-        job_description: req.body.job_description,
-        job_skills: req.body.job_skills,
-        job_type: req.body.job_type,
-        job_location: req.body.job_location,
-        is_active: req.body.is_active,
-        is_hidden: req.body.is_hidden,
-        salary: req.body.salary,
-        job_duration: req.job_duration,
+router.post('/',
+    validate_job_post_create,
+    job_post_validation,
+    /* todo: make authentication check */ /* passport.authenticate('jwt', {session: false}), */ async (req, res) => {
+        const job = new Job_post({
+            posted_by_id: mongoose.Types.ObjectId(/* req.user._id ||*/ "641b0c2e95e465087359ee93"),
+
+            job_name: req.body.title,
+            job_description: req.body.description,
+            job_skills: req.body.skills,
+            job_type: req.body.type,
+            job_location: req.body.location,
+            // is_active: req.body.is_active,
+            // is_hidden: req.body.is_hidden,
+            salary: req.body.salary,
+            job_duration: req.duration,
+        })
+        try {
+            const new_job_post = await job.save()
+            res.status(201).json(new_job_post)
+        } catch (err) {
+            res.status(400).json({message: err.message})
+        }
     })
-    try {
-        const new_job_post = await job.save()
-        res.status(201).json(new_job_post)
-    } catch (err) {
-        res.status(400).json({message: err.message})
-    }
-})
 
 
 // updating one job
@@ -235,7 +240,7 @@ router.delete('/:id', get_job_post, async (req, res) => {
 })
 
 
-// function as middleware to get job using id to use all object again
+// function as middlewares to get job using id to use all object again
 async function get_job_post(req, res, next) {
     const job_id = req.params.id
     console.log(isValidObjectId(job_id), job_id)
@@ -305,8 +310,8 @@ async function get_job_post_details(req, res, next) {
                         salary: 1,
                         job_duration: 1,
                         job_img_url: 1,
-                        rating:1,
-                        total_rating:1,
+                        rating: 1,
+                        total_rating: 1,
                         createdAt: 1,
                         updatedAt: 1,
                         user: "$user",
