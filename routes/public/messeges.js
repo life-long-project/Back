@@ -8,7 +8,7 @@ router.post("/new_message", async (req, res) => {
     const savedMesseges = await newMessage.save();
     conversation.findByIdAndUpdate(
       req.body.conversation,
-      { $push: { messages: savedMessage } },
+      { $push: { messages: savedMesseges } },
       {
         new: true,
       }

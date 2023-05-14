@@ -6,6 +6,7 @@ const Conversation = require("../../models/conversation");
 router.post("/", async (req, res) => {
   const newConversation = new conversation({
     members: [req.body.senderId, req.body.recieverId],
+    messages: [],
   });
   try {
     const savedConversation = await newConversation.save();
@@ -22,7 +23,9 @@ router.get("/:userId", async (req, res) => {
       members: { $in: [req.params.userId] },
     });
     res.status(200).json(conversation);
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
