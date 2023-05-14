@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { route } = require("./messenger_router");
+const { route } = require("./messeges");
 const Conversation = require("../../models/conversation");
 //create new conversation
 router.post("/", async (req, res) => {
