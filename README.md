@@ -73,7 +73,7 @@ GET  https://back-ph2h.onrender.com/jobs/63a1dbb8b4a47f5e085b9dbf
 title (string, required),
 description (string, required),
 skills (array, required),
-type (string['full time', 'part time', 'service'], required),
+type (string['fullt-ime', 'part-time', 'service'], required),
 location (string, required),
 salary (integer, required),
 duration (integer, required),
