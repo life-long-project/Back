@@ -3,6 +3,7 @@ const io = require("socket.io")(8900, {
     origin: "http://localhost:3000",
   },
 });
+const generateLocationMessage = require("../routes/public/messeges");
 let users = [];
 const addUSer = (userId, socketId) => {
   !users.some((user) => user.userId) && users.push({ userId, socketId });
@@ -23,16 +24,19 @@ io.on("connection", (socket) => {
     addUSer(userId, socket.id);
     io.emit("getUsers", users);
   });
-  socket.on("sendMessage", ({ userId, receiverId, text })=>{
-    const user = getUser(receiverId)
-    io.to(user.socketId).emit('getMessage',{
+  socket.on("sendMessage", ({ userId, receiverId, text }) => {
+    const user = getUser(receiverId);
+    io.to(user.socketId).emit("getMessage", {
       senderId,
-      text 
-    })
-
-  })
-  
-  ;
+      text,
+    });
+    socket.on("createLocationMessage", (coords) => {
+      io.emit(
+        "newLocationMessage",
+        generateLocationMessage("user", coords.latitude, coords.longitude)
+      );
+    });
+  });
   socket.on("disconnect", () => {
     console.log("a user disconnected ! ");
     removeUSer(socket.Id);
