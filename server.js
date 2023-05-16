@@ -45,6 +45,13 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+
+app.use((req,res,next)=>{
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  console.log(req.body,req.params)
+  next(); // Pass control to the next middleware
+})
+
 // authentication routes
 require("./auth/auth");
 const routes = require("./routes/auth/auth_routes");
