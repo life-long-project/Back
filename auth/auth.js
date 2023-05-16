@@ -65,8 +65,9 @@ passport.use('login',
             passwordField: 'password',
         },
         async (email, password, done) => {
+        // here the error
             const user = await User.findOne({email: email});
-            console.log(user['password'])
+            // console.log(user['password'])
 
             if (!user) {
                 return done(null, false);

@@ -5,13 +5,42 @@ const mongoose = require("mongoose");
 const {MongoClient} = require('mongodb');
 const {isValidObjectId, ObjectId} = require("mongoose");
 const passport = require('passport');
-const {validate_job_post_create, job_post_validation} = require('../../middlewares/validation/job_post')
+const {validate_job_post_create, job_post_validation, validate_job_post_update} = require('../../middlewares/validation/job_post')
+
+router.get('/skills', async (req, res) => {
+    try {
+        const skills_db = await Job_post.aggregate([
+            {$unwind: '$job_skills'},
+            {
+                $group: {
+                    _id: "$job_skills",
+                    count: {$sum: 1},
+                }
+            },
+            {
+                $sort: {count: -1}
+            }
+        ]).exec()
+        let skills_arr = []
+        skills_db.forEach((skill) => {
+            skills_arr.push(skill._id)
+        })
+        if (skills_arr.length === 0) {
+            skills_arr = [""]
+        }
+        res.status(200).json(skills_arr)
+    }catch (e) {
+        res.status(404).json("not found "+ e.message)
+    }
+})
+
+
+
+
 
 
 //getting all data for home page or search with ?q=query
 router.get('/', async (req, res) => {
-
-
     try {
 
         // getting skills from job_post collection
@@ -51,7 +80,6 @@ router.get('/', async (req, res) => {
         } else {
             sortBy[sort[0]] = -1
         }
-
 
         const jobs = await Job_post.aggregate([
             {
@@ -130,10 +158,7 @@ router.get('/', async (req, res) => {
                 }
             }
         ])
-
-
         const total = Object(jobs).length
-
         const response = {
             error: false,
             search,
@@ -161,7 +186,6 @@ router.post('/',
     /* todo: make authentication check */ /* passport.authenticate('jwt', {session: false}), */ async (req, res) => {
         const job = new Job_post({
             posted_by_id: mongoose.Types.ObjectId(/* req.user._id ||*/ "641b0c2e95e465087359ee93"),
-
             job_name: req.body.title,
             job_description: req.body.description,
             job_skills: req.body.skills,
@@ -182,24 +206,26 @@ router.post('/',
 
 
 // updating one job
-router.patch('/:id', get_job_post, async (req, res) => {
-    if (req.body.job_name != null) {
-        res.job_post.job_name = req.body.job_name
+router.patch('/:id',
+    validate_job_post_update,
+    job_post_validation,
+    get_job_post, async (req, res) => {
+    if (req.body.title != null) {
+        res.job_post.job_name = req.body.title
     }
-    if (req.body.job_description != null) {
-        res.job_post.job_description = req.body.job_description
+    if (req.body.description != null) {
+        res.job_post.job_description = req.body.description
 
     }
-    if (req.body.job_skills != null) {
-        res.job_post.job_skills = req.body.job_skills
+    if (req.body.skills != null) {
+        res.job_post.job_skills = req.body.skills
+    }
+    if (req.body.type != null) {
+        res.job_post.job_type = req.body.type
 
     }
-    if (req.body.job_type != null) {
-        res.job_post.job_type = req.body.job_type
-
-    }
-    if (req.body.job_location != null) {
-        res.job_post.job_location = req.body.job_location
+    if (req.body.location != null) {
+        res.job_post.job_location = req.body.location
     }
     if (req.body.is_active != null) {
         res.job_post.is_active = req.body.is_active
@@ -210,8 +236,8 @@ router.patch('/:id', get_job_post, async (req, res) => {
     if (req.body.salary != null) {
         res.job_post.salary = req.body.salary
     }
-    if (req.body.job_duration != null) {
-        res.job_post.job_duration = req.body.job_duration
+    if (req.body.duration != null) {
+        res.job_post.job_duration = req.body.duration
     }
     if (req.body.job_img_url != null) {
         res.job_post.job_img_url = req.body.job_img_url
@@ -297,8 +323,9 @@ async function get_job_post_details(req, res, next) {
                         'as': 'user'
                     }
                 }, {
-                    '$unwind': {
-                        'path': '$user'
+                    $unwind: {
+                        path: "$user",
+                        preserveNullAndEmptyArrays: true
                     }
                 }, {
                     '$project': {

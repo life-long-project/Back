@@ -68,38 +68,43 @@ GET  https://back-ph2h.onrender.com/jobs/?page=4&limit=3&skills=sum,add&sort=job
 GET  https://back-ph2h.onrender.com/jobs/63a1dbb8b4a47f5e085b9dbf
 ```
 
-#### Creating job validation pattern
+#### get all skills
 ```
-title (string, required),
-description (string, required),
-skills (array, required),
-type (string['fullt-ime', 'part-time', 'service'], required),
-location (string, required),
-salary (integer, required),
-duration (integer, required),
+GET https://back-ph2h.onrender.com/jobs/skills
 ```
+#### get all egypt cities
+``` 
+GET https://back-ph2h.onrender.com/cities
+```
+
 
 
 ##### Create new job
+###### Creating job validation pattern
+```
+    title (string, required),
+    description (string, required),
+    skills (array, optional),
+    type (string['fullt-ime', 'part-time', 'service'], required),
+    location (string, optional),
+    salary (integer, required),
+    duration (integer, optional),
+```
 
 ```
 POST https://back-ph2h.onrender.com/jobs/
 Content-Type: application/json
 
 {
-  "posted_by_id": "2",
-  "job_name": "cashier job",
-  "job_description": "i need a calculator man.",
-  "job_skills": [
-    "calc",
-    "sum",
-    "add"
+  "title": "test autherization",
+  "description": "barista autherization.",
+  "skills": [
+    "noop"
   ],
-  "job_type": "part job",
-  "job_location": "test",
-  "salary": "50",
-  "job_duration": "2 hours",
-  "job_img_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
+  "type": "part-time",
+  "location": "test",
+  "salary": "500",
+  "duration": "2",
 }
 ```
 
@@ -111,13 +116,24 @@ DELETE https://back-ph2h.onrender.com/jobs/63a1e1aced38843b5f4a3512
 
 ##### Update job
 
+##### Updating job validation pattern
+```
+    title (string, optional),
+    description (string, optional),
+    skills (array, optional),
+    type (string['full-time', 'part-time', 'service'], optional),
+    location (string, optional),
+    salary (integer, optional),
+    duration (integer, optional),
+```
+
 ```
 PATCH https://back-ph2h.onrender.com/jobs/63b604852e043ba4d05c2469
 Content-Type: application/json
 
 {
-"is_active" : false,
-"job_name": "Test Name changed"
+"title" : "job name",
+"type": "full-time"
 }
 ```
 

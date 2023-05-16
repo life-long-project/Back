@@ -74,6 +74,7 @@ const offerRoute = require("./routes/secure/offer_router");
 app.use("/offer", passport.authenticate("jwt", { session: false }), offerRoute);
 
 // image upload
+
 // todo: make a middleware for upload profile image and id and job post images
 app.post(
   "/upload",
@@ -107,6 +108,40 @@ app.post(
     });
   }
 );
+
+// request all egypt citiies
+app.use('/cities',(req,res,next)=>{
+  res.status(200).json([
+        "Alexandria",
+        "Aswan",
+        "Asyut",
+        "Beheira",
+        "Beni Suef",
+        "Cairo",
+        "Dakahlia",
+        "Damietta",
+        "Faiyum",
+        "Gharbia",
+        "Giza",
+        "Ismailia",
+        "Kafr El Sheikh",
+        "Luxor",
+        "Matruh",
+        "Minya",
+        "Monufia",
+        "New Valley",
+        "North Sinai",
+        "Port Said",
+        "Qalyubia",
+        "Qena",
+        "Red Sea",
+        "Sharqia",
+        "Sohag",
+        "South Sinai",
+        "Suez"
+      ]
+  )
+})
 
 //comments
 const commentRouter = require("./routes/public/comment_router");
