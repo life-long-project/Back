@@ -77,6 +77,22 @@ const job_post_schema = new mongoose.Schema(
         autoIndex: true,
     }
 );
+
+job_post_schema.pre(
+    'save',
+    async function (next) {
+        const job = this;
+        let skills_arr =[]
+        this.job_skills.forEach((skill)=>{
+            skills_arr.push(skill.toUpperCase())
+        })
+        this.job_skills = skills_arr
+        next();
+    }
+);
+
+
+
 job_post_schema.index({job_name: 'text', job_description: 'text'})
 job_post_schema.index({posted_by_id: 1});
 

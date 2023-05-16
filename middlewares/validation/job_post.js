@@ -1,6 +1,4 @@
 const {check, validationResult} = require('express-validator');
-
-
 /*
 fields required for creating:
     title (string, required),
@@ -11,7 +9,6 @@ fields required for creating:
     salary (integer, required),
     duration (integer, required),
  */
-
 /*
 fields required for updating:
     title (string, optional),
@@ -22,8 +19,6 @@ fields required for updating:
     salary (integer, optional),
     duration (integer, optional),
  */
-
-
 exports.validate_job_post_create = [
     check('title')
         .notEmpty().withMessage('job title required!')
@@ -104,9 +99,3 @@ exports.job_post_validation = (req, res, next) => {
     const error = result[0].msg;
     return res.status(401).json({message: error});
 }
-
-
-
-
-
-

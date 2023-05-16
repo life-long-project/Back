@@ -210,6 +210,48 @@ Content-Type: application/json
 }
 ```
 ---
+### rate
+
+##### fields required for rating a user
+```  
+    rating [int, required]
+    feedback [string, optional]
+```
+
+
+### create a user feedback [need authentication]
+```
+                /-------user id --------/
+POST /rate/user/6463b901b377ff4bae1c9c1a
+Content-Type: application/json
+
+{
+	"rating":5,
+	"feedback":"nice man"
+}
+
+```
+
+##### fields required for rating a job [need authentication]
+```  
+    rating [int, required]
+    feedback [string, optional]
+```
+
+### create a job feedback
+``` 
+               /--------job id --------/
+POST /rate/job/6461757025d3b22292e0b2a6
+Content-Type: application/json
+
+{
+	"rating":5,
+	"feedback":"nice job"
+}
+
+
+```
+
 
 ---
 

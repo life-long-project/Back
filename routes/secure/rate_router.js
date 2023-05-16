@@ -1,5 +1,6 @@
 const Job_rate = require('../../models/job_rate');
 const User_rate = require('../../models/user_rate');
+const {validate_user_rate, validate_job_rate , user_validation} = require('../../middlewares/validation/rate')
 
 const express = require('express')
 const router = express.Router()
@@ -7,12 +8,15 @@ const mongoose = require("mongoose");
 const {MongoClient} = require('mongodb');
 const {isValidObjectId, ObjectId} = require("mongoose");
 
-router.post('/user/:rated_id', async (req, res) => {
+router.post('/user/:rated_id',
+    validate_user_rate,
+    user_validation,
+    async (req, res) => {
     try {
-        const rater_id = req.user._id
-        const rated_id = req.params.rated_id
-        const rating = req.body.rating
-        const feedback = req.body.feedback
+        const rater_id = req.user._id || '6463b901b377ff4bae1c9c1a'
+        const rated_id = req.params.rated_id || '6463b901b377ff4bae1c9c1a'
+        const rating = req.body.rating || 5
+        const feedback = req.body.feedback || ""
         const new_user_rate = new User_rate({
             rater_id,
             rated_id,
@@ -28,12 +32,15 @@ router.post('/user/:rated_id', async (req, res) => {
 
 })
 
-router.post('/job/:rated_job_id', async (req, res) => {
+router.post('/job/:rated_job_id',
+    validate_user_rate,
+    user_validation,
+    async (req, res) => {
     try {
-        const rater_id = req.user._id
-        const rated_job_id = req.params.rated_job_id
-        const rating = req.body.rating
-        const feedback = req.body.feedback
+        const rater_id = req.user._id || "6463b901b377ff4bae1c9c1a"
+        const rated_job_id = req.params.rated_job_id || "6461757025d3b22292e0b2a6"
+        const rating = req.body.rating || 5
+        const feedback = req.body.feedback || ""
         const new_job_rate = new Job_rate({
             rater_id,
             rated_job_id,

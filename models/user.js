@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const Notification = require("./notification")
+
 
 const Schema = mongoose.Schema;
 
@@ -83,11 +85,26 @@ const UserSchema = new Schema({
     autoIndex: true,
 });
 
+
+
 UserSchema.pre(
     'save',
     async function (next) {
         const user = this;
         this.password = await bcrypt.hash(this.password, 10);
+        next();
+    }
+);
+
+UserSchema.pre(
+    'save',
+    async function (next) {
+        const user = this;
+        this.f_name = this.f_name.toLowerCase()
+        this.l_name = this.l_name.toLowerCase()
+        this.username = this.f_name[0].toUpperCase()+this.f_name.slice(1).toLowerCase()
+            + " "
+            + this.l_name[0].toUpperCase()+this.l_name.slice(1).toLowerCase();
         next();
     }
 );
@@ -100,6 +117,10 @@ UserSchema.methods.isValidPassword = async function(password) {
         throw new Error(error);
     }
 };
+
+
+
+
 
 const UserModel = mongoose.model('user', UserSchema);
 
