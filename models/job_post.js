@@ -45,14 +45,14 @@ const job_post_schema = new mongoose.Schema(
             default: false,
         },
         salary: {
-            type: Number,
+            type: String,
             required: true,
-            default: 100,
+            default: "100",
         },
         job_duration: {
-            type: Number,
+            type: String,
             required: false,
-            default: 1,
+            default: "",
         },
 
         //todo: don't forget handle the size of images max < 16MB when upload it to our cloud or server
