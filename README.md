@@ -76,7 +76,16 @@ GET https://back-ph2h.onrender.com/jobs/skills
 ``` 
 GET https://back-ph2h.onrender.com/cities
 ```
+#### get all user
+```
+GET https://back-ph2h.onrender.com/user
+```
 
+#### get specific
+```
+                                        /-------user id --------/
+GET https://back-ph2h.onrender.com/user/6449249fe8392437d61826ff
+```
 
 
 ##### Create new job

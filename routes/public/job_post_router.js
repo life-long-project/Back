@@ -7,6 +7,7 @@ const {isValidObjectId, ObjectId} = require("mongoose");
 const passport = require('passport');
 const {validate_job_post_create, job_post_validation, validate_job_post_update} = require('../../middlewares/validation/job_post')
 
+// list the skills
 router.get('/skills', async (req, res) => {
     try {
         const skills_db = await Job_post.aggregate([
@@ -33,10 +34,6 @@ router.get('/skills', async (req, res) => {
         res.status(404).json("not found "+ e.message)
     }
 })
-
-
-
-
 
 
 //getting all data for home page or search with ?q=query

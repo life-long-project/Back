@@ -59,11 +59,15 @@ app.use("/", routes);
 
 // secure routes
 const secureRoute = require("./routes/secure/secure_routes");
-app.use("/user", passport.authenticate("jwt", { session: false }), secureRoute);
+app.use("/secure", passport.authenticate("jwt", { session: false }), secureRoute);
 
 //admin routes
 const adminRoute = require("./routes/admin/admin_router");
 app.use("/admin", passport.authenticate("jwt", { session: false }), adminRoute);
+
+//users
+const userRoute = require("./routes/public/user_router");
+app.use("/user", userRoute);
 
 //rate routes
 const rateRoute = require("./routes/secure/rate_router");
@@ -150,11 +154,6 @@ app.use("/comment", commentRouter);
 // public routes
 const job_post_router = require("./routes/public/job_post_router");
 app.use("/jobs", job_post_router);
-
-//profiles
-const profile_router = require("./routes/public/profileRoutes");
-const { response } = require("express");
-app.use("/profile", profile_router);
 
 const messenger_router = require("./routes/public/messeges");
 app.use("/messenger", messenger_router);
