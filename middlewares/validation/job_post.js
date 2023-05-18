@@ -42,12 +42,12 @@ exports.validate_job_post_create = [
 
     check('salary')
         .notEmpty().withMessage('job salary required!')
-        .isInt().withMessage("Invalid salary")
+        .isString().withMessage("Invalid salary, it should sent in string")
         .isLength({min: 1, max: 6}).withMessage('Salary must be between 1 and 6 characters'),
 
     check('duration')
         .optional()
-        .isInt().withMessage("Invalid duration")
+        .isString().withMessage("Invalid duration, it should sent in string")
         .isLength({min: 1, max: 6}).withMessage('Job duration must be between 1 and 6 characters'),
 
 
@@ -68,26 +68,22 @@ exports.validate_job_post_update = [
         .isArray().withMessage('Skills must be an array'),
     check('type')
         .optional()
-        .notEmpty().withMessage('Job type required!')
         .isString().withMessage("Invalid job type")
         .trim()
         .isIn(['full-time', 'part-time', 'service']).withMessage('job type must be full-time, part-time or service'),
     check('location')
         .optional()
-        .notEmpty()
         .isString().withMessage("Invalid location")
         .isLength({min: 3, max: 20}).withMessage('Salary must be between 3 and 20 characters'),
 
     check('salary')
         .optional()
-        .notEmpty()
-        .isInt().withMessage("Invalid salary")
+        .isString().withMessage("Invalid salary, it should sent in string")
         .isLength({min: 1, max: 6}).withMessage('Salary must be between 1 and 6 characters'),
 
     check('duration')
         .optional()
-        .notEmpty()
-        .isInt().withMessage("Invalid duration")
+        .isString().withMessage("Invalid duration, it should sent in string")
         .isLength({min: 1, max: 6}).withMessage('Job duration must be between 1 and 6 characters'),
 
 ]
