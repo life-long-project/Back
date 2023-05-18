@@ -10,6 +10,21 @@
 
 ---
 ###### Explanation for the way and the request method and if there is any header or json data
+### Customer chat
+#### validation pattern
+```
+messag ['string',required]
+```
+
+```
+POST https://back-ph2h.onrender.com/chat
+Content-Type: application/json
+
+{
+    "message":"what if my visa not workig correctly"
+}
+```
+
 
 ## Job posts
 ##### get all jobs with default (page=1, limit =10, sort=created_at, descending order ,skills =ALL)

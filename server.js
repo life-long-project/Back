@@ -69,6 +69,11 @@ app.use("/admin", passport.authenticate("jwt", { session: false }), adminRoute);
 const userRoute = require("./routes/public/user_router");
 app.use("/user", userRoute);
 
+// chatgpt routes
+const chatgptRoute = require('./routes/public/chatgpt_router')
+app.use("/chat", chatgptRoute)
+
+
 //rate routes
 const rateRoute = require("./routes/secure/rate_router");
 app.use("/rate", passport.authenticate("jwt", { session: false }), rateRoute);
