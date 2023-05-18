@@ -46,7 +46,7 @@ exports.validate_job_post_create = [
         .isLength({min: 1, max: 6}).withMessage('Salary must be between 1 and 6 characters'),
 
     check('duration')
-        .notEmpty().withMessage('job duration required!')
+        .optional()
         .isInt().withMessage("Invalid duration")
         .isLength({min: 1, max: 6}).withMessage('Job duration must be between 1 and 6 characters'),
 
