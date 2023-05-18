@@ -73,7 +73,7 @@ exports.validate_user_signup = [
     check('age')
         .optional({nullable: true})
         .notEmpty()
-        .isInt()
+        .isString().withMessage("Invalid age, it should sent in string")
         .isLength({min: 1, max: 3}).withMessage("Age must be a valid number"),
     check('gender')
         .optional({nullable: true})
