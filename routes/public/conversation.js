@@ -22,7 +22,7 @@ router.get("/:conversationId", async (req, res) => {
 });
 
 //start a new conversation between two users
-router.post("/send_message", async (req, res, next) => {
+router.post("/first_message", async (req, res, next) => {
   const { senderId, receiverId, text } = req.body;
 
   let conversation = await Conversation.findOne({
@@ -61,7 +61,7 @@ router.post("/send_message", async (req, res, next) => {
 
 //send a message inside the conversation
 router.post("/new_message", async (req, res) => {
-  const newMessage = await new Messeges(req.body);
+  const newMessage = await new message_model(req.body);
   try {
     const savedMesseges = await newMessage.save();
     Conversation.findByIdAndUpdate(
