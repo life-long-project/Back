@@ -1,45 +1,52 @@
-const io = require("socket.io")(8900, {
-  cors: {
-    origin: "http://localhost:3000",
-  },
-});
-const generateLocationMessage = require("../routes/public/messeges");
-let users = [];
-const addUSer = (userId, socketId) => {
-  !users.some((user) => user.userId) && users.push({ userId, socketId });
-};
+const Message = require("../models/message_model");
+const Conversation = require("../models/conversation");
+module.exports = function (io) {
+  io.on("connection", (socket) => {
+    console.log("user connected");
+    // Join conversation room
+    socket.on("joinConversation", async (conversationId) => {
+      socket.join(conversationId);
 
-const removeUSer = (socketId) => {
-  users = users.filter((user) => user.socket.Id !== socketId);
-};
+      // Load previous messages
+      try {
+        const messages = await Message.find({
+          conversation: conversationId,
+        }).populate("sender", "fullName");
+        socket.emit("previousMessages", messages);
+      } catch (err) {
+        console.error(err);
+      }
+    });
 
-const getUser = (userId) => {
-  return users.find((user) => user.userId === userId);
+    // Send message
+    socket.on("sendMessage", async (data) => {
+      const { conversationId, senderId, text } = data;
+      const message = new Message({
+        conversation: conversationId,
+        sender: senderId,
+        text,
+      });
+      try {
+        // Save message to database
+        const savedMessage = await message.save();
+        await Conversation.findByIdAndUpdate(
+          conversationId,
+          { $set: { lastMessage: savedMessage.text } },
+          { new: true }
+        );
+        const messageWithSender = await Message.findById(
+          savedMessage._id
+        ).populate("sender", "fullName");
+        io.to(conversationId).emit("messageReceived", messageWithSender);
+        console.log(`message with sender is ${messageWithSender}`);
+      } catch (err) {
+        console.error(err);
+        console.log(err);
+      }
+    });
+
+    socket.on("disconnect", () => {
+      console.log("user disconnected");
+    });
+  });
 };
-io.on("connection", (socket) => {
-  console.log("a user has connected");
-  io.emit("welcome", "this is the socket server");
-  //take the user id and socket id from the user
-  socket.on("addUser", (userId) => {
-    addUSer(userId, socket.id);
-    io.emit("getUsers", users);
-  });
-  socket.on("sendMessage", ({ userId, receiverId, text }) => {
-    const user = getUser(receiverId);
-    io.to(user.socketId).emit("getMessage", {
-      senderId,
-      text,
-    });
-    socket.on("createLocationMessage", (coords) => {
-      io.emit(
-        "newLocationMessage",
-        generateLocationMessage("user", coords.latitude, coords.longitude)
-      );
-    });
-  });
-  socket.on("disconnect", () => {
-    console.log("a user disconnected ! ");
-    removeUSer(socket.Id);
-    io.emit("getUsers", users);
-  });
-});

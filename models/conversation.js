@@ -1,23 +1,19 @@
 const mongoose = require("mongoose");
-const conversation_schema = mongoose.Schema({
-  members: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
-    },
-  ],
-  isFile: { type: Boolean, default: false },
-  file: {
-    type: Object,
-    required: false,
-  },
-  seenBySender: Boolean,
-  seenByReceiver: Boolean,
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-});
 
-module.exports = mongoose.model("conversation", conversation_schema);
+const conversationSchema = new mongoose.Schema(
+  {
+    members: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    latestMessage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "message_model",
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = Conversation = mongoose.model(
+  "Conversation",
+  conversationSchema
+);
