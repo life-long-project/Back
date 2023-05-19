@@ -331,4 +331,74 @@ post request
 delete request
 https://jobseeker-profile-api.onrender.com/profile/64025a13ce6b430d475f250a
 ```
+##################################################################################################################################################################
+
+##### the conversation api contains 
+1-starting a conversation between two users and send the first message between them
+	(requires the id of the 2 users and the message in the body)
+
+2-send messeges insdie the conversation and saving it 
+	(requires the id of the sender , the conversationId and the message )
+   
+3- getting all the conversation content (by click on the user name to open his chat head)
+	(requires the id of the conversation in the params )
+	
+4- getting all the user chats 
+	(requires the id of the user in the params )
+
+##### start a conversation between two users and send the first message :
+
+```
+post request :
+https://back-ph2h.onrender.com/conversation/first_message
+
+in the body of this request you should provide :
+senderId : 
+receiverId :
+text : 
+|||||||||||||| the body
+{
+"senderId":"645188bf9c4bb1302f6279a5",
+"receiverId":"6450ca3370ca0d14ce63542d",
+"text" :"heyy this is my second mrssage as a reply"
+}
+|||||||||||||
+```
+
+### to send messeges insdie the conversation 
+
+```
+post request 
+https://back-ph2h.onrender.com/conversation/new_message
+
+in the body of this request you should provide :
+sender:
+conversationId:
+text:
+|||||||||||||| the body
+{
+"sender":"64500e8576088eaedd21fff0",
+"conversationId":"6465190867734265dde8bfb9",
+"text" :"heyy this is my third mrssage"
+}
+||||||||||||||
+```
+
+### to get the conversation content (messeges)
+
+```
+get request "/conversation/:conversationId"
+https://back-ph2h.onrender.com/conversation/6465190867734265dde8bfb9
+```
+
+### to get all the user chats 
+```
+get request "/conversation/chats/:userId"
+https://back-ph2h.onrender.com/conversation/chats/64500e8576088eaedd21fff0
+```
+
+
+
+
+
 
