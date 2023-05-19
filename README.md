@@ -351,7 +351,7 @@ https://jobseeker-profile-api.onrender.com/profile/64025a13ce6b430d475f250a
 ```
 post request :
 https://back-ph2h.onrender.com/conversation/first_message
-```
+
 in the body of this request you should provide :
 senderId : 
 receiverId :
@@ -363,13 +363,14 @@ text :
 "text" :"heyy this is my second mrssage as a reply"
 }
 |||||||||||||
+```
 
 ### to send messeges insdie the conversation 
 
 ```
 post request 
 https://back-ph2h.onrender.com/conversation/new_message
-```
+
 in the body of this request you should provide :
 sender:
 conversationId:
@@ -381,6 +382,7 @@ text:
 "text" :"heyy this is my third mrssage"
 }
 ||||||||||||||
+```
 
 ### to get the conversation content (messeges)
 
