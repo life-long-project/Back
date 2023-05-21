@@ -17,7 +17,8 @@ async function call_chat_gpt(text){
         });
         return (completion.data.choices[0].text.trim())
     }catch (e) {
-
+        console.log(e.message)
+        return e.message
     }
 }
 

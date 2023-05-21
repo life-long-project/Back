@@ -183,15 +183,15 @@ router.post('/',
     /* todo: make authentication check */ /* passport.authenticate('jwt', {session: false}), */ async (req, res) => {
         const job = new Job_post({
             posted_by_id: mongoose.Types.ObjectId(/* req.user._id ||*/ "641b0c2e95e465087359ee93"),
-            job_name: req.body.title,
-            job_description: req.body.description,
-            job_skills: req.body.skills,
-            job_type: req.body.type,
-            job_location: req.body.location,
+            job_name: req.body.title || "",
+            job_description: req.body.description || "",
+            job_skills: req.body.skills || [],
+            job_type: req.body.type || "Full-time",
+            job_location: req.body.location || "Cairo",
             // is_active: req.body.is_active,
             // is_hidden: req.body.is_hidden,
-            salary: req.body.salary,
-            job_duration: req.duration,
+            salary: req.body.salary || "1000",
+            job_duration: req.duration || "0",
         })
         try {
             const new_job_post = await job.save()

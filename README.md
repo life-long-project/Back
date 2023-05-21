@@ -13,7 +13,7 @@
 ### Customer chat
 #### validation pattern
 ```
-messag ['string',required]
+message ['string',required]
 ```
 
 ```
@@ -177,7 +177,7 @@ country (string, optional),
 age (integer, optional),
 gender (string, required),
 past_experience (string, optional),
-skills (array, required),
+skills (array, optional),
 ```
 
 #### signup
@@ -186,13 +186,13 @@ POST  https://back-ph2h.onrender.com/signup
 Content-Type: application/json
 
 {
-"f_name": "Mahmoud",
-"l_name": "Mosbah",
-"email": "xmosb7@gmail.com",
-"password": "12345678",
-"confirm_password": "12345678",
-"phone": "01210662977",
-"gender" : "male"
+    "f_name": "Mahmoud",
+    "l_name": "Mosbah",
+    "email": "xmosb7@gmail.com",
+    "password": "12345678",
+    "confirm_password": "12345678",
+    "phone": "01210662977",
+    "gender" : "male"
 }
 ```
 #### login
