@@ -287,50 +287,8 @@ Content-Type: application/json
 - deleting user profile (only by admin)
 - creating a new profile (only in sign up)
 
-### get all profiles for admin :
-```
-get request
-https://jobseeker-profile-api.onrender.com/profile
-```
-##### get one profile :
-```
-get request
-https://jobseeker-profile-api.onrender.com/profile/6403c7ddc6e353894f3ae9e8
-```
-##### update user profile :
-```
-https://jobseeker-profile-api.onrender.com/profile/6403c7ddc6e353894f3ae9e8
-content type : application/json
 
-patch request
-{
-"userName": "our best user",
-"bio": " test test test ",
-}
-```
-##### create new profile with signUp
-```
-https://jobseeker-profile-api.onrender.com/profile
 
-post request
-{
-"userName": "khaled yasser",
-"bio": "i'am a professional photographer",
-"age": 23,
-"location": "tanta",
-"skills": [
-"wedding,party,product marketing"
-],
-"past_jobs": ["i have worked as a photographer for my shot company for two years"],
-}
-```
-
-##### delete user profile for admin :
-
-```
-delete request
-https://jobseeker-profile-api.onrender.com/profile/64025a13ce6b430d475f250a
-```
 ##################################################################################################################################################################
 
 ##### the conversation api contains 
