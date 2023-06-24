@@ -16,7 +16,7 @@ const UserSchema = new Schema(
     },
     full_name: {
       type: String,
-      required: true,
+      required: false,
     },
     email: {
       type: String,
@@ -100,7 +100,7 @@ UserSchema.pre("save", async function (next) {
   const user = this;
   this.f_name = this.f_name.toLowerCase();
   this.l_name = this.l_name.toLowerCase();
-  this.username =
+  this.full_name =
     this.f_name[0].toUpperCase() +
     this.f_name.slice(1).toLowerCase() +
     " " +

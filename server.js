@@ -73,6 +73,7 @@ const userRoute = require("./routes/public/user_router");
 app.use("/user", userRoute);
 
 // chatgpt routes
+// there is error with rate limit
 const chatgptRoute = require('./routes/public/chatgpt_router')
 app.use("/chat", chatgptRoute)
 

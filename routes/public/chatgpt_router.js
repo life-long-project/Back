@@ -11,7 +11,7 @@ const openai = new OpenAIApi(configuration);
 async function call_chat_gpt(text){
     try {
         const completion = await openai.createCompletion({
-            model: "text-davinci-003",
+            model: "text-davinci-002",
             prompt: text,
             max_tokens: 1000,
         });
@@ -27,9 +27,11 @@ router.post('/',
     message_validation,
     async (req, res) => {
     const message = req.body.message
+    console.log(message)
     let response;
     if (message) {
         response = await call_chat_gpt(message)
+        console.log(response)
         if(response){
             res.status(200).json({
                 response
