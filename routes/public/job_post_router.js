@@ -195,7 +195,21 @@ router.post('/',
         })
         try {
             const new_job_post = await job.save()
-            res.status(201).json(new_job_post)
+            res.status(201).json({
+                "_id": new_job_post._id,
+                "title": new_job_post.job_name,
+                "description": new_job_post.job_description,
+                "skills": new_job_post.job_skills,
+                "type": new_job_post.job_type,
+                "location": new_job_post.job_location,
+                "is_active": new_job_post.is_active,
+                "is_hidden": new_job_post.is_hidden,
+                "salary": new_job_post.salary,
+                "duration": new_job_post.job_duration,
+                "job_img_url": new_job_post.job_img_url,
+                "createdAt": new_job_post.createdAt,
+                "updatedAt": new_job_post.updatedAt,
+            })
         } catch (err) {
             res.status(400).json({message: err.message})
         }
@@ -241,7 +255,21 @@ router.patch('/:id',
     }
     try {
         const updated_jop_post = await res.job_post.save()
-        res.status(201).json(updated_jop_post)
+        res.status(201).json({
+            "_id": updated_jop_post._id,
+            "title": updated_jop_post.job_name,
+            "description": updated_jop_post.job_description,
+            "skills": updated_jop_post.job_skills,
+            "type": updated_jop_post.job_type,
+            "location": updated_jop_post.job_location,
+            "is_active": updated_jop_post.is_active,
+            "is_hidden": updated_jop_post.is_hidden,
+            "salary": updated_jop_post.salary,
+            "duration": updated_jop_post.job_duration,
+            "job_img_url": updated_jop_post.job_img_url,
+            "createdAt": updated_jop_post.createdAt,
+            "updatedAt": updated_jop_post.updatedAt,
+        })
     } catch (err) {
         res.status(400).json({message: err.message})
     }

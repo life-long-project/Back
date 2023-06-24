@@ -93,37 +93,10 @@ app.use("/upload", uploadRoute);
 
 
 // request all egypt citiies
+const { cities ,cities_with_code} = require("./cities")
 app.use('/cities',(req,res,next)=>{
-  res.status(200).json([
-        "Alexandria",
-        "Aswan",
-        "Asyut",
-        "Beheira",
-        "Beni Suef",
-        "Cairo",
-        "Dakahlia",
-        "Damietta",
-        "Faiyum",
-        "Gharbia",
-        "Giza",
-        "Ismailia",
-        "Kafr El Sheikh",
-        "Luxor",
-        "Matruh",
-        "Minya",
-        "Monufia",
-        "New Valley",
-        "North Sinai",
-        "Port Said",
-        "Qalyubia",
-        "Qena",
-        "Red Sea",
-        "Sharqia",
-        "Sohag",
-        "South Sinai",
-        "Suez"
-      ]
-  )
+  // console.log(cities_with_code['Giza'])
+  res.status(200).json(cities)
 })
 
 //comments
