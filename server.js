@@ -94,8 +94,8 @@ app.use("/upload", uploadRoute);
 
 
 // request all egypt citiies
-const { cities ,cities_with_code} = require("./cities")
-app.use('/cities',(req,res,next)=>{
+const { cities,cities_with_code,code_with_cities} = require("./cities")
+app.use('/cities',(req,res)=>{
   // console.log(cities_with_code['Giza'])
   res.status(200).json(cities)
 })
