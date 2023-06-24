@@ -5,6 +5,7 @@ const router = express.Router()
 const mongoose = require("mongoose");
 const {MongoClient} = require('mongodb');
 const {isValidObjectId, ObjectId} = require("mongoose");
+const {validate_apply_offer, offer_validation} = require("../../middlewares/validation/offer");
 
 router.get('/', async (req, res) => {
     try {
@@ -12,12 +13,53 @@ router.get('/', async (req, res) => {
         if (offers.length === 0) {
             res.status(400).json({message: "No offers yet"})
         }
-        res.status(200).json(offers)
+        else{
+            res.status(200).json(offers)
+        }
     } catch (e) {
         res.status(500).json({message: e.message})
     }
 })
-router.post('/apply/:job_post_id', async (req, res) => {
+
+// get the user applies for all jobs
+router.get('/user/', async (req, res) => {
+    try {
+        const offers = await Offer.find({
+            applicant_id: req.user._id
+        });
+        if (offers.length === 0) {
+            res.status(400).json({message: "No offers yet"})
+        }
+        else{
+            res.status(200).json(offers)
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message})
+    }
+})
+
+//get all offers for specific job
+router.get('/job/:job_id', async (req, res) => {
+    try {
+        const offers = await Offer.find({
+            job_post_id: req.params.job_id
+        });
+        if (offers.length === 0) {
+            res.status(400).json({message: "No offers yet"})
+        }
+        else{
+            res.status(200).json(offers)
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message})
+    }
+})
+
+
+router.post('/apply/:job_post_id',
+    validate_apply_offer,
+    offer_validation,
+    async (req, res) => {
     try {
         const job_post_id = req.params.job_post_id;
         if (job_post_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(job_post_id)) {
@@ -26,9 +68,9 @@ router.post('/apply/:job_post_id', async (req, res) => {
                 res.status(200).json({message: "Already applied"})
             } else {
                 const new_offer = new Offer({
-                    price: req.body.price,
-                    message: req.body.message,
-                    applicant_id: req.user._id,
+                    price: req.body.price || "0",
+                    message: req.body.message || "",
+                    applicant_id: req.user._id ,
                     job_post_id: job_post_id,
                 })
                 await new_offer.save();

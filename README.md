@@ -234,7 +234,7 @@ Content-Type: application/json
 }
 ```
 ---
-### rate
+### Rate
 
 ##### fields required for rating a user
 ```  
@@ -276,9 +276,54 @@ Content-Type: application/json
 
 ```
 
+---
+---
+### Offers / applies
+
+
+##### fields required for making offer
+``` 
+    price [string, required]
+    message [string, optional]
+```
+### create offer / apply for specific job
+``` 
+                 /--------job id --------/
+POST /offer/apply/6461757025d3b22292e0b2a6
+Content-Type: application/json
+
+{
+    "price": "5"
+}
+```
+
+### get all offers for all jobs
+```
+GET /offer/
+```
+
+### get specific offer
+```
+          /------ offer id ------/
+GET /offer/6496dfef6feefd920273f024
+```
+
+### get all offers for specific job
+```
+               /------ job id ------/
+GET /offer/job/64954e48bb4c768655bba547
+```
+
+### get all offers for present user
+```
+GET /offer/user
+```
+
+
+
+
 
 ---
-
 #### the profile api contains :
 
 - getting one profile (by direct click on the user_name or by search method)
