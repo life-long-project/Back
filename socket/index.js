@@ -1,5 +1,7 @@
 const Message = require("../models/message_model");
 const Conversation = require("../models/conversation");
+const { init } = require("passport");
+let io;
 module.exports = function (io) {
   io.on("connection", (socket) => {
     console.log("user connected");
@@ -49,4 +51,17 @@ module.exports = function (io) {
       console.log("user disconnected");
     });
   });
+};
+
+module.exports = {
+  init: (httpServer) => {
+    io = require("socket.io")(httpServer);
+    return io;
+  },
+  getIO: () => {
+    if (!io) {
+      throw new Error("IO not initialized");
+    }
+    return io;
+  },
 };

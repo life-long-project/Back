@@ -25,7 +25,6 @@ db.on("open", (error) => console.log("Connected to Snapjobs DB"));
 // const {uploadImage,uploadIDs, uploadIDsDummy} = require("./cloudinary");
 // const deleteImage = require("./fs");
 
-
 //todo: don't forget to delete CORS
 // CORS is enabled for all origins
 app.use(cors());
@@ -43,17 +42,11 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
-
-
-
-
-
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
-  console.log(req.body,req.params)
+  console.log(req.body, req.params);
   next(); // Pass control to the next middleware
-})
+});
 
 // authentication routes
 require("./auth/auth");
@@ -62,7 +55,11 @@ app.use("/", routes);
 
 // secure routes
 const secureRoute = require("./routes/secure/secure_routes");
-app.use("/secure", passport.authenticate("jwt", { session: false }), secureRoute);
+app.use(
+  "/secure",
+  passport.authenticate("jwt", { session: false }),
+  secureRoute
+);
 
 //admin routes
 const adminRoute = require("./routes/admin/admin_router");
@@ -74,9 +71,8 @@ app.use("/user", userRoute);
 
 // chatgpt routes
 // there is error with rate limit
-const chatgptRoute = require('./routes/public/chatgpt_router')
-app.use("/chat", chatgptRoute)
-
+const chatgptRoute = require("./routes/public/chatgpt_router");
+app.use("/chat", chatgptRoute);
 
 //rate routes
 const rateRoute = require("./routes/secure/rate_router");
@@ -92,13 +88,12 @@ app.use("/offer", passport.authenticate("jwt", { session: false }), offerRoute);
 const uploadRoute = require("./routes/public/upload_router");
 app.use("/upload", uploadRoute);
 
-
 // request all egypt citiies
-const { cities,cities_with_code,code_with_cities} = require("./cities")
-app.use('/cities',(req,res)=>{
+const { cities, cities_with_code, code_with_cities } = require("./cities");
+app.use("/cities", (req, res) => {
   // console.log(cities_with_code['Giza'])
-  res.status(200).json(cities)
-})
+  res.status(200).json(cities);
+});
 
 //comments
 const commentRouter = require("./routes/public/comment_router");
@@ -120,3 +115,9 @@ const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
 const io = socketio(expressServer);
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
