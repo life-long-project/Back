@@ -1,5 +1,4 @@
-import * as socketIO from "socket.io";
-const socket = socketIO.connect();
+const io = require("../../socket/index");
 
 const { check, validationResult } = require("express-validator");
 
