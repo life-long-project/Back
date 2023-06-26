@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 router.get(
-    '/profile',
+    '/test-secure-data',
     (req, res, next) => {
         res.json({
             message: 'You made it to the secure route',
