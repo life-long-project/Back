@@ -367,6 +367,9 @@ GET /offer/user
 
 - updating the user profile (patch)
 - https://back-ph2h.onrender.com/profile/6463b901b377ff4bae1c9c1a
+- {
+  "phone":"5555555"
+  }
 
 - getting all the profiles (only by admin)(not accessable by this user )
 - https://back-ph2h.onrender.com/profile/
