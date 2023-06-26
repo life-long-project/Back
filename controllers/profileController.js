@@ -1,8 +1,8 @@
-const profile = require("../models/user_profile");
+const Profile = require("../models/user");
 
 exports.createProfile = async (req, res, next) => {
   try {
-    const newProfile = await profile.create(req.body);
+    const newProfile = await Profile.create(req.body);
     res.status(201).json({
       message: "your profile created successfully!",
       data: {
@@ -23,12 +23,12 @@ exports.getAllprofiles = async (req, res, next) => {
     const queryObject = { ...req.query };
     const excludedFields = ["page", "sort", "limit", "fields"];
     excludedFields.forEach((Element) => delete queryObject[Element]);
-    const profilee = await profile.find(queryObject);
+    const profile = await Profile.find(queryObject);
 
     res.status(200).json({
       status: "success",
-      results: profilee.length,
-      data: { profilee },
+      results: profile.length,
+      data: { profiles: profile },
     });
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -37,7 +37,7 @@ exports.getAllprofiles = async (req, res, next) => {
 
 exports.getProfileById = async (req, res) => {
   try {
-    const profileee = await profile.findById(req.params.id);
+    const profileee = await Profile.findById(req.params.id);
     res.json({ data: profileee, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -46,7 +46,7 @@ exports.getProfileById = async (req, res) => {
 
 exports.updateProfile = async (req, res, next) => {
   try {
-    const profileee = await profile.findByIdAndUpdate(req.params.id, req.body, {
+    const profileee = await Profile.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -57,7 +57,7 @@ exports.updateProfile = async (req, res, next) => {
 };
 exports.deleteProfile = async (req, res) => {
   try {
-    await profile.findByIdAndDelete(req.params.id);
+    await Profile.findByIdAndDelete(req.params.id);
     res.status(204).json({ status: "success" });
   } catch (err) {
     res.status(404).json({

@@ -53,6 +53,12 @@ require("./auth/auth");
 const routes = require("./routes/auth/auth_routes");
 app.use("/", routes);
 
+
+const profileRouter= require("./routes/public/profileRoutes");
+app.use('/profile', profileRouter);
+
+
+
 // secure routes
 const secureRoute = require("./routes/secure/secure_routes");
 app.use(
