@@ -4,7 +4,7 @@ const { route } = require("./messeges");
 const Conversation = require("../../models/conversation");
 const { Mongoose } = require("mongoose");
 const UserModel = require("../../models/user");
-const io = require("../../socket/index");
+const io = require("../../socket");
 const message_model = require("../../models/message_model");
 
 // get the messages of a conversation
