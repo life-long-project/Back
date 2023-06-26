@@ -73,8 +73,8 @@ app.use("/admin", passport.authenticate("jwt", {session: false}), adminRoute);
 
 //users
 // todo: make it secure
-const userRoute = require("./routes/secure/user_router");
-app.use("/user", passport.authenticate("jwt", {session: false}), userRoute);
+const userRoute = require("./routes/public/user_router");
+app.use("/user", /* passport.authenticate("jwt", {session: false}), */ userRoute);
 
 // chatgpt routes
 // there is error with rate limit
