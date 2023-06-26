@@ -361,11 +361,19 @@ GET /offer/user
 
 #### the profile api contains :
 
-- getting one profile (by direct click on the user_name or by search method)
-- updating the user profile
-- getting all the profiles (only by admin)
-- deleting user profile (only by admin)
-- creating a new profile (only in sign up)
+- getting one profile (by direct click on the user_name or by search method) (get)
+
+- https://back-ph2h.onrender.com/profile/6463b901b377ff4bae1c9c1a
+
+- updating the user profile (patch)
+- https://back-ph2h.onrender.com/profile/6463b901b377ff4bae1c9c1a
+
+- getting all the profiles (only by admin)(not accessable by this user )
+- https://back-ph2h.onrender.com/profile/
+
+- deleting user profile (only by admin) -https://back-ph2h.onrender.com/profile/the user id
+
+- creating a new profile (only in sign up) X X X X X X X X X X X
 
 ##################################################################################################################################################################
 
