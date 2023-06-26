@@ -4,6 +4,7 @@ const { route } = require("./messeges");
 const Conversation = require("../../models/conversation");
 const { Mongoose } = require("mongoose");
 const UserModel = require("../../models/user");
+const io = require("../../socket/index");
 const message_model = require("../../models/message_model");
 
 // get the messages of a conversation
@@ -23,39 +24,41 @@ router.get("/:conversationId", async (req, res) => {
 
 //start a new conversation between two users
 router.post("/first_message", async (req, res, next) => {
-  const { senderId, receiverId, text } = req.body;
+  try {
+    const { senderId, receiverId, text } = req.body;
 
-  let conversation = await Conversation.findOne({
-    members: { $all: [senderId, receiverId] },
-  });
-
-  if (!conversation) {
-    conversation = await Conversation.create({
-      members: [senderId, receiverId],
+    let conversation = await Conversation.findOne({
+      members: { $all: [senderId, receiverId] },
     });
-  }
 
-  const newMessage = new Message({
-    conversationId: conversation._id,
-    sender: senderId,
-    receiver: receiverId,
-    senderName: UserModel.findById(senderId)
-      .then((user) => user.f_name)
-      .catch((err) => err),
-    receiverName: UserModel.findById(receiverId)
-      .then((user) => user.f_name)
-      .catch((err) => err),
-    text,
-  });
+    if (!conversation) {
+      conversation = await Conversation.create({
+        members: [senderId, receiverId],
+      });
+    }
 
-  const savedMessage = await newMessage.save();
+    const newMessage = new Message({
+      conversationId: conversation._id,
+      sender: senderId,
+      receiver: receiverId,
+      senderName: UserModel.findById(senderId)
+        .then((user) => user.f_name)
+        .catch((err) => err),
+      receiverName: UserModel.findById(receiverId)
+        .then((user) => user.f_name)
+        .catch((err) => err),
+      text,
+    });
 
-  if (savedMessage) {
-    res
-      .status(201)
-      .json({ message: "Message sent successfully", savedMessage });
-  } else {
-    res.status(500).json({ message: "Failed to send message" });
+    const savedMessage = await newMessage.save();
+
+    if (savedMessage) {
+      res
+        .status(201)
+        .json({ message: "Message sent successfully", savedMessage });
+    }
+  } catch {
+    res.status(500).json({ message: err.message, err });
   }
 });
 
@@ -71,6 +74,7 @@ router.post("/new_message", async (req, res) => {
         new: true,
       }
     );
+    io.emit("messageReceived", savedMesseges);
     res.status(200).json(savedMesseges);
   } catch (err) {
     res.status(500).json({ message: err.message, err });

@@ -20,6 +20,23 @@ module.exports = function (io) {
       }
     });
 
+    io.on("connection", (socket) => {
+      console.log("New client connected");
+
+      // Handle incoming messages
+      socket.on("new_message", (data) => {
+        // Process the message
+        // Emit the message to all connected clients
+        io.emit("message", data);
+      });
+
+      // Handle client disconnection
+      socket.on("disconnect", () => {
+        console.log("Client disconnected");
+      });
+    });
+
+    return io;
     // Send message
     socket.on("sendMessage", async (data) => {
       const { conversationId, senderId, text } = data;
