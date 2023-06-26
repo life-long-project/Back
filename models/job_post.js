@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const {ObjectId} = require('mongodb');
+const Notification = require("./notification");
 
 const job_post_schema = new mongoose.Schema(
     {
         // job_location attributes
         posted_by_id: {
             type: ObjectId,
-            ref: 'user',
             required: true,
         },
         job_name: {
@@ -54,6 +54,11 @@ const job_post_schema = new mongoose.Schema(
             required: false,
             default: "",
         },
+        accepted_user_id: {
+            type: ObjectId,
+            default: null,
+            required: false,
+        },
 
         //todo: don't forget handle the size of images max < 16MB when upload it to our cloud or server
         //todo: we can use CDN (s3 aws, cloudnary) after some developing
@@ -62,11 +67,11 @@ const job_post_schema = new mongoose.Schema(
             default:
                 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png",
         },
-        rating:{
+        rating: {
             type: Number,
             default: 0
         },
-        total_rating:{
+        total_rating: {
             type: Number,
             default: 0
         }
@@ -82,8 +87,8 @@ job_post_schema.pre(
     'save',
     async function (next) {
         const job = this;
-        let skills_arr =[]
-        this.job_skills.forEach((skill)=>{
+        let skills_arr = []
+        this.job_skills.forEach((skill) => {
             skills_arr.push(skill.toUpperCase())
         })
         this.job_skills = skills_arr
@@ -91,6 +96,18 @@ job_post_schema.pre(
     }
 );
 
+job_post_schema.pre("save", async function (next) {
+    const notification = new Notification({
+        action: 'creating new job',
+        from_id: this.posted_by_id,
+        for_admin: true,
+        // todo: check if it get error
+        job_post_id: this._id
+
+    })
+    await notification.save()
+    next();
+});
 
 
 job_post_schema.index({job_name: 'text', job_description: 'text'})

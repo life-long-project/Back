@@ -44,6 +44,7 @@ passport.use('signup', new LocalStrategy({
             gender: req.body.gender,
 
             age: req.body.age || 20,
+            // todo: how save cities
             cities: [req.body.city || "Cairo"],
             country: req.body.country || "Egypt",
             past_experience: req.body.past_experience || "No Experience",

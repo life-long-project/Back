@@ -43,21 +43,23 @@ job_rate_Schema.pre('save', async function (next) {
         job_post.total_rating = total_rating
         await job_post.save()
         next()
-    }catch (err) {
+    } catch (err) {
         next(err)
     }
 })
 
 job_rate_Schema.pre('save', async function (next) {
+    const job_post = await Job_post.findOne(this.rated_job_id)
+
     const notification = new Notification({
-        action: 'rating',
+        action: 'Rating Job',
         from_id: this.rater_id,
+        for_id: job_post['posted_by_id'],
         job_post_id: this.rated_job_id,
     })
     await notification.save()
     next()
 })
-
 
 
 const Job_rateModel = mongoose.model('Job_rate', job_rate_Schema);

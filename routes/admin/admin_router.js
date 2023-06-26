@@ -177,7 +177,7 @@ router.post('/reported_job/:reported_job_request_id/:action', async (req, res) =
                 //
                 //     break;
                 case 'hide':
-                    await Reported_job_post.findByIdAndUpdate(reported_job_request_id, {status: "hided"})
+                    await Reported_job_post.findByIdAndUpdate(reported_job_request_id, {status: "hidden"})
                     break;
             }
             res.status(200).json({message: "Job is " + action + ",User is blocked."})

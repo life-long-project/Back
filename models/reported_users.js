@@ -1,6 +1,7 @@
 const User = require("./user")
 const mongoose = require("mongoose")
 const {ObjectId} = require('mongodb');
+const Notification = require("./notification");
 
 
 const reported_users_schema = new mongoose.Schema({
@@ -36,6 +37,14 @@ reported_users_schema.pre('update', async function (next) {
     if (this.getUpdate().$set.status === 'blocked') {
         const user_id = this.reported_id
         User.findByIdAndUpdate(user_id, {is_blocked: true})
+        const notification = new Notification({
+            action: 'updating reported user to blocked',
+            for_id: this.reporter_id,
+            from_id: this.reported_id
+        })
+        await notification.save()
+
+
     }
     next()
 })

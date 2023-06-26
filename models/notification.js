@@ -3,7 +3,7 @@ const {ObjectId} = require('mongodb');
 
 const notificationSchema = new mongoose.Schema(
     {
-        action:{
+        action: {
             type: String,
             required: true
         },
@@ -14,6 +14,11 @@ const notificationSchema = new mongoose.Schema(
         for_id: {
             type: ObjectId,
             required: false
+        },
+        for_admin: {
+            type: Boolean,
+            required: false,
+            default: false
         },
         job_post_id: {
             type: ObjectId,
