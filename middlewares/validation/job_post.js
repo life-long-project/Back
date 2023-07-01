@@ -29,6 +29,7 @@ exports.validate_job_post_create = [
         .isString().withMessage("Invalid job description")
         .isLength({min: 3, max: 200}).withMessage('Job description must be between 3 and 200 characters'),
     check('skills')
+        .Optional()
         .isArray().withMessage('Skills must be an array'),
     check('type')
         .notEmpty().withMessage('Job type required!')
@@ -37,8 +38,7 @@ exports.validate_job_post_create = [
         .isIn(['full-time', 'part-time', 'service']).withMessage('job type must be full-time, part-time or service'),
     check('location')
         .optional()
-        .isString().withMessage("Invalid location")
-        .isLength({min: 3, max: 20}).withMessage('Salary must be between 3 and 20 characters'),
+        .isString().withMessage("Invalid location"),
 
     check('salary')
         .notEmpty().withMessage('job salary required!')
