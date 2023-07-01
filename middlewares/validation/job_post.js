@@ -36,7 +36,7 @@ exports.validate_job_post_create = [
         .trim()
         .isIn(['full-time', 'part-time', 'service']).withMessage('job type must be full-time, part-time or service'),
     check('location')
-        .notEmpty().withMessage('job location required!')
+        .optional()
         .isString().withMessage("Invalid location")
         .isLength({min: 3, max: 20}).withMessage('Salary must be between 3 and 20 characters'),
 

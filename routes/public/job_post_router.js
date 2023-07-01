@@ -11,9 +11,22 @@ const {
     job_post_validation,
     validate_job_post_update,
 } = require("../../middlewares/validation/job_post");
+const {cities, cities_with_code, code_with_cities} = require("../../cities");
 
-// list the skills
-router.get("/skills", async (req, res) => {
+/*
+options / route
+
+
+sort
+filter-skills
+cities
+
+
+ */
+
+
+
+router.get("/options", async (req, res) => {
     try {
         const skills_db = await Job_post.aggregate([
             {$unwind: "$job_skills"},
@@ -34,11 +47,27 @@ router.get("/skills", async (req, res) => {
         if (skills_arr.length === 0) {
             skills_arr = [""];
         }
-        res.status(200).json(skills_arr);
+
+        const sort = [
+            "title",
+            "description",
+            "skills",
+            "type",
+            "location",
+            "salary",
+            "duration"
+        ]
+
+        res.status(200).json({
+            "skills-filters" : skills_arr,
+            "sort": sort,
+            cities
+        });
     } catch (e) {
         res.status(404).json("not found " + e.message);
     }
-});
+})
+
 
 //getting all data for home page or search with ?q=query
 router.get("/", async (req, res) => {
@@ -421,9 +450,17 @@ async function get_job_post_details(req, res, next) {
                 {
                     $lookup: {
                         from: "comments",
-                        localField: "job_id",
+                        localField: "_id",
                         foreignField: "job_id",
                         as: "comments",
+                     },
+                },
+                {
+                    $lookup: {
+                        from: "offers",
+                        localField: "_id",
+                        foreignField: "job_post_id",
+                        as: "offers",
                     },
                 },
             ]);

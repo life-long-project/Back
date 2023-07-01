@@ -63,9 +63,10 @@ const job_post_schema = new mongoose.Schema(
         //todo: don't forget handle the size of images max < 16MB when upload it to our cloud or server
         //todo: we can use CDN (s3 aws, cloudnary) after some developing
         job_img_url: {
-            type: String,
-            default:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png",
+            type: Array,
+            default:[
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
+            ]
         },
         rating: {
             type: Number,
