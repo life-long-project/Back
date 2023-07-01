@@ -152,20 +152,53 @@ router.get("/", async (req, res) => {
                     job_duration: 1,
                     job_img_url: 1,
                     rating: 1,
-                    total_rating: 1,
+                    total_Nrating: 1,
                     createdAt: 1,
                     updatedAt: 1,
                     user: "$user",
                 },
             },
         ]);
-        const total = Object(jobs).length;
+        const len_all_jobs = await Job_post.aggregate([
+            {
+                $match: {
+                    is_hidden: {
+                        $ne: true,
+                    },
+                },
+            },
+            {
+                $match: {
+                    $or: [
+                        {
+                            job_name: {
+                                $regex: search,
+                                $options: "i",
+                            },
+                        },
+                        {
+                            job_description: {
+                                $regex: search,
+                                $options: "i",
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                $match: {
+                    job_skills: {
+                        $in: [...skills],
+                    },
+                },
+            }
+        ]);
         const response = {
             error: false,
             search,
             page: page + 1,
             limit,
-            total,
+            total: Object(len_all_jobs).length,
             skills,
             jobs,
         };
@@ -379,7 +412,7 @@ async function get_job_post_details(req, res, next) {
                         job_duration: 1,
                         job_img_url: 1,
                         rating: 1,
-                        total_rating: 1,
+                        total_Nrating: 1,
                         createdAt: 1,
                         updatedAt: 1,
                         user: "$user",

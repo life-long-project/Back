@@ -71,7 +71,7 @@ const job_post_schema = new mongoose.Schema(
             type: Number,
             default: 0
         },
-        total_rating: {
+        total_Nrating: {
             type: Number,
             default: 0
         }

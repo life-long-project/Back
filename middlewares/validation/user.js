@@ -59,7 +59,7 @@ exports.validate_user_signup = [
     check('phone')
         .notEmpty().withMessage('Phone number required!')
         .isString().withMessage("Invalid phone number")
-        .trim().isLength({min: 11, max: 11}).withMessage('Phone number must be 11 numbers'),
+        .trim().isLength({min: 11, max: 13}).withMessage('Phone number must be 11 or 13 numbers'),
     check('city')
         .optional({nullable: true})
         .notEmpty()

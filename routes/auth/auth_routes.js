@@ -47,7 +47,10 @@ router.post('/login',
             is_admin: user.is_admin
         };
         const token = jwt.sign({ user: body }, jwt_secret);
-        return res.json({ "auth_token": token });
+        return res.json({
+            "auth_token": token,
+            "user": user
+        });
     } catch (error) {
         return res.status(500).json({ message: 'Internal Server Error' });
     }
