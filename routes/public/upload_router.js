@@ -11,6 +11,9 @@ router.post(
     upload,
     (req, res) => {
         const files = req.files;
+        console.log(req.body);
+        // res.send(req.body);
+
         const responses = [];
         const f_response = [];
 
@@ -37,6 +40,8 @@ router.post(
         });
     }
 );
+
+
 
 
 

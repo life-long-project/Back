@@ -9,21 +9,27 @@ cloudinary.config({
 })
 
 
-function uploadImage(file, callback) {
-    cloudinary.uploader.upload(file.path,
-        {folder: "images"},
-        function (err, result) {
-            if (err) {
-                console.error(err);
-                return callback(err);
+function uploadImage(file) {
+    return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload(
+            file.path,
+            { folder: "images" },
+            (err, result) => {
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                } else {
+                    console.log("Image uploaded successfully.");
+                    // Delete file from server
+                    console.log(file.path);
+                    deleteFile(file.path);
+                    resolve(result);
+                }
             }
-            console.log('Image uploaded successfully.');
-            // Delete file from server
-            console.log(file.path)
-            deleteFile(file.path);
-            callback(null, result);
-        });
+        );
+    });
 }
+
 
 function uploadIDs(file, callback) {
     cloudinary.uploader.upload(file.path,

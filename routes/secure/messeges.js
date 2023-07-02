@@ -26,10 +26,12 @@ router.get("/:conversationId", async (req, res) => {
     });
     // if (messages.length === 0) {
     //   res.status(200).json({
-    //     status: 0,
+    //     status: "error",
     //     message: "No Messages yet",
     //     messages,
     //   });
+    // }
+    // else{
     res.status(200).json({ status: 0, messages });
     // }
   } catch (err) {

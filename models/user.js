@@ -69,7 +69,7 @@ const UserSchema = new Schema(
     profile_url: {
       type: String,
       default:
-        "https://res.cloudinary.com/dwnvh8vn4/image/upload/v1682517154/images/ntn03pogiz3nxlmbq7be.png",
+        "https://res.cloudinary.com/dwnvh8vn4/image/upload/v1688294025/test_rhvhku.png",
     },
     id_url: {
       type: String,
