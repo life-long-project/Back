@@ -40,11 +40,16 @@ app.use((req, res, next) => {
 
 //json middleware
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
     console.log(`Incoming request: ${req.method} ${req.url}`);
-    console.log(req.body, req.params);
+    console.log(
+        `\nIncoming body: `,req.body,
+        `\nIncoming params:`, req.params,
+        // `\nIncoming query:`,req.query,
+        // `\nIncoming files:` ,req.files
+    );
     next(); // Pass control to the next middleware
 });
 
