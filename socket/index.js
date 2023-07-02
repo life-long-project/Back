@@ -83,7 +83,7 @@ module.exports = {
   },
   getIO: () => {
     if (!io) {
-      throw new Error("IO not initialized");
+      throw new Error("IO is not initialized");
     }
     return io;
   },
