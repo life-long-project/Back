@@ -288,6 +288,7 @@ router.post(
 
             res.status(201).json({
                 _id: new_job_post._id,
+                posted_by_id: new_job_post.posted_by_id,
                 title: new_job_post.job_name,
                 description: new_job_post.job_description,
                 skills: new_job_post.job_skills,
