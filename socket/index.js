@@ -24,10 +24,12 @@ module.exports = function (io) {
     // Handle incoming messages
     socket.on("sendMessage", async (data) => {
       const { conversationId, senderId, text } = data;
+      console.log(data);
 
       try {
         // Save message to database
         const savedMessage = await saveMessage(conversationId, senderId, text);
+        console.log(savedMessage);
 
         // Update conversation's lastMessage field
         await updateConversationLastMessage(conversationId, savedMessage.text);
@@ -35,6 +37,7 @@ module.exports = function (io) {
         // Retrieve saved message with populated sender field
         const messageWithSender = await getMessageWithSender(savedMessage._id);
 
+        console.log(messageWithSender);
         // Emit the message to the conversation room
         io.to(conversationId).emit("messageReceived", messageWithSender);
 
