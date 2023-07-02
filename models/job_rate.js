@@ -34,13 +34,13 @@ const job_rate_Schema = new mongoose.Schema({
 job_rate_Schema.pre('save', async function (next) {
     try {
         const job_post = await Job_post.findOne(this.rated_job_id)
-        const total_rating = (job_post.total_rating || 0) + 1
+        const total_Nrating = (job_post.total_Nrating || 0) + 1
         const new_rating = this.rating
         const current_rating = job_post.rating || 0
-        const updated_rating = (current_rating * job_post.total_rating + new_rating) / total_rating
+        const updated_rating = (current_rating * job_post.total_Nrating + new_rating) / total_Nrating
 
         job_post.rating = updated_rating
-        job_post.total_rating = total_rating
+        job_post.total_Nrating = total_Nrating
         await job_post.save()
         next()
     } catch (err) {
