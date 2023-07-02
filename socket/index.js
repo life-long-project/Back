@@ -24,7 +24,6 @@ module.exports = function (io) {
     // Handle incoming messages
     socket.on("sendMessage", async (data) => {
       const { conversationId, senderId, text } = data;
-      console.log(data);
 
       try {
         // Save message to database
