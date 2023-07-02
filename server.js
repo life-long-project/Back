@@ -134,8 +134,9 @@ const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
 const io = require("socket.io")({
+  expressServer,
   cors: {
-    origin: "https://back-ph2h.onrender.com",
+    origin: "https://shaghal-22b6a.web.app/",
   },
 });
 
