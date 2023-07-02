@@ -26,25 +26,17 @@ module.exports = function (io) {
       const { conversationId, senderId, text } = data;
 
       try {
-        // Save message to database
-        const savedMessage = await saveMessage(conversationId, senderId, text);
-        console.log(savedMessage);
-
-        // Update conversation's lastMessage field
-        await updateConversationLastMessage(conversationId, savedMessage.text);
-
-        // Retrieve saved message with populated sender field
-        const messageWithSender = await getMessageWithSender(savedMessage._id);
-
-        console.log(messageWithSender);
-        // Emit the message to the conversation room
-        io.to(conversationId).emit("messageReceived", messageWithSender);
-
-        console.log(`Message with sender: ${messageWithSender}`);
-        res.status(200).json(savedMessage);
+        const message = await Message.create({
+          conversation: conversationId,
+          sender: senderId,
+          text,
+        });
+        const savedMessage = await message.save();
+        if (savedMessage) {
+          io.to(conversationId).emit("newMessage", savedMessage);
+        }
       } catch (err) {
         console.error(err);
-        res.status(500).json({ message: err.message, err });
       }
     });
 
@@ -52,31 +44,10 @@ module.exports = function (io) {
     socket.on("disconnect", () => {
       console.log("User disconnected");
     });
-  });
 
-  return io;
+    return io;
+  });
 };
-
-async function saveMessage(conversationId, senderId, text) {
-  const message = new Message({
-    conversation: conversationId,
-    sender: senderId,
-    text,
-  });
-  return message.save();
-}
-
-async function updateConversationLastMessage(conversationId, lastMessage) {
-  return Conversation.findByIdAndUpdate(
-    conversationId,
-    { $set: { lastMessage } },
-    { new: true }
-  );
-}
-
-async function getMessageWithSender(messageId) {
-  return Message.findById(messageId).populate("sender", "fullName");
-}
 
 module.exports = {
   init: (httpServer) => {
