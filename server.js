@@ -134,6 +134,7 @@ const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
 const io = require("socket.io")(expressServer);
+
 let users = [];
 
 const addUser = (userId, socketId) => {
@@ -151,7 +152,7 @@ const getUser = (userId) => {
 
 io.on("connection", (socket) => {
   //when ceonnect
-  //   console.log("a user connected." + socket.id);
+  console.log("a user connected." + socket.id);
 
   //take userId and socketId from user
   socket.on("addUser", (userId) => {
