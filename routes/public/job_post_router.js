@@ -255,23 +255,25 @@ router.post(
         // console.log(req.body, files);
 
         try {
-            for (const file of files) {
-                const result = await uploadImage(file);
-                responses.push(result);
-            }
+            if(files.length > 0){
+                for (const file of files) {
+                    const result = await uploadImage(file);
+                    responses.push(result);
+                }
 
-            responses.forEach((resp) => {
-                f_response.push(resp.secure_url);
-            });
+                responses.forEach((resp) => {
+                    f_response.push(resp.secure_url);
+                });
+            }
 
             const job = new Job_post({
                 posted_by_id: mongoose.Types.ObjectId(req.user._id || "641b0c2e95e465087359ee93"),
                 job_name: req.body.title || "",
                 job_description: req.body.description || "",
                 job_skills: req.body.skills || [],
-                job_type: req.body.type || "Full-time",
+                job_type: req.body.type || "full-time",
                 job_location: req.body.location || "Cairo",
-                required_experience: req.body.required_experience || "Any Experience",
+                required_experience: req.body.required_experience || "ALL",
                 // is_active: req.body.is_active,
                 // is_hidden: req.body.is_hidden,
                 salary: req.body.salary || "1000",
