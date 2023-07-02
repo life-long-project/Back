@@ -133,12 +133,7 @@ const port = process.env.PORT || 3000;
 const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
-const io = require("socket.io")({
-  expressServer,
-  cors: {
-    origin: "https://shaghal-22b6a.web.app/",
-  },
-});
+const io = socketio(expressServer);
 
 let users = [];
 
