@@ -119,13 +119,16 @@ GET https://back-ph2h.onrender.com/user/6449249fe8392437d61826ff
 ###### Creating job validation pattern
 
 ```
-    title (string, required),
-    description (string, required),
-    skills (array, optional),
-    type (string['fullt-ime', 'part-time', 'service'], required),
-    location (string, optional),
-    salary (integer, required),
-    duration (integer, optional),
+    title (string => "test name", required),
+    description (string => "test description", required),
+    type (string => "full-time", required),
+    salary (string => "100", required),
+    
+    skills (array => ["test skill 1","test skill 2"], optional),
+    location (string => "cairo", optional),
+    required_experience (string => "beginner", optional)
+    duration (string => "20", optional),
+    images (images => one or multiple images,optional)
 ```
 
 ```
@@ -156,13 +159,17 @@ DELETE https://back-ph2h.onrender.com/jobs/63a1e1aced38843b5f4a3512
 ##### Updating job validation pattern
 
 ```
-    title (string, optional),
-    description (string, optional),
-    skills (array, optional),
-    type (string['full-time', 'part-time', 'service'], optional),
-    location (string, optional),
-    salary (integer, optional),
-    duration (integer, optional),
+   title (string => "test name", optional),
+    description (string => "test description", optional),
+    skills (array => ["test skill 1","test skill 2"], optional),
+    type (string => "full-time", optional),
+    location (string => "cairo", optional),
+    required_experience (string => "beginner", optional)
+    salary (string => "100", optional),
+    duration (string => "20", optional),
+    images (images => one or multiple images,optional),
+    is_active (boolean => true, optional)
+    is_hidden (boolean => true, optional)
 ```
 
 ```
@@ -182,18 +189,21 @@ Content-Type: application/json
 #### Signup user validation pattern
 
 ```
-f_name (string, required),
-l_name (string, required),
-email (string[correct email], required),
-password (string, required),
-confirm_password (string, required),
-phone (string, required),
-city (string, optional),
-country (string, optional),
-age (integer, optional),
-gender (string, required),
-past_experience (string, optional),
-skills (array, optional),
+fields required:
+
+    f_name (string, required),
+    l_name (string, required),
+    email (string[correct email], required),
+    password (string, required),
+    confirm_password (string, required),
+
+    phone (string, optional),
+    gender (string, optional),
+    age (number, optional),
+    city (string, optional),
+    country (string, optional),
+    past_experience (string, optional)
+    skills (array, optional),
 ```
 
 #### signup
