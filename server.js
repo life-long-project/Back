@@ -130,9 +130,31 @@ const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
 const io = require("./socket/index").init(expressServer);
+
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  //when ceonnect
+  console.log("a user connected." + socket.id);
+
+  //take userId and socketId from user
+  socket.on("addUser", (userId) => {
+    console.log(userId, socket.id);
+    addUser(userId, socket.id);
+    io.emit("getUsers", users);
+  });
+
+  //send and get message
+  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+    const user = getUser(receiverId);
+    io.to(user.socketId).emit("newMessage", {
+      senderId,
+      text,
+    });
+  });
+
+  //when disconnect
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("a user disconnected!");
+    removeUser(socket.id);
+    io.emit("getUsers", users);
   });
 });

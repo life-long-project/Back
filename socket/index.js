@@ -1,53 +1,45 @@
-const { init } = require("passport");
-const Message = require("../models/message_model");
-const Conversation = require("../models/conversation");
+// let users = [];
 
-module.exports = function (io) {
-  io.on("connection", (socket) => {
-    console.log("User connected");
+// const addUser = (userId, socketId) => {
+//   !users.some((user) => user.userId === userId) &&
+//     users.push({ userId, socketId });
+// };
 
-    // Join conversation room
-    socket.on("joinConversation", async (conversationId) => {
-      socket.join(conversationId);
+// const removeUser = (socketId) => {
+//   users = users.filter((user) => user.socketId !== socketId);
+// };
 
-      try {
-        // Load previous messages for the conversation
-        const messages = await Message.find({
-          conversation: conversationId,
-        }).populate("sender", "fullName");
-        socket.emit("previousMessages", messages);
-      } catch (err) {
-        console.error(err);
-      }
-    });
+// const getUser = (userId) => {
+//   return users.find((user) => user.userId === userId);
+// };
 
-    // Handle incoming messages
-    socket.on("sendMessage", async (data) => {
-      const { conversationId, senderId, text } = data;
+// io.on("connection", (socket) => {
+//   //when ceonnect
+//   console.log("a user connected." + socket.id);
 
-      try {
-        const message = await Message.create({
-          conversation: conversationId,
-          sender: senderId,
-          text,
-        });
-        const savedMessage = await message.save();
-        if (savedMessage) {
-          io.to(conversationId).emit("newMessage", savedMessage);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    });
+//   //take userId and socketId from user
+//   socket.on("addUser", (userId) => {
+//     console.log(userId, socket.id);
+//     addUser(userId, socket.id);
+//     io.emit("getUsers", users);
+//   });
 
-    // Handle client disconnection
-    socket.on("disconnect", () => {
-      console.log("User disconnected");
-    });
+//   //send and get message
+//   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+//     const user = getUser(receiverId);
+//     io.to(user.socketId).emit("newMessage", {
+//       senderId,
+//       text,
+//     });
+//   });
 
-    return io;
-  });
-};
+//   //when disconnect
+//   socket.on("disconnect", () => {
+//     console.log("a user disconnected!");
+//     removeUser(socket.id);
+//     io.emit("getUsers", users);
+//   });
+// });
 
 module.exports = {
   init: (httpServer) => {
