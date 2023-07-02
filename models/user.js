@@ -86,7 +86,7 @@ const UserSchema = new Schema(
             type: Number,
             default: 0,
         },
-        total_rating: {
+        total_Nrating: {
             type: Number,
             default: 0,
         },

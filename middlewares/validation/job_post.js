@@ -56,7 +56,8 @@ exports.validate_job_post_create = [
     check("required_experience")
         .optional()
         .trim()
-        .isString().withMessage("Invalid required experience, must be string"),
+        .isString().withMessage("Invalid required experience, must be string")
+        .isIn(['ALL', 'beginner', 'intermediate', 'expert']).withMessage('required experience should be on of [\'ALL\', \'beginner\', \'intermediate\', \'expert\']'),
 
     check('salary')
         .notEmpty().withMessage('job salary required!')

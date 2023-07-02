@@ -38,7 +38,8 @@ const job_post_schema = new mongoose.Schema(
         required_experience: {
             type: String,
             required: false,
-            enum: ["beginner", "intermediate", "expert"],
+            default: "ALL",
+            enum: ["ALL", "beginner", "intermediate", "expert"],
         },
         is_active: {
             type: Boolean,
@@ -70,7 +71,7 @@ const job_post_schema = new mongoose.Schema(
         //todo: we can use CDN (s3 aws, cloudnary) after some developing
         job_img_url: {
             type: Array,
-            default:[
+            default: [
                 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
             ]
         },

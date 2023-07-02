@@ -1,90 +1,82 @@
 const upload = require("../../multer");
-const {uploadImage,uploadIDs,uploadIDsDummy} = require("../../cloudinary");
+const {
+    uploadImage,
+    uploadIDs,
+    uploadIDsDummy
+} = require("../../cloudinary");
 const express = require('express')
-const { translate } = require('bing-translate-api');
+const {translate} = require('bing-translate-api');
 const router = express.Router()
+const User = require('../../models/user')
 
+// upload profile image
 
 router.post(
-    "/",
-    // passport.authenticate("jwt", { session: false }),
+    "/profile",
     upload,
-    (req, res) => {
+    async (req, res) => {
+        let responses = [];
+        let f_response = [];
+
         const files = req.files;
-        console.log(req.body);
-        // res.send(req.body);
+        // console.log(req.body, files);
 
-        const responses = [];
-        const f_response = [];
+        try {
+            const result = await uploadImage(files[0]);
+            f_response.push(result.secure_url);
+            const user = User.findByIdAndUpdate(req.user._id, {
+                profile_url: f_response[0],
+            })
+            res.send({message: "Profile image uploaded", url: f_response[0]})
 
-        // Upload images to Cloudinary
-        // todo: can make this function just return the url as img_url in the req to continue your process
-        files.forEach((file) => {
-            uploadImage(file, (err, result) => {
-                if (err) {
-                    console.error(err);
-                    return res.status(500).send(err);
-                }
-                responses.push(result);
-                if (responses.length === files.length) {
-                    responses.forEach((resp) => {
-                        f_response.push({
-                            url: resp.secure_url,
-                            public_id: resp.public_id,
-                            format: resp.format,
-                        });
-                    });
-                    return res.send(f_response);
-                }
-            });
-        });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send("profile image not uploaded," + error);
+        }
     }
 );
 
-
-
-
+// upload card id image and verify the user
 
 router.post(
     "/id",
-    // passport.authenticate("jwt", { session: false }),
     upload,
-     (req, res) => {
-        const files = req.files;
-        const responses = [];
-        const f_response = [];
+    async (req, res) => {
+        let responses = [];
+        let f_response = [];
 
-        // Upload images to Cloudinary
-        // todo: can make this function just return the url as img_url in the req to continue your process
-        files.forEach((file) => {
-            uploadIDsDummy(file, async (err, result) => {
-                if (err) {
-                    console.error(err);
-                    return res.status(500).send(err);
-                }
-                responses.push(result);
-                if (responses.length === files.length) {
-                    for (const resp of responses) {
-                        let data = resp['info']['ocr']['adv_ocr']['data'][0]['textAnnotations'][0]["description"]
-                        let pure_result
-                        data = data.replace(/(\r\n|\n|\r)/gm, " ");
-                        await translate(data, null, 'en').then(res => {
-                            pure_result = res.translation.trim()
-                        }).catch(err => {
-                            console.error("translation error: " + err);
-                        });
-                        // console.log(pure_result)
-                        f_response.push(pure_result)
-                        // todo: need to make search for all parts to ge the id
-                    }
-                    return res.send(f_response);
-                }
+        const files = req.files;
+        // console.log(req.body, files);
+
+        try {
+            const result = await /*uploadIDs*//*todo:should use the real function*/uploadIDsDummy(files[0]);
+            const user = await User.findByIdAndUpdate(req.user._id, {
+                id_url: result.secure_url,
+            })
+
+            let data = result['info']['ocr']['adv_ocr']['data'][0]['textAnnotations'][0]["description"]
+            let pure_result
+            data = data.replace(/(\r\n|\n|\r)/gm, " ");
+            await translate(data, null, 'en').then(res => {
+                pure_result = res.translation.trim()
+            }).catch(err => {
+                console.error("translation error: " + err);
             });
-        });
+
+            // todo: just here make comparison between user elements and the text you get from the OCR
+
+            res.send({
+                url: result.secure_url,
+                data,
+                pure_result
+            })
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).send("card id image not uploaded," + error);
+        }
     }
 );
-
-
 
 
 module.exports = router
