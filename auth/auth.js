@@ -36,13 +36,13 @@ passport.use('signup', new LocalStrategy({
             return done(null, false, {message: 'User already exists'});
         }
         const new_user = await User.create({
-            f_name: req.body.f_name,
-            l_name: req.body.l_name,
+            f_name: req.body.f_name || "test first name",
+            l_name: req.body.l_name || "test last name",
             email: email,
             password: password,
-            phone: req.body.phone,
-            gender: req.body.gender,
 
+            phone: req.body.phone || "",
+            gender: req.body.gender || "Male",
             age: req.body.age || 20,
             // todo: how save cities
             cities: [req.body.city || "Cairo"],

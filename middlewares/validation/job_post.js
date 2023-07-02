@@ -66,7 +66,7 @@ exports.validate_job_post_create = [
 
 
     check('duration')
-        .optional()
+        .optional({nullable: true})
         .isString().withMessage("Invalid duration, must be string as '100'")
         .isLength({min: 1, max: 6}).withMessage('Job duration must be between 1 and 6 characters'),
 
