@@ -97,6 +97,7 @@ router.get("/chats/:userId", async (req, res) => {
         message: "there is no conversations yet , start one !",
       });
     } else {
+      io.getIO().emit("conversations", conversations);
       res.status(200).json({ status: 0, conversations });
     }
   } catch (error) {
