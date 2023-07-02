@@ -318,9 +318,10 @@ router.post(
 // todo: check if update work correctly on postman
 router.patch(
     "/:id",
+    passport.authenticate('jwt', {session: false}),
+    upload,
     validate_job_post_update,
     job_post_validation,
-    passport.authenticate('jwt', {session: false}),
     get_job_post,
     async (req, res) => {
 
@@ -505,7 +506,6 @@ async function get_job_post_details(req, res, next) {
                         preserveNullAndEmptyArrays: true,
                     },
                 },
-
                 {
                     $lookup: {
                         from: "comments",
