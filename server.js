@@ -93,7 +93,9 @@ app.use("/offer", passport.authenticate("jwt", { session: false }), offerRoute);
 
 // todo: make a middleware for upload profile image and id and job post images
 const uploadRoute = require("./routes/public/upload_router");
-app.use("/upload", uploadRoute);
+app.use("/upload",
+    passport.authenticate("jwt", { session: false }),
+    uploadRoute);
 
 // request all egypt citiies
 const { cities, cities_with_code, code_with_cities } = require("./cities");

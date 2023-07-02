@@ -124,9 +124,9 @@ GET https://back-ph2h.onrender.com/user/6449249fe8392437d61826ff
     type (string => "full-time", required),
     salary (string => "100", required),
     
-    skills (array => ["test skill 1","test skill 2"], optional),
+    skills (array of strings => ["skill 1","skill 2"], optional),
     location (string => "cairo", optional),
-    required_experience (string => "beginner", optional)
+    required_experience (string => "beginner"-"intermediate"-"expert" , optional)
     duration (string => "20", optional),
     images (images => one or multiple images,optional)
 ```
@@ -240,6 +240,28 @@ Content-Type: application/json
 ```
 GET  https://back-ph2h.onrender.com/user/profile/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
 ```
+
+
+### upload only user profile image
+
+``` 
+POST https://back-ph2h.onrender.com/upload/profile/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+
+attach the image as 'images'
+[![img.png](img.png)]
+
+```
+
+### upload only user card id image
+
+``` 
+POST https://back-ph2h.onrender.com/upload/id/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
+
+attach the image as 'images'
+[![img.png](img.png)]
+
+```
+
 
 ---
 

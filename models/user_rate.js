@@ -33,16 +33,22 @@ const user_rate_Schema = new mongoose.Schema({
 user_rate_Schema.pre('save', async function (next) {
     try {
         const user = await User.findOne(this.rated_id)
-        const total_rating = (user.total_rating || 0) + 1
+        const total_Nrating = (user.total_Nrating || 0) + 1
         const new_rating = this.rating
         const current_rating = (user.rating || 0)
-        const updated_rating = (current_rating * user.total_rating + new_rating) / total_rating
+        const updated_rating = (current_rating * user.total_Nrating + new_rating) / total_Nrating
 
-        console.log("user: "+user,"total_rating:"+total_rating,"new_rating:"+new_rating,"current_rating:"+current_rating,"updated_rating:"+updated_rating)
+        console.log(
+            "user: "+user,
+            "total_Nrating:"+total_Nrating,
+            "new_rating:"+new_rating,
+            "current_rating:"+current_rating,
+            "updated_rating:"+updated_rating
+        )
 
         await User.findByIdAndUpdate(this.rated_id,{
             rating: updated_rating,
-            total_rating: total_rating
+            total_Nrating: total_Nrating
         })
         next()
     }catch (err) {
