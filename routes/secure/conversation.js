@@ -74,7 +74,8 @@ router.post("/new_message", async (req, res) => {
         new: true,
       }
     );
-    io.getIO().to(req.body.conversationId);
+
+    io.getIO().emit("messageReceived", savedMesseges);
     res.status(200).json(savedMesseges);
   } catch (err) {
     res.status(500).json({ message: err.message, err });
