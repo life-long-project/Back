@@ -93,9 +93,11 @@ app.use("/offer", passport.authenticate("jwt", { session: false }), offerRoute);
 
 // todo: make a middleware for upload profile image and id and job post images
 const uploadRoute = require("./routes/public/upload_router");
-app.use("/upload",
-    passport.authenticate("jwt", { session: false }),
-    uploadRoute);
+app.use(
+  "/upload",
+  passport.authenticate("jwt", { session: false }),
+  uploadRoute
+);
 
 // request all egypt citiies
 const { cities, cities_with_code, code_with_cities } = require("./cities");
@@ -132,6 +134,19 @@ const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
 const io = require("./socket/index").init(expressServer);
+
+const addUser = (userId, socketId) => {
+  !users.some((user) => user.userId === userId) &&
+    users.push({ userId, socketId });
+};
+
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId !== socketId);
+};
+
+const getUser = (userId) => {
+  return users.find((user) => user.userId === userId);
+};
 
 io.on("connection", (socket) => {
   //when ceonnect
