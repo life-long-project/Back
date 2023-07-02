@@ -133,7 +133,11 @@ const port = process.env.PORT || 3000;
 const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
-const io = require("socket.io")(expressServer);
+const io = require("socket.io")({
+  cors: {
+    origin: "https://back-ph2h.onrender.com",
+  },
+});
 
 let users = [];
 
