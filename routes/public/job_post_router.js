@@ -15,6 +15,7 @@ const {
     validate_job_post_update,
 } = require("../../middlewares/validation/job_post");
 const {cities, cities_with_code, code_with_cities} = require("../../cities");
+const User = require("../../models/user");
 /*
 options / route
 
@@ -155,23 +156,10 @@ router.get("/", async (req, res) => {
                 $limit: limit,
             },
             {
-                $lookup: {
-                    from: "users",
-                    localField: "posted_by_id",
-                    foreignField: "_id",
-                    as: "user",
-                },
-            },
-            {
-                $unwind: {
-                    path: "$user",
-                    preserveNullAndEmptyArrays: true,
-                },
-            },
-            {
                 $project: {
                     _id: 1,
                     job_name: 1,
+                    posted_by_id:1,
                     job_description: 1,
                     job_skills: 1,
                     job_type: 1,
@@ -185,9 +173,24 @@ router.get("/", async (req, res) => {
                     total_Nrating: 1,
                     createdAt: 1,
                     updatedAt: 1,
-                    user: "$user",
+                    user: 1,
                 },
             },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "posted_by_id",
+                    foreignField: "_id",
+                    as: "user",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$user",
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+
         ]);
         const len_all_jobs = await Job_post.aggregate([
             {
@@ -242,11 +245,12 @@ router.get("/", async (req, res) => {
 
 //create new job post
 
-
 router.post(
     "/",
     passport.authenticate("jwt", { session: false }),
     upload,
+    validate_job_post_create,
+    job_post_validation,
     async (req, res) => {
         let responses = [];
         let f_response = [];
@@ -255,23 +259,20 @@ router.post(
         // console.log(req.body, files);
 
         try {
-            if(files.length > 0){
+            if (files && files.length > 0) {
                 for (const file of files) {
                     const result = await uploadImage(file);
-                    responses.push(result);
+                    f_response.push(result.secure_url);
                 }
-
-                responses.forEach((resp) => {
-                    f_response.push(resp.secure_url);
-                });
             }
+
 
             const job = new Job_post({
                 posted_by_id: mongoose.Types.ObjectId(req.user._id || "641b0c2e95e465087359ee93"),
                 job_name: req.body.title || "",
                 job_description: req.body.description || "",
                 job_skills: req.body.skills || [],
-                job_type: req.body.type || "full-time",
+                job_type: req.body.type || "Full-time",
                 job_location: req.body.location || "Cairo",
                 required_experience: req.body.required_experience || "ALL",
                 // is_active: req.body.is_active,
@@ -467,6 +468,27 @@ async function get_job_post_details(req, res, next) {
                         _id: new mongoose.Types.ObjectId(job_id),
                     },
                 },
+                {
+                    $project: {
+                        _id: 1,
+                        posted_by_id:1,
+                        job_name: 1,
+                        job_description: 1,
+                        job_skills: 1,
+                        job_type: 1,
+                        job_location: 1,
+                        is_active: 1,
+                        is_hidden: 1,
+                        salary: 1,
+                        job_duration: 1,
+                        job_img_url: 1,
+                        rating: 1,
+                        total_Nrating: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
+                        user: 1,
+                    },
+                },
                 // Join with users collection
                 {
                     $lookup: {
@@ -482,26 +504,7 @@ async function get_job_post_details(req, res, next) {
                         preserveNullAndEmptyArrays: true,
                     },
                 },
-                {
-                    $project: {
-                        _id: 1,
-                        job_name: 1,
-                        job_description: 1,
-                        job_skills: 1,
-                        job_type: 1,
-                        job_location: 1,
-                        is_active: 1,
-                        is_hidden: 1,
-                        salary: 1,
-                        job_duration: 1,
-                        job_img_url: 1,
-                        rating: 1,
-                        total_Nrating: 1,
-                        createdAt: 1,
-                        updatedAt: 1,
-                        user: "$user",
-                    },
-                },
+
                 {
                     $lookup: {
                         from: "comments",

@@ -15,7 +15,6 @@ router.post(
     "/profile",
     upload,
     async (req, res) => {
-        let responses = [];
         let f_response = [];
 
         const files = req.files;
