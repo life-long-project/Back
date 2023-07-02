@@ -105,21 +105,3 @@ router.get("/chats/:userId", async (req, res) => {
 });
 
 module.exports = router;
-
-// // // get a conversation of a user by his Id
-// router.get("/:userId", async (req, res) => {
-//   try {
-//     const conversations = await Conversation.find({
-//       members: { $in: [Mongoose.Types.ObjectId(req.body.userId)] },
-//     }).populate("Users", "full_name email profile_url");
-//     if (conversations.length === 0) {
-//       res.status(200).json({
-//         status: 0,
-//         message: "there is no conversations yet , start one !",
-//       });
-//     }
-//     res.status(200).json({ status: 0, conversations });
-//   } catch (err) {
-//     res.status(500).json({ status: 1, message: err.message, err });
-//   }
-// });
