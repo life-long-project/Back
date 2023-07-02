@@ -133,7 +133,7 @@ const port = process.env.PORT || 3000;
 const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
-const io = require("./socket/index").init(expressServer);
+const io = require("socket.io")(expressServer);
 
 const addUser = (userId, socketId) => {
   !users.some((user) => user.userId === userId) &&
