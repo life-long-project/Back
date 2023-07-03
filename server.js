@@ -133,25 +133,5 @@ const port = process.env.PORT || 3000;
 const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
-const io = socketio(expressServer);
-
-io.on("connection", (socket) => {
-  //when ceonnect
-  console.log("a user connected." + socket.id);
-
-  //send and get message
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-    const user = getUser(receiverId);
-    io.to(user.socketId).emit("newMessage", {
-      senderId,
-      text,
-    });
-  });
-
-  //when disconnect
-  socket.on("disconnect", () => {
-    console.log("a user disconnected!");
-    removeUser(socket.id);
-    io.emit("getUsers", users);
-  });
-});
+const io = socketio(expressServer, { pingTimeout: 60000 });
+require("./socket/index")(io);
