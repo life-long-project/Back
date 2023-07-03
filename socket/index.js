@@ -27,10 +27,16 @@ module.exports = (io) => {
     //send and get message
     socket.on("sendMessage", ({ senderId, receiverId, text }) => {
       const user = getUser(receiverId);
-      io.to(user.socketId).emit("newMessage", {
-        senderId,
-        text,
-      });
+      if (user) {
+        io.to(user.socketId).emit("newMessage", {
+          senderId,
+          text,
+        });
+      } else {
+        // Handle the case when the user is not found
+        console.log("User not found or offline");
+        // You can emit an error event or handle it according to your application logic
+      }
     });
     socket.on("disconnect", () => {
       console.log("a user disconnected!");
