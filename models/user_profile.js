@@ -55,12 +55,12 @@ const user_profile_schema = new mongoose.Schema(
     feed_back: {
       type: [String],
       required: false,
-      default: "this user doesn't have any feedback yet ",
+      default: ["this user is a good problem solver "],
     },
     past_jobs: {
       type: [String],
-      // required: true,
-      // default: ["backend devoloper,frontend devoloper"],
+      required: false,
+      default: ["backend devoloper", "frontend devoloper"],
     },
     rate_quantity: {
       type: Number,

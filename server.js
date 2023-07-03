@@ -129,9 +129,9 @@ app.use(
 );
 
 // deploy server
+require("./socket/index")(io);
 const port = process.env.PORT || 3000;
 const expressServer = app.listen(port, () =>
   console.log(`server had started on port: ${port}`)
 );
 const io = socketio(expressServer, { pingTimeout: 60000 });
-require("./socket/index")(io);
