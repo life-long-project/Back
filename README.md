@@ -123,7 +123,7 @@ GET https://back-ph2h.onrender.com/user/6449249fe8392437d61826ff
     description (string => "test description", required),
     type (string => "full-time", required),
     salary (string => "100", required),
-    
+
     skills (array of strings => ["skill 1","skill 2"], optional),
     location (string => "cairo", optional),
     required_experience (string => "beginner"-"intermediate"-"expert" , optional)
@@ -241,10 +241,9 @@ Content-Type: application/json
 GET  https://back-ph2h.onrender.com/user/profile/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
 ```
 
-
 ### upload only user profile image
 
-``` 
+```
 POST https://back-ph2h.onrender.com/upload/profile/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
 
 attach the image as 'images'
@@ -254,14 +253,13 @@ attach the image as 'images'
 
 ### upload only user card id image
 
-``` 
+```
 POST https://back-ph2h.onrender.com/upload/id/?auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NGJlMjU0NDAwNDAzOTJjMGRiYTUyNSIsImVtYWlsIjoidGVzdDIiLCJ1c2VybmFtZSI6InRlc3QtdXNlciIsImlzX2FkbWluIjpmYWxzZX0sImlhdCI6MTY4Mjg1MDI3N30.ZGzWfFVGZcOJNSjOQ64s2AHPMvFh0-oGl9RKd8E29dY
 
 attach the image as 'images'
 [![img.png](img.png)]
 
 ```
-
 
 ---
 
@@ -395,10 +393,10 @@ GET /offer/user
 
 - getting one profile (by direct click on the user_name or by search method) (get)
 
-- https://back-ph2h.onrender.com/profile/6463b901b377ff4bae1c9c1a
+- https://back-ph2h.onrender.com/profile/64a37fe71eb603da27a61e72
 
 - updating the user profile (patch)
-- https://back-ph2h.onrender.com/profile/6463b901b377ff4bae1c9c1a
+- https://back-ph2h.onrender.com/profile/64a37fe71eb603da27a61e72
 - {
   "phone":"5555555"
   }
