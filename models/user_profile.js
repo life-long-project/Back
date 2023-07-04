@@ -41,7 +41,7 @@ const user_profile_schema = new mongoose.Schema(
     },
     following: {
       type: Boolean,
-      required: true,
+      required: false,
       default: false,
     },
     location: {
