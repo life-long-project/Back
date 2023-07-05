@@ -15,7 +15,7 @@ exports.offer_validation = (req, res, next) => {
   if (!result.length) {
     const message = "Someone has applied to your job";
     // Emit the notification event to the user
-    io.to(req.user._id).emit("notification", { message });
+    // io.to(req.user._id).emit("notification", { message });
     return next();
   }
   const error = result[0].msg;
