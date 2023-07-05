@@ -120,8 +120,7 @@ exports.validate_user_signup = [
 
   check("past_experience")
     .optional({ nullable: true })
-    .isArray()
-    .withMessage("Invalid experience, must be array of string")
+    .isString().withMessage("Invalid experience, must be string")
     .trim()
     .isLength({ min: 3, max: 200 })
     .withMessage("past experience must be within 3 and 200 characters"),
