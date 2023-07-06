@@ -51,8 +51,8 @@ const UserSchema = new Schema(
       default: "Egypt",
     },
     past_experience: {
-      type: [String],
-      default: ["the user has no past experience"],
+      type: String,
+      default: "the user has no past experience",
     },
     skills: {
       type: [String],
