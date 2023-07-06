@@ -9,12 +9,6 @@ const socketio = require("socket.io");
 const nodemon = require("nodemon");
 const expressValidator = require("express-validator");
 
-const server = require("http").createServer(app);
-const io = socketio(server);
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  socket.on("newApply", () => {});
-});
 // Mongo db
 mongoose.set("strictQuery", false);
 mongoose.connect(
@@ -136,6 +130,8 @@ app.use(
 
 // deploy server
 const port = process.env.PORT || 3000;
-server.listen(port, () => console.log(`server had started on port: ${port}`));
+const expressServer = app.listen(port, () =>
+  console.log(`server had started on port: ${port}`)
+);
 // const io = socketio(expressServer, { pingTimeout: 60000 });
 require("./socket/index");
