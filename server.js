@@ -8,6 +8,18 @@ const passport = require("passport");
 const socketio = require("socket.io");
 const nodemon = require("nodemon");
 const expressValidator = require("express-validator");
+const server = require("http").createServer(app);
+const io = socketio(server);
+io.on("connection", (socket) => {
+  // console.log("a user connected");
+  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+    const user = getUser(receiverId);
+    io.to(user.socketId).emit("newMessage", {
+      senderId,
+      text,
+    });
+  });
+});
 
 // Mongo db
 mongoose.set("strictQuery", false);
@@ -130,8 +142,6 @@ app.use(
 
 // deploy server
 const port = process.env.PORT || 3000;
-const expressServer = app.listen(port, () =>
-  console.log(`server had started on port: ${port}`)
-);
-// const io = socketio(expressServer, { pingTimeout: 60000 });
+server.listen(port, () => console.log(`server had started on port: ${port}`));
+//  const io = socketio(expressServer, { pingTimeout: 60000 });
 require("./socket/index");
