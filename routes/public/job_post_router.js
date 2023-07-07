@@ -286,6 +286,9 @@ router.post(
 
             const new_job_post = await job.save();
             console.log(f_response);
+            console.log(req.user._id)
+            const user = await User.findById(req.user._id);
+            // console.log(user)
 
             res.status(201).json({
                 _id: new_job_post._id,
@@ -303,6 +306,7 @@ router.post(
                 is_hidden: new_job_post.is_hidden,
                 createdAt: new_job_post.createdAt,
                 updatedAt: new_job_post.updatedAt,
+                user:user
             });
 
 
