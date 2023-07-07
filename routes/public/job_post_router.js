@@ -87,6 +87,8 @@ router.get("/", async (req, res) => {
                 $sort: {count: -1},
             },
         ]).exec();
+        console.log(skills_db)
+
         let skills_arr = [];
         skills_db.forEach((skill) => {
             skills_arr.push(skill._id);
@@ -105,6 +107,8 @@ router.get("/", async (req, res) => {
             ? (skills = [...skills_arr])
             : (skills = req.query.skills.split(","));
         req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
+        console.log(skills)
+
 
         let sortBy = {};
         if (sort[1] && sort[1].toLowerCase() === "asc") {
@@ -114,6 +118,7 @@ router.get("/", async (req, res) => {
         }
 
         const jobs = await Job_post.aggregate([
+
             {
                 $match: {
                     is_hidden: {
@@ -139,6 +144,8 @@ router.get("/", async (req, res) => {
                     ],
                 },
             },
+
+            //
             {
                 $match: {
                     job_skills: {
@@ -146,6 +153,9 @@ router.get("/", async (req, res) => {
                     },
                 },
             },
+            //
+
+
             {
                 $sort: sortBy,
             },
@@ -154,6 +164,20 @@ router.get("/", async (req, res) => {
             },
             {
                 $limit: limit,
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "posted_by_id",
+                    foreignField: "_id",
+                    as: "user",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$user",
+                    preserveNullAndEmptyArrays: true,
+                },
             },
             {
                 $project: {
@@ -175,20 +199,6 @@ router.get("/", async (req, res) => {
                     createdAt: 1,
                     updatedAt: 1,
                     user: 1,
-                },
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "posted_by_id",
-                    foreignField: "_id",
-                    as: "user",
-                },
-            },
-            {
-                $unwind: {
-                    path: "$user",
-                    preserveNullAndEmptyArrays: true,
                 },
             },
 

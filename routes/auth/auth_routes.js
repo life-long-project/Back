@@ -3,6 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const jwt_secret = process.env.JWT_SECRET || 'jwt_secret';
 const {validate_user_signup , validate_user_login, user_validation} = require('../../middlewares/validation/user')
+const User = require("../../models/user");
 
 const router = express.Router();
 
@@ -43,7 +44,8 @@ router.post('/login',
         const body = {
             _id: user._id,
             email: user.email,
-            is_admin: user.is_admin
+            is_admin: user.is_admin,
+            username: user.full_name
         };
         const token = jwt.sign({ user: body }, jwt_secret);
         return res.json({
@@ -55,6 +57,20 @@ router.post('/login',
     }
 });
 
+
+// router.get('/check_user',
+//     passport.authenticate('login', { session: false }),
+//     (req, res) => {
+//         const user_id = req.user._id;
+//         const user = User.findById(user_id)
+//         if(user){
+//             return res.status(200).json({message: "user exists"})
+//         }else{
+//             return res.status(400).json({message: "user not found"})
+//         }
+//     }
+//
+// )
 
 
 module.exports = router;

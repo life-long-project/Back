@@ -123,8 +123,8 @@ GET https://back-ph2h.onrender.com/user/6449249fe8392437d61826ff
     description (string => "test description", required),
     type (string => "full-time", required),
     salary (string => "100", required),
-
-    skills (array of strings => ["skill 1","skill 2"], optional),
+    skills (array of strings => ["skill 1","skill 2"], required),
+    
     location (string => "cairo", optional),
     required_experience (string => "beginner"-"intermediate"-"expert" , optional)
     duration (string => "20", optional),

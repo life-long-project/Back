@@ -3,7 +3,7 @@ const {check, validationResult} = require('express-validator');
 fields required for creating:
     title (string => "test name", required),
     description (string => "test description", required),
-    skills (array => ["test skill 1","test skill 2"], optional),
+    skills (array => ["test skill 1","test skill 2"], required),
     type (string => "full-time", required),
     location (string => "cairo", optional),
     required_experience (string => "beginner", optional)
@@ -39,7 +39,7 @@ exports.validate_job_post_create = [
         .isLength({min: 3, max: 400}).withMessage('Job description must be between 3 and 400 characters'),
 
     check('skills')
-        .optional()
+        .notEmpty().withMessage('skills required!')
         .isArray().withMessage('Skills must be an array of strings'),
 
     check('type')

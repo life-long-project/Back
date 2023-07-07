@@ -22,7 +22,7 @@ const job_post_schema = new mongoose.Schema(
         job_skills: {
             type: [String],
             required: true,
-            default: ["javascript", "angular", "react"],
+            default: ['none'],
         },
         job_type: {
             type: String,
