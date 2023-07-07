@@ -8,8 +8,11 @@ const passport = require("passport");
 const socketio = require("socket.io");
 const nodemon = require("nodemon");
 const expressValidator = require("express-validator");
+
 const server = require("http").createServer(app);
 const io = socketio(server);
+require("./socket/index")(io);
+
 io.on("connection", (socket) => {
   // console.log("a user connected");
   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
@@ -143,5 +146,3 @@ app.use(
 // deploy server
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`server had started on port: ${port}`));
-//  const io = socketio(expressServer, { pingTimeout: 60000 });
-require("./socket/index");

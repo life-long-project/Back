@@ -1,49 +1,87 @@
-const io = require("socket.io")(8900, {
-  cors: {
-    origin: "https://snapjobs-a7d7e.web.app/",
-  },
-});
+const Message = require("../models/message_model");
+const Conversation = require("../models/conversation");
 
-let users = [];
+const users = {};
 
-const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
-};
+module.exports = function (io) {
+  io.on("connection", (socket) => {
+    socket.on("saveUserData", (userData) => {
+      const { id } = userData;
+      users[id] = socket;
+      console.log(`User with ID ${id} saved`);
+    });
 
-const removeUser = (socketId) => {
-  users = users.filter((user) => user.socketId !== socketId);
-};
+    console.log("user connected");
 
-const getUser = (userId) => {
-  return users.find((user) => user.userId === userId);
-};
+    // Join conversation room
+    socket.on("joinConversation", async (conversationId) => {
+      socket.join(conversationId);
 
-io.on("connection", (socket) => {
-  //when ceonnect
-  console.log("a user connected." + socket.id);
+      // Load previous messages
+      try {
+        const messages = await Message.find({
+          conversation: conversationId,
+        }).populate("sender", "fullName");
+        socket.emit("previousMessages", messages);
+      } catch (err) {
+        console.error(err);
+      }
+    });
 
-  //take userId and socketId from user
-  socket.on("addUser", (userId) => {
-    console.log(userId, socket.id);
-    addUser(userId, socket.id);
-    io.emit("getUsers", users);
-  });
+    // Send message
+    socket.on("sendMessage", async (data) => {
+      const { conversationId, senderId, text } = data;
+      const message = new Message({
+        conversation: conversationId,
+        sender: senderId,
+        text,
+      });
+      try {
+        // Save message to database
+        const savedMessage = await message.save();
 
-  //send and get message
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-    const user = getUser(receiverId);
-    io.to(user.socketId).emit("newMessage", {
-      senderId,
-      text,
+        const conversation = await Conversation.findById(conversationId);
+        let receiverId = conversation.users[0];
+        if (conversation.users[0].toString() === senderId) {
+          receiverId = conversation.users[1];
+        }
+
+        await Conversation.findByIdAndUpdate(
+          conversationId,
+          { $set: { lastMessage: savedMessage.text } },
+          { new: true }
+        );
+        const messageWithSender = await Message.findById(
+          savedMessage._id
+        ).populate("sender", "fullName userImage");
+        emitMessageToUsers(
+          [senderId, receiverId],
+          "messageReceived",
+          messageWithSender
+        );
+      } catch (err) {
+        console.error(err);
+        console.log(err);
+      }
+    });
+
+    socket.on("disconnect", () => {
+      const disconnectedUserId = Object.keys(users).find(
+        (id) => users[id] === socket
+      );
+      delete users[disconnectedUserId];
+      console.log(
+        `User with ID ${disconnectedUserId} disconnected and was removed`
+      );
     });
   });
+};
 
-  //when disconnect
-  socket.on("disconnect", () => {
-    console.log("a user disconnected!");
-    removeUser(socket.id);
-    io.emit("getUsers", users);
+function emitMessageToUsers(userIds, eventName, eventData) {
+  userIds.forEach((userId) => {
+    const socket = users[userId];
+    if (socket) {
+      socket.emit(eventName, eventData);
+    }
   });
-});
-module.exports = { io };
+}
