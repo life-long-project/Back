@@ -11,8 +11,73 @@ const {validate_apply_offer, offer_validation} = require("../../middlewares/vali
 
 // todo: adding to readme later
 
+// create new offer / apply for job
+router.post('/apply/:job_post_id', validate_apply_offer, offer_validation, async (req, res) => {
+    try {
+        const job_post_id = req.params.job_post_id;
+        if (job_post_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(job_post_id)) {
+            const offer = await Offer.findOne({applicant_id: req.user._id, job_post_id: job_post_id});
+            if (offer) {
+                res.status(200).json({message: "Already applied"})
+            } else {
+                const new_offer = new Offer({
+                    price: req.body.price || "0",
+                    message: req.body.message || "",
+                    applicant_id: req.user._id,
+                    job_post_id: job_post_id,
+                })
+                await new_offer.save();
+                res.status(201).json({
+                    message: "offer applied", offer: new_offer
+                })
+            }
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message})
+    }
+})
+// accept an offer
+router.post('/accept/:offer_id', async (req, res) => {
+    try {
+        const offer_id = req.params.offer_id;
+        if (offer_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(offer_id)) {
 
+            const old_offer = await Offer.findById(offer_id)
 
+            await Offer.updateMany(
+                {job_post_id: old_offer['job_post_id']},
+                {'$set': {status: "rejected"}},
+                {multi: true}
+            )
+
+            const offer = await Offer.findOneAndUpdate(
+                {_id: offer_id},
+                {status: "accepted"},
+                {new: true}
+            )
+
+            const job_post = await Job_post.findOneAndUpdate(
+                {_id:offer['job_post_id']}
+                ,{'accepted_user_id':offer['applicant_id']}
+                ,{new: true}
+            )
+
+            const notification = new Notification({
+                action: 'your offer has been accepted',
+                from_id: job_post['posted_by_id'],
+                for_id: offer['applicant_id'],
+                job_post_id: offer['job_post_id']
+            })
+            await notification.save()
+
+            res.status(201).json({message: "offer accepted"})
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message})
+    }
+})
+
+// get all offers
 router.get('/', async (req, res) => {
     try {
         const offers = await Offer.find();
@@ -26,7 +91,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-// get the user applies for all jobs
+// get the present user applies for all jobs
 router.get('/user/', async (req, res) => {
     try {
         const offers = await Offer.find({
@@ -52,66 +117,6 @@ router.get('/job/:job_id', async (req, res) => {
             res.status(400).json({message: "No offers yet"})
         } else {
             res.status(200).json(offers)
-        }
-    } catch (e) {
-        res.status(500).json({message: e.message})
-    }
-})
-
-
-router.post('/accept/:offer_id', async (req, res) => {
-    try {
-        const offer_id = req.params.offer_id;
-        if (offer_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(offer_id)) {
-            // console.log(offer_id)
-            const old_offer = await Offer.findById(offer_id)
-            // console.log(old_offer)
-            // console.log(await Offer.find({job_post_id: old_offer['job_post_id']}))
-            await Offer.updateMany(
-                {job_post_id: old_offer['job_post_id']},
-                {'$set': {status: "rejected"}},
-                {multi: true}
-            )
-
-            const offer = await Offer.findOneAndUpdate({_id: offer_id}, {status: "accepted"}, {new: true})
-
-            const job_post = await Job_post.findById(offer['job_post_id'])
-
-            const notification = new Notification({
-                action: 'your offer has been accepted',
-                from_id: job_post['posted_by_id'],
-                for_id: offer['applicant_id'],
-                job_post_id: offer['job_post_id']
-            })
-            await notification.save()
-            console.log(notification)
-
-            res.status(201).json({message: "offer accepted"})
-        }
-    } catch (e) {
-        res.status(500).json({message: e.message})
-    }
-})
-
-router.post('/apply/:job_post_id', validate_apply_offer, offer_validation, async (req, res) => {
-    try {
-        const job_post_id = req.params.job_post_id;
-        if (job_post_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(job_post_id)) {
-            const offer = await Offer.findOne({applicant_id: req.user._id, job_post_id: job_post_id});
-            if (offer) {
-                res.status(200).json({message: "Already applied"})
-            } else {
-                const new_offer = new Offer({
-                    price: req.body.price || "0",
-                    message: req.body.message || "",
-                    applicant_id: req.user._id,
-                    job_post_id: job_post_id,
-                })
-                await new_offer.save();
-                res.status(201).json({
-                    message: "offer applied", offer: new_offer
-                })
-            }
         }
     } catch (e) {
         res.status(500).json({message: e.message})
@@ -154,6 +159,7 @@ router.delete('/:offer_id', async (req, res) => {
         res.status(500).json({message: e.message})
     }
 })
+
 
 
 module.exports = router

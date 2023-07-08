@@ -70,6 +70,35 @@ router.get("/options", async (req, res) => {
     }
 })
 
+router.get('/skills', async (req, res) => {
+    try{
+        const skills_db = await Job_post.aggregate([
+            {$unwind: "$job_skills"},
+            {
+                $group: {
+                    _id: "$job_skills",
+                    count: {$sum: 1},
+                },
+            },
+            {
+                $sort: {count: -1},
+            },
+        ]).exec();
+        let skills_arr = [];
+        skills_db.forEach((skill) => {
+            skills_arr.push(skill._id);
+        });
+        if (skills_arr.length === 0) {
+            skills_arr = [""];
+        }
+        console.log(skills_arr)
+        res.status(200).json(skills_arr)
+    }catch (e) {
+        res.status(500).json({message: e.message})
+    }
+
+})
+
 
 //getting all data for home page or search with ?q=query
 router.get("/", async (req, res) => {
@@ -282,7 +311,7 @@ router.post(
                 posted_by_id: mongoose.Types.ObjectId(req.user._id || "641b0c2e95e465087359ee93"),
                 job_name: req.body.title || "",
                 job_description: req.body.description || "",
-                job_skills: req.body.skills || [],
+                job_skills: req.body.skills || [''],
                 job_type: req.body.type || "Full-time",
                 job_location: req.body.location || "Cairo",
                 required_experience: req.body.required_experience || "ALL",

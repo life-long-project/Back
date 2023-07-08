@@ -352,7 +352,7 @@ Content-Type: application/json
 ### create offer / apply for specific job
 
 ```
-                 /--------job id --------/
+                  /--------job id --------/
 POST /offer/apply/6461757025d3b22292e0b2a6
 Content-Type: application/json
 
@@ -361,17 +361,22 @@ Content-Type: application/json
 }
 ```
 
+### accept specific offer
+```
+                   /------ offer id ------/
+POST /offer/accept/6496dfef6feefd920273f024
+
+```
+
 ### get all offers for all jobs
 
 ```
 GET /offer/
 ```
-
-### get specific offer
+### get all offers for present user
 
 ```
-          /------ offer id ------/
-GET /offer/6496dfef6feefd920273f024
+GET /offer/user
 ```
 
 ### get all offers for specific job
@@ -381,11 +386,31 @@ GET /offer/6496dfef6feefd920273f024
 GET /offer/job/64954e48bb4c768655bba547
 ```
 
-### get all offers for present user
+### get specific offer
 
 ```
-GET /offer/user
+           /------ offer id ------/
+GET /offer/6496dfef6feefd920273f024
 ```
+
+
+[//]: # (### get all offers for specific user)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # ()
+[//]: # (```)
+
+### delete specific offer
+```
+              /------ offer id ------/
+DELETE /offer/6496dfef6feefd920273f024
+
+```
+
+
+
 
 ---
 
