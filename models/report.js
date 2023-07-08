@@ -12,7 +12,7 @@ const reportSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  message: {
+  reportReason: {
     type: String,
   },
   timestamp: {

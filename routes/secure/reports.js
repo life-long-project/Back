@@ -8,7 +8,7 @@ const router = require("express").Router();
 //get all reported jobs
 router.get("/reported_jobs", async (req, res) => {
   try {
-    await jobs.find({
+    const jobs = await jobs.find({
       is_reported: true,
     });
     if (jobs.length === 0) {
@@ -21,6 +21,23 @@ router.get("/reported_jobs", async (req, res) => {
   }
 });
 
+//get all reported users
+router.get("/reported_users", async (req, res) => {
+  try {
+    const users = await UserModel.find({
+      is_reported: true,
+    });
+    if (users.length === 0) {
+      res.status(400).json({ message: "No users yet" });
+    } else {
+      res.status(200).json(users);
+    }
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+//report a job
 router.post("/report_job/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -50,6 +67,7 @@ router.post("/report_job/:id", async (req, res) => {
   }
 });
 
+//report a user
 router.post("report_user/:id", async (req, res) => {
   try {
     const { user_id } = req.body;
@@ -65,3 +83,5 @@ router.post("report_user/:id", async (req, res) => {
     res.status(500).json({ message: e.message });
   }
 });
+
+module.exports = router;
