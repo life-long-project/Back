@@ -66,6 +66,10 @@ const job_post_schema = new mongoose.Schema(
       required: false,
       default: "",
     },
+    report_messages: {
+      type: String,
+      default: "there is no reports",
+    },
     accepted_user_id: {
       type: ObjectId,
       default: null,

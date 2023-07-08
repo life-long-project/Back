@@ -94,6 +94,10 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    report_messages: {
+      type: String,
+      default: "there is no reports",
+    },
   },
   {
     timestamps: true,
