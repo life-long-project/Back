@@ -90,6 +90,12 @@ app.use(
   "/user",
   /* passport.authenticate("jwt", {session: false}), */ userRoute
 );
+const reportRoute = require("./routes/public/report_router");
+app.use(
+  "/report",
+  passport.authenticate("jwt", { session: false }),
+  reportRoute
+);
 
 // chatgpt routes
 // there is error with rate limit

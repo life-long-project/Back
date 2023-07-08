@@ -90,6 +90,10 @@ const UserSchema = new Schema(
       type: Number,
       default: 0,
     },
+    is_reported: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
