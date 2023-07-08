@@ -14,6 +14,7 @@ const reportSchema = new mongoose.Schema({
   },
   report_messages: {
     type: String,
+    required: true,
   },
   timestamp: {
     type: Date,
