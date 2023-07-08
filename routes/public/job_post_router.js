@@ -51,19 +51,16 @@ router.get("/options", async (req, res) => {
         }
 
         const sort = [
-            "title",
-            "description",
-            "skills",
-            "type",
-            "location",
             "salary",
-            "duration"
+            "updatedAt",
+            "job_duration",
+            // "is_active",
         ]
 
         res.status(200).json({
             "skills-filters": skills_arr,
             "sort": sort,
-            cities
+            // cities
         });
     } catch (e) {
         res.status(404).json("not found " + e.message);
@@ -156,6 +153,16 @@ router.get("/", async (req, res) => {
                 },
             },
             {
+                $match:{
+                    is_active: true
+                }
+            },
+            {
+                $match:{
+                    is_hidden: false
+                }
+            },
+            {
                 $match: {
                     $or: [
                         {
@@ -173,7 +180,6 @@ router.get("/", async (req, res) => {
                     ],
                 },
             },
-
             //
             {
                 $match: {

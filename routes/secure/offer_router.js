@@ -58,7 +58,10 @@ router.post('/accept/:offer_id', async (req, res) => {
 
             const job_post = await Job_post.findOneAndUpdate(
                 {_id:offer['job_post_id']}
-                ,{'accepted_user_id':offer['applicant_id']}
+                ,{ '$set': {
+                        'accepted_user_id':offer['applicant_id'],
+                        'is_active':false
+                    }}
                 ,{new: true}
             )
 

@@ -113,6 +113,13 @@ GET https://back-ph2h.onrender.com/user
                                         /-------user id --------/
 GET https://back-ph2h.onrender.com/user/6449249fe8392437d61826ff
 ```
+#### get user profile 
+##### (user details, jobs that the user has posted, jobs that the user had been accepted for, rates and feeback for the user)
+``` 
+                                                /-------user id --------/
+GET https://back-ph2h.onrender.com/user/profile/6449249fe8392437d61826ff
+```
+
 
 ##### Create new job
 
