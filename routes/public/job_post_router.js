@@ -58,7 +58,7 @@ router.get("/options", async (req, res) => {
         ]
 
         res.status(200).json({
-            "skills_filters": skills_arr,
+            "skills": skills_arr,
             "sort": sort,
             // cities
         });
