@@ -18,7 +18,7 @@ router.post('/apply/:job_post_id', validate_apply_offer, offer_validation, async
         if (job_post_id.match(/^[0-9a-fA-F]{24}$/) && isValidObjectId(job_post_id)) {
             const offer = await Offer.findOne({applicant_id: req.user._id, job_post_id: job_post_id});
             if (offer) {
-                res.status(200).json({message: "Already applied"})
+                res.status(400).json({message: "Already applied"})
             } else {
                 const new_offer = new Offer({
                     price: req.body.price || "0",
@@ -152,7 +152,7 @@ router.delete('/:offer_id', async (req, res) => {
                 res.status(404).json({message: "No offers with this id"})
             } else {
                 await offer.remove();
-                res.status(200).json({message: "offer is deleted"})
+                res.status(201).json({message: "offer is deleted"})
             }
         } else {
             res.status(404).json({message: "Invalid offer id"})
