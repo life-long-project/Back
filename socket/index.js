@@ -12,7 +12,6 @@ module.exports = function (io) {
     });
 
     console.log("user connected");
-
     // Join conversation room
     socket.on("joinConversation", async (conversationId) => {
       socket.join(conversationId);
@@ -70,15 +69,13 @@ module.exports = function (io) {
         const user = getUser(receiver);
         // console.log({ receiver, sender, callerName, acceptorName  })
         if (user) {
-          socket
-            .to(user.socketId)
-            .emit("callUser", {
-              signal: signalData,
-              to: sender,
-              from: receiver,
-              callerName,
-              acceptorName,
-            });
+          socket.to(user.socketId).emit("callUser", {
+            signal: signalData,
+            to: sender,
+            from: receiver,
+            callerName,
+            acceptorName,
+          });
         }
       }
     );
