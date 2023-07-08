@@ -64,6 +64,32 @@ module.exports = function (io) {
         console.log(err);
       }
     });
+    socket.on(
+      "callUser",
+      ({ receiver, signalData, sender, callerName, acceptorName }) => {
+        const user = getUser(receiver);
+        // console.log({ receiver, sender, callerName, acceptorName  })
+        if (user) {
+          socket
+            .to(user.socketId)
+            .emit("callUser", {
+              signal: signalData,
+              to: sender,
+              from: receiver,
+              callerName,
+              acceptorName,
+            });
+        }
+      }
+    );
+
+    socket.on("answerCall", ({ signal, to, from }) => {
+      console.log({ signal, to, from });
+      const user = getUser(to);
+      if (user) {
+        socket.to(user.socketId).emit("callAccepted", signal);
+      }
+    });
 
     socket.on("disconnect", () => {
       const disconnectedUserId = Object.keys(users).find(
