@@ -1,59 +1,93 @@
-const Job_rate = require('../../models/job_rate');
 const User_rate = require('../../models/user_rate');
-const {validate_user_rate, validate_job_rate, user_validation} = require('../../middlewares/validation/rate')
+const {validate_rate,rate_validation} = require('../../middlewares/validation/rate')
+const Job = require('../../models/job_post');
 
 const express = require('express')
 const router = express.Router()
-const mongoose = require("mongoose");
-const {MongoClient} = require('mongodb');
-const {isValidObjectId, ObjectId} = require("mongoose");
 
-router.post('/user/:rated_id',
-    validate_user_rate,
-    user_validation,
+// rating from worker for the job and the owner
+router.post('/job/:job_id',
+    validate_rate,
+    rate_validation,
     async (req, res) => {
         try {
+            // worker
             const rater_id = req.user._id || '6463b901b377ff4bae1c9c1a'
-            const rated_id = req.params.rated_id || '6463b901b377ff4bae1c9c1a'
+            const rated_job_id = req.params.job_id
+            const job = await Job.findById(rated_job_id)
+            // owner
+            const rated_id = job['posted_by_id']
             const rating = req.body.rating || 5
             const feedback = req.body.feedback || ""
-            const new_user_rate = new User_rate({
-                rater_id,
-                rated_id,
-                rating,
-                feedback
+
+            const old_rate = await User_rate.findOne({
+                "rater_id": rater_id,
+                "rated_id":rated_id,
+                "rated_job_id":rated_job_id
             })
-            console.log(new_user_rate)
-            await new_user_rate.save();
-            res.status(201).json({message: "Success"})
+            if(old_rate){
+                res.status(400).json({message: "Already rated"})
+            }else{
+                const rate = new User_rate({
+                    rater_id,
+                    rated_job_id,
+                    rated_id,
+                    rating,
+                    feedback
+                })
+                console.log(rate)
+                await rate.save();
+                res.status(201).json({message: "Success"})
+            }
         } catch (e) {
             res.status(500).json({message: e.message})
         }
 
     })
 
-router.post('/job/:rated_job_id',
-    validate_user_rate,
-    user_validation,
+// rating from owner for the user
+
+router.post('/user/:job_id',
+    validate_rate,
+    rate_validation,
     async (req, res) => {
         try {
-            const rater_id = req.user._id || "6463b901b377ff4bae1c9c1a"
-            const rated_job_id = req.params.rated_job_id || "6461757025d3b22292e0b2a6"
+            // owner
+            const rater_id = req.user._id || '6463b901b377ff4bae1c9c1a'
+            const rated_job_id = req.params.job_id
+            const job = await Job.findById(rated_job_id)
+            // worker
+            const rated_id = job['accepted_user_id']
             const rating = req.body.rating || 5
             const feedback = req.body.feedback || ""
-            const new_job_rate = new Job_rate({
-                rater_id,
-                rated_job_id,
-                rating,
-                feedback
+
+            const old_rate = await User_rate.findOne({
+                "rater_id": rater_id,
+                "rated_id":rated_id,
+                "rated_job_id":rated_job_id
             })
-            await new_job_rate.save();
-            res.status(201).json({message: "Success"})
+            if(old_rate){
+                res.status(400).json({message: "Already rated"})
+            }else{
+                const rate = new User_rate({
+                    rater_id,
+                    rated_job_id,
+                    rated_id,
+                    rating,
+                    feedback
+                })
+                console.log(rate)
+                await rate.save();
+                res.status(201).json({message: "Success"})
+            }
         } catch (e) {
             res.status(500).json({message: e.message})
         }
 
     })
 
+/*
+todo: finish request then route to rating pages
+ */
 
 module.exports = router

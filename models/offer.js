@@ -1,7 +1,6 @@
 const Notification = require("./notification")
 // todo:when enter job post page check if the user is the owner then request this join with the users
-
-
+const Offer = require("./offer")
 const mongoose = require("mongoose");
 const {ObjectId} = require('mongodb');
 const User = require("./user");
@@ -54,30 +53,7 @@ offerSchema.pre('save', async function (next) {
     next()
 })
 
-// notify for accepting your offer
-offerSchema.pre('update', async function (next) {
-    if (this.getUpdate().$set.status === "accepted") {
-        const offers = await Offer.find({
-            job_post_id: this.job_post_id
-        })
-        const job_post = await Job_post.findById(this.job_post_id)
 
-        const notification = new Notification({
-            action: 'your offer has been accepted',
-            from_id: job_post['posted_by_id'],
-            for_id: this.applicant_id,
-            job_post_id: this.job_post_id
-        })
-        await notification.save()
-
-        if (offers.length <= 1) {
-            next()
-        } else {
-            await offers.update({status: "rejected"})
-        }
-    }
-    next()
-})
 
 
 const offer_model = mongoose.model("Offer", offerSchema);

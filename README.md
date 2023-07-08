@@ -291,41 +291,41 @@ Content-Type: application/json
 
 ---
 
-### Rate
+### Rate [require authentication]
 
-##### fields required for rating a user
+##### fields required for rating from worker for the job and the owner
 
 ```
     rating [int, required]
     feedback [string, optional]
 ```
 
-### create a user feedback [need authentication]
+### rating from worker for the job and the owner [need authentication]
 
 ```
-                /-------user id --------/
-POST /rate/user/6463b901b377ff4bae1c9c1a
+                /-------job id --------/
+POST /rate/job/6463b901b377ff4bae1c9c1a
 Content-Type: application/json
 
 {
 	"rating":5,
-	"feedback":"nice man"
+	"feedback":"nice job, cute owner"
 }
 
 ```
 
-##### fields required for rating a job [need authentication]
+##### fields required for rating from owner for the user
 
 ```
     rating [int, required]
     feedback [string, optional]
 ```
 
-### create a job feedback
+### rating from owner for the user
 
 ```
-               /--------job id --------/
-POST /rate/job/6461757025d3b22292e0b2a6
+                /-------- job id --------/
+POST /rate/user/6461757025d3b22292e0b2a6
 Content-Type: application/json
 
 {

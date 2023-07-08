@@ -13,15 +13,21 @@ const user_rate_Schema = new mongoose.Schema({
         type: ObjectId,
         required: true
     },
+    rated_job_id: {
+        type: ObjectId,
+        required: true
+    },
     rating: {
         type: Number,
         required: true,
         min: 1,
-        max: 5
+        max: 5,
+        default: 5
     },
     feedback: {
         type: String,
         required: true,
+        default: "",
         trim: true
     },
 
