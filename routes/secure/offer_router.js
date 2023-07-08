@@ -37,6 +37,7 @@ router.post(
             price: req.body.price || "0",
             message: req.body.message || "",
             applicant_id: req.user._id,
+            applicant_name: req.user.username,
             job_post_id: job_post_id,
           });
           await new_offer.save();

@@ -8,13 +8,13 @@ const router = require("express").Router();
 //get all reported jobs
 router.get("/reported_jobs", async (req, res) => {
   try {
-    const jobs = await jobs.find({
+    const job = await jobs.find({
       is_reported: true,
     });
     if (jobs.length === 0) {
       res.status(400).json({ message: "No jobs yet" });
     } else {
-      res.status(200).json(jobs);
+      res.status(200).json(job);
     }
   } catch (e) {
     res.status(500).json({ message: e.message });
