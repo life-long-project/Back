@@ -70,6 +70,10 @@ const job_post_schema = new mongoose.Schema(
       type: String,
       default: "there is no reports",
     },
+    status: {
+      type: Boolean,
+      default: false,
+    },
     accepted_user_id: {
       type: ObjectId,
       default: null,
