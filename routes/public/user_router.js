@@ -144,6 +144,12 @@ router.get('/profile/:user_id', async (req, res) => {
                         as: "user",
                     },
                 },
+                {
+                    $unwind: {
+                        path: "$user",
+                        preserveNullAndEmptyArrays: true,
+                    },
+                },
             ])
             // rates for the user
             const rates = await Rate.find({'rated_id': user_id})
