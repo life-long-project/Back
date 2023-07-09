@@ -583,8 +583,8 @@ router.post("/update_status/:id", get_job_post, async (req, res) => {
   try {
     const updated_jop_post = await res.job_post.save();
     res.status(201).json({
-      is_finished: updated_jop_post.is_finished,
       message: "the job is now finished",
+      is_finished: updated_jop_post.is_finished,
     });
   } catch (err) {
     res.status(400).json({ message: err.message });

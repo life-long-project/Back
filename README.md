@@ -534,3 +534,11 @@ get request "/report/reported_jobs"
 
 . to get the reported users :
 get request "/report/reported_users"
+##################################################################
+change the job status :
+post request "/jobs/update_status/64a89e201697e8996e61bbed"
+
+with a body content of :
+{
+"is_finished":"true"
+}
