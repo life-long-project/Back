@@ -40,18 +40,20 @@ router.get("/reported_users", async (req, res) => {
 //report a job
 router.post("/report_job/:id", async (req, res) => {
   try {
-    const { id } = req.params;
-    const { message } = req.body;
+    const { reportedId } = req.params;
+    const { report_messages } = req.body;
+    const { reporterId } = req.body;
 
-    const job = await jobs.findById(id);
+    const job = await jobs.findById(reportedId);
     if (job) {
       job.is_reported = true;
       job.save();
 
       // Create a new report document in your database with the job ID and message
       const report = await Report.create({
-        jobId: job._id,
-        message: message,
+        reportedId: job._id,
+        report_messages: report_messages,
+        reporterId: reporterId,
         // Add other relevant fields like reporterId, reportedUserId, timestamp as needed
       });
 
