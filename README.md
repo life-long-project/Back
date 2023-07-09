@@ -113,13 +113,15 @@ GET https://back-ph2h.onrender.com/user
                                         /-------user id --------/
 GET https://back-ph2h.onrender.com/user/6449249fe8392437d61826ff
 ```
-#### get user profile 
+
+#### get user profile
+
 ##### (user details, jobs that the user has posted, jobs that the user had been accepted for, rates and feeback for the user)
-``` 
+
+```
                                                 /-------user id --------/
 GET https://back-ph2h.onrender.com/user/profile/6449249fe8392437d61826ff
 ```
-
 
 ##### Create new job
 
@@ -131,7 +133,7 @@ GET https://back-ph2h.onrender.com/user/profile/6449249fe8392437d61826ff
     type (string => "full-time", required),
     salary (string => "100", required),
     skills (array of strings => ["skill 1","skill 2"], required),
-    
+
     location (string => "cairo", optional),
     required_experience (string => "beginner"-"intermediate"-"expert" , optional)
     duration (string => "20", optional),
@@ -369,6 +371,7 @@ Content-Type: application/json
 ```
 
 ### accept specific offer
+
 ```
                    /------ offer id ------/
 POST /offer/accept/6496dfef6feefd920273f024
@@ -380,6 +383,7 @@ POST /offer/accept/6496dfef6feefd920273f024
 ```
 GET /offer/
 ```
+
 ### get all offers for present user
 
 ```
@@ -400,24 +404,19 @@ GET /offer/job/64954e48bb4c768655bba547
 GET /offer/6496dfef6feefd920273f024
 ```
 
-
-[//]: # (### get all offers for specific user)
-
-[//]: # (```)
-
-[//]: # ()
-[//]: # ()
-[//]: # (```)
+[//]: # "### get all offers for specific user"
+[//]: # "```"
+[//]: #
+[//]: #
+[//]: # "```"
 
 ### delete specific offer
+
 ```
               /------ offer id ------/
 DELETE /offer/6496dfef6feefd920273f024
 
 ```
-
-
-
 
 ---
 
@@ -506,3 +505,32 @@ https://back-ph2h.onrender.com/conversation/6465190867734265dde8bfb9
 get request "/conversation/chats/:userId"
 https://back-ph2h.onrender.com/conversation/chats/6463b901b377ff4bae1c9c1a
 ```
+
+### to report a job post or a user
+
+post request "/report/report_job/64a893b7205107f13de57c2d"
+this /:id refers to the (job post id )
+the body should have :
+{
+"report_messages":"this doesn't make sense to me",
+"reporterId":"64a16604493228d42c997761"
+}
+
+################################################################
+
+post request "/report/report_user/64a8b01ba074b1554a7dc4c5"
+this /:id refers to the (reported user id )
+the body should have :
+{
+"report_messages":"this user violates the service conditions",
+"reporterId":"64a8b01ba074b1554a7dc4c5"
+}
+
+################################################################
+and for the admin he can get the reported users or the repoted job posts :
+
+. to get the reported job posts :
+get request "/report/reported_jobs"
+
+. to get the reported users :
+get request "/report/reported_users"

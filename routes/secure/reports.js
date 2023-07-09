@@ -11,10 +11,18 @@ router.get("/reported_jobs", async (req, res) => {
     const job = await jobs.find({
       is_reported: true,
     });
-    if (jobs.length === 0) {
-      res.status(400).json({ message: "No jobs yet" });
+
+    if (job.length === 0) {
+      res.status(400).json({ message: "No reported jobs yet" });
     } else {
-      res.status(200).json(job);
+      const jobsWithReportMessages = job.map((job) => {
+        return {
+          ...job.toObject(),
+          report_messages: job.report_messages,
+        };
+      });
+
+      res.status(200).json(jobsWithReportMessages);
     }
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -27,10 +35,18 @@ router.get("/reported_users", async (req, res) => {
     const users = await UserModel.find({
       is_reported: true,
     });
+
     if (users.length === 0) {
       res.status(400).json({ message: "No users yet" });
     } else {
-      res.status(200).json(users);
+      const usersWithReportMessages = users.map((user) => {
+        return {
+          ...user.toObject(),
+          report_messages: user.report_messages,
+        };
+      });
+
+      res.status(200).json(usersWithReportMessages);
     }
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -40,15 +56,11 @@ router.get("/reported_users", async (req, res) => {
 //report a job
 router.post("/report_job/:id", async (req, res) => {
   try {
-    const { reportedId } = req.params;
+    const { id } = req.params;
     const { report_messages } = req.body;
     const { reporterId } = req.body;
 
-    const job = await jobs.findById(reportedId);
-
-    console.log(job);
-    console.log(job);
-    console.log(job);
+    const job = await jobs.findById(id);
 
     if (job) {
       job.is_reported = true;
@@ -56,7 +68,7 @@ router.post("/report_job/:id", async (req, res) => {
 
       // Create a new report document in your database with the job ID and message
       const report = await Report.create({
-        reportedId: job._id,
+        reportedId: id,
         report_messages: report_messages,
         reporterId: reporterId,
         // Add other relevant fields like reporterId, reportedUserId, timestamp as needed
@@ -75,14 +87,30 @@ router.post("/report_job/:id", async (req, res) => {
 });
 
 //report a user
-router.post("report_user/:id", async (req, res) => {
+router.post("/report_user/:id", async (req, res) => {
   try {
-    const { user_id } = req.body;
-    const user = await UserModel.findById(user_id);
+    const { id } = req.params; // Get the user ID from the request parameters
+    const { report_messages } = req.body;
+    const { reporterId } = req.body; // Get the report message from the request body
+
+    const user = await UserModel.findById(id); // Find the user based on the ID
+
     if (user) {
       user.is_reported = true;
       user.save();
-      res.status(200).json({ message: "thank you for helping us !" });
+
+      // Create a new report document in your database with the user ID and message
+      const report = await Report.create({
+        reportedId: id,
+        report_messages: report_messages,
+        reporterId: reporterId,
+        // Add other relevant fields like reporterId, timestamp as needed
+      });
+
+      res.status(200).json({
+        message: "Thank you for helping us!",
+        report: report, // Include the report details in the response
+      });
     } else {
       res.status(400).json({ message: "User not found or has been deleted" });
     }
