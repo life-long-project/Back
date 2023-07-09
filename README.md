@@ -107,6 +107,12 @@ GET https://back-ph2h.onrender.com/cities
 GET https://back-ph2h.onrender.com/user
 ```
 
+#### related
+```
+                                      
+GET https://back-ph2h.onrender.com/jobs/related
+```
+
 #### get specific
 
 ```
