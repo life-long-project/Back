@@ -241,6 +241,16 @@ router.get("/", async (req, res) => {
             },
             {
                 $match: {
+                    is_active: true,
+                },
+            },
+            {
+                $match: {
+                    is_hidden: false,
+                },
+            },
+            {
+                $match: {
                     $or: [
                         {
                             job_name: {
@@ -287,10 +297,10 @@ router.get("/", async (req, res) => {
 router.get('/related', async (req, res) => {
     const total = await Job_post.countDocuments();
     let skip = 0
-    let randomDoc = await Job_post.find({}).skip(skip).limit(10).exec();
-    while (total > 7 && skip < 7) {
+    let randomDoc = await Job_post.find({}).skip(skip).limit(5).exec();
+    while (total > 5 && skip < 5) {
         skip = Math.floor(Math.random() * total) + 1;
-        randomDoc = await Job_post.find({}).skip(skip).limit(10).exec();
+        randomDoc = await Job_post.find({}).skip(skip).limit(5).exec();
     }
     console.log(total, Object(randomDoc).length)
     res.json(randomDoc)
