@@ -506,7 +506,7 @@ get request "/conversation/chats/:userId"
 https://back-ph2h.onrender.com/conversation/chats/6463b901b377ff4bae1c9c1a
 ```
 
-### to report a job post or a user
+### to report a job post or a user (need auth_token)
 
 post request "/report/report_job/64a893b7205107f13de57c2d"
 this /:id refers to the (job post id )
