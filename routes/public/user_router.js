@@ -127,6 +127,12 @@ router.get('/profile/:user_id', async (req, res) => {
                         as: "user",
                     },
                 },
+                {
+                    $unwind: {
+                        path: "$user",
+                        preserveNullAndEmptyArrays: true,
+                    },
+                },
             ])
 
             // jobs the had been accepted for
