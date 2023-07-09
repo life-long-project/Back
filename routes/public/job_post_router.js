@@ -227,6 +227,7 @@ router.get("/", async (req, res) => {
           createdAt: 1,
           updatedAt: 1,
           user: 1,
+          is_finished: 1,
         },
       },
     ]);
@@ -343,6 +344,7 @@ router.post(
         is_hidden: new_job_post.is_hidden,
         createdAt: new_job_post.createdAt,
         updatedAt: new_job_post.updatedAt,
+        is_finished: new_job_post.is_finished,
         user: user,
       });
     } catch (error) {
@@ -386,6 +388,9 @@ router.patch(
     }
     if (req.body.salary != null) {
       res.job_post.salary = req.body.salary;
+    }
+    if (req.body.is_finished != null) {
+      res.job_post.is_finished = req.body.is_finished;
     }
     if (req.body.duration != null) {
       res.job_post.job_duration = req.body.duration;
@@ -433,6 +438,7 @@ router.patch(
         is_active: updated_jop_post.is_active,
         createdAt: updated_jop_post.createdAt,
         updatedAt: updated_jop_post.updatedAt,
+        is_finished: updated_jop_post.is_finished,
       });
     } catch (err) {
       res.status(400).json({ message: err.message });
@@ -529,6 +535,7 @@ async function get_job_post_details(req, res, next) {
             createdAt: 1,
             updatedAt: 1,
             user: 1,
+            is_finished: 1,
           },
         },
         // Join with users collection
