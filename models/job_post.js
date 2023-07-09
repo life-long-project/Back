@@ -70,7 +70,7 @@ const job_post_schema = new mongoose.Schema(
       type: String,
       default: "there is no reports",
     },
-    status: {
+    is_finished: {
       type: Boolean,
       default: false,
     },

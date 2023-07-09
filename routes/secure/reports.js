@@ -45,9 +45,11 @@ router.post("/report_job/:id", async (req, res) => {
     const { reporterId } = req.body;
 
     const job = await jobs.findById(reportedId);
+
     console.log(job);
     console.log(job);
     console.log(job);
+
     if (job) {
       job.is_reported = true;
       job.save();
