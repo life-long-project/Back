@@ -90,14 +90,27 @@ router.get("/chats/:userId", async (req, res) => {
     // Retrieve all conversations where the user is a member
     const conversations = await Conversation.find({
       members: { $in: [userId] },
-    });
+    }).sort({ updatedAt: -1 }); // Sort conversations by updatedAt field in descending order
+
     if (conversations.length === 0) {
       res.status(200).json({
         status: 0,
-        message: "there is no conversations yet , start one !",
+        message: "There are no conversations yet. Start one!",
       });
     } else {
-      res.status(200).json({ status: 0, conversations });
+      // Get the last message of each conversation
+      const conversationsWithLastMessage = await Promise.all(
+        conversations.map(async (conversation) => {
+          const lastMessage = await Message.findOne({
+            conversation: conversation._id,
+          }).sort({ createdAt: -1 });
+          return { conversation, lastMessage };
+        })
+      );
+
+      res
+        .status(200)
+        .json({ status: 0, conversations: conversationsWithLastMessage });
     }
   } catch (error) {
     console.error(error);
