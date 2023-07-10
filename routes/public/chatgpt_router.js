@@ -11,9 +11,13 @@ const openai = new OpenAIApi(configuration);
 async function call_chat_gpt(text){
     try {
         const completion = await openai.createCompletion({
-            model: "text-davinci-002",
+            model: "text-davinci-003",
             prompt: text,
-            max_tokens: 1000,
+            temperature: 1,
+            max_tokens: 256,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
         });
         return (completion.data.choices[0].text.trim())
     }catch (e) {
