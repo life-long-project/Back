@@ -63,6 +63,20 @@ GET  https://back-ph2h.onrender.com/jobs/?page=2
 GET  https://back-ph2h.onrender.com/jobs/?skills=sum,add
 ```
 
+##### to filter the jobs with a job type
+
+```
+GET  https://back-ph2h.onrender.com/jobs/?job_type=full-time,part-time,service
+```
+
+##### to filter the jobs with a job city(location)
+
+```
+GET  https://back-ph2h.onrender.com/jobs/?city=tanta
+```
+
+
+
 ##### to sort the jobs by specific column and ascending order
 
 ```

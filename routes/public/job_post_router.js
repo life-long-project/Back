@@ -48,6 +48,9 @@ router.get("/options", async (req, res) => {
             skills_arr = [""];
         }
 
+        let job_types = ['full-time', 'part-time', 'service']
+
+
         const sort = [
             "salary",
             "updatedAt",
@@ -58,7 +61,8 @@ router.get("/options", async (req, res) => {
         res.status(200).json({
             skills: skills_arr,
             sort: sort,
-            // cities
+            job_types: job_types,
+            cities: cities
         });
     } catch (e) {
         res.status(404).json("not found " + e.message);
@@ -86,7 +90,7 @@ router.get("/skills", async (req, res) => {
         if (skills_arr.length === 0) {
             skills_arr = [""];
         }
-        console.log(skills_arr);
+        // console.log(skills_arr);
         res.status(200).json(skills_arr);
     } catch (e) {
         res.status(500).json({message: e.message});
@@ -109,7 +113,7 @@ router.get("/", async (req, res) => {
                 $sort: {count: -1},
             },
         ]).exec();
-        console.log(skills_db);
+        // console.log(skills_db);
 
         let skills_arr = [];
         skills_db.forEach((skill) => {
@@ -129,7 +133,7 @@ router.get("/", async (req, res) => {
             ? (skills = [...skills_arr])
             : (skills = req.query.skills.split(","));
         req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
-        console.log(skills);
+        // console.log(skills);
 
         let sortBy = {};
         if (sort[1] && sort[1].toLowerCase() === "asc") {
@@ -137,6 +141,20 @@ router.get("/", async (req, res) => {
         } else {
             sortBy[sort[0]] = -1;
         }
+
+        let job_types = ['full-time', 'part-time', 'service'];
+        let job_type = req.query.job_type || 'ALL';
+
+        job_type === 'ALL'
+            ? (job_type = [...job_types])
+            : (job_type = req.query.job_type.split(','));
+
+
+        let city = req.query.city || 'ALL';
+        city === 'ALL'
+            ? (city = [...cities])
+            : (city = req.query.city.split(','));
+
 
         const jobs = await Job_post.aggregate([
             {
@@ -148,7 +166,10 @@ router.get("/", async (req, res) => {
             },
             {
                 $match: {
-                    is_active: true,
+                    $and:[
+                        {is_active: true},
+                        {is_finished: false},
+                    ],
                 },
             },
             {
@@ -174,6 +195,22 @@ router.get("/", async (req, res) => {
                     ],
                 },
             },
+            // filter for job_type
+            {
+                $match: {
+                    job_type: {
+                        $in: [...job_type],
+                    },
+                },
+            },
+            // filter for location
+            {
+                $match: {
+                    job_location: {
+                        $in: [...city],
+                    },
+                },
+            },
             //
             {
                 $match: {
@@ -182,8 +219,9 @@ router.get("/", async (req, res) => {
                     },
                 },
             },
-            //
 
+
+            //
             {
                 $sort: sortBy,
             },
@@ -241,7 +279,10 @@ router.get("/", async (req, res) => {
             },
             {
                 $match: {
-                    is_active: true,
+                    $and:[
+                        {is_active: true},
+                        {is_finished: false},
+                    ],
                 },
             },
             {
@@ -265,6 +306,22 @@ router.get("/", async (req, res) => {
                             },
                         },
                     ],
+                },
+            },
+            // filter for job_type
+            {
+                $match: {
+                    job_type: {
+                        $in: [...job_type],
+                    },
+                },
+            },
+            // filter for location
+            {
+                $match: {
+                    job_location: {
+                        $in: [...city],
+                    },
                 },
             },
             {
@@ -333,12 +390,12 @@ router.post(
                 posted_by_id: mongoose.Types.ObjectId(
                     req.user._id || "641b0c2e95e465087359ee93"
                 ),
-                job_name: req.body.title || "",
-                job_description: req.body.description || "",
-                job_skills: req.body.skills || [""],
-                job_type: req.body.type || "Full-time",
-                job_location: req.body.location || "Cairo",
-                required_experience: req.body.required_experience || "ALL",
+                job_name: req.body.title.toLowerCase() || "",
+                job_description: req.body.description.toLowerCase() || "",
+                job_skills: req.body.skills.toLowerCase() || [""],
+                job_type: req.body.type.toLowerCase() || "full-time",
+                job_location: req.body.location.toLowerCase() || "Cairo",
+                required_experience: req.body.required_experience.toLowerCase() || "ALL",
                 // is_active: req.body.is_active,
                 // is_hidden: req.body.is_hidden,
                 salary: req.body.salary || "1000",
