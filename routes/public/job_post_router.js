@@ -151,15 +151,15 @@ router.get("/", async (req, res) => {
         const jobs = await Job_post.aggregate([
             {
                 $match: {
-                    $and: [
-                        {is_active: true},
-                        {is_finished: false},
-                    ],
+                    is_hidden: false,
                 },
             },
             {
                 $match: {
-                    is_hidden: false,
+                    $and: [
+                        {is_active: true},
+                        {is_finished: false},
+                    ],
                 },
             },
             {
@@ -255,17 +255,17 @@ router.get("/", async (req, res) => {
             },
         ]);
         const len_all_jobs = await Job_post.aggregate([
-            // {
-            //     $match: {
-            //         $and: [
-            //             {is_active: true},
-            //             {is_finished: false},
-            //         ],
-            //     },
-            // },
             {
                 $match: {
                     is_hidden: false,
+                },
+            },
+            {
+                $match: {
+                    $and: [
+                        {is_active: true},
+                        {is_finished: false},
+                    ],
                 },
             },
             {
@@ -302,6 +302,7 @@ router.get("/", async (req, res) => {
                     },
                 },
             },
+            //
             {
                 $match: {
                     job_skills: {

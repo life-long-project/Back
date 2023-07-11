@@ -24,15 +24,31 @@ router.use((req, res, next) => {
 router.get('/', async (req, res) => {
 // get all users
     const users = await User.find();
+    const total_users = await User.countDocuments();
 // get all jobs
     const job_posts = await Job_post.find();
+    const total_job_posts = await Job_post.countDocuments();
+
 // get reported users
     const reported_users = await User.find({'is_reported': true})
+    const total_reported_users = await User.find({'is_reported': true}).countDocuments();
+
 // get reported jobs
     const reported_job_posts = await Job_post.find({'is_reported': true})
+    const total_reported_job_posts = await Job_post.find({'is_reported': true}).countDocuments();
+
 
 // todo: recently activities
-    res.status(200).json({users, reported_users, job_posts, reported_job_posts})
+    res.status(200).json({
+        users,
+        total_users,
+        reported_users,
+        total_reported_users,
+        job_posts,
+        total_job_posts,
+        reported_job_posts,
+        total_reported_job_posts
+    })
 });
 
 // todo: control users

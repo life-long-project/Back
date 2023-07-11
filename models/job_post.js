@@ -1,136 +1,137 @@
 const mongoose = require("mongoose");
-const { ObjectId } = require("mongodb");
+const {ObjectId} = require("mongodb");
 const Notification = require("./notification");
 
 const job_post_schema = new mongoose.Schema(
-  {
-    // job_location attributes
-    posted_by_id: {
-      type: ObjectId,
-      required: true,
-    },
-    job_name: {
-      type: String,
-      required: true,
-      default: "test",
-    },
-    job_description: {
-      type: String,
-      required: true,
-      default: "this is a test description, don't judge, um just fake one.",
-    },
-    job_skills: {
-      type: [String],
-      required: true,
-      default: ["none"],
-    },
-    job_type: {
-      type: String,
-      required: true,
-      default: "full-time",
-    },
-    job_location: {
-      type: String,
-      required: true,
-      default: "test",
-    },
-    // todo : edit readme
-    required_experience: {
-      type: String,
-      required: false,
-      default: "ALL",
-      enum: ["ALL", "beginner", "intermediate", "expert"],
-    },
-      // it's false when the offer is accepted
-    is_active: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-      // it's true when the report is accepted, and take hidden action for it
-      is_hidden: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-      // it's false when the offer is accepted
-      is_reported: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    salary: {
-      type: String,
-      required: true,
-      default: "100",
-    },
-    job_duration: {
-      type: String,
-      required: false,
-      default: "",
-    },
-    report_messages: {
-      type: String,
-      default: "there is no reports",
-    },
-      //  it's true when the user finish the job
-      is_finished: {
-      type: Boolean,
-      default: false,
-    },
-    accepted_user_id: {
-      type: ObjectId,
-      default: null,
-      required: false,
-    },
+    {
+        // job_location attributes
+        posted_by_id: {
+            type: ObjectId,
+            required: true,
+        },
+        job_name: {
+            type: String,
+            required: true,
+            default: "test",
+        },
+        job_description: {
+            type: String,
+            required: true,
+            default: "this is a test description, don't judge, um just fake one.",
+        },
+        job_skills: {
+            type: [String],
+            required: true,
+            default: ["none"],
+        },
+        job_type: {
+            type: String,
+            required: true,
+            default: "full-time",
+        },
+        job_location: {
+            type: String,
+            required: true,
+            default: "test",
+        },
+        // todo : edit readme
+        required_experience: {
+            type: String,
+            required: false,
+            default: "ALL",
+            enum: ["ALL", "beginner", "intermediate", "expert"],
+        },
+        // it's change to false when the offer is accepted
+        is_active: {
+            type: Boolean,
+            required: false,
+            default: true,
+        },
+        // it's changed to true when the report is accepted, and take hidden action for it
+        is_hidden: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        // it's changed to true if any reported it
+        is_reported: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        //  it's changed to true when the user finished the job
+        is_finished: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        salary: {
+            type: String,
+            required: true,
+            default: "100",
+        },
+        job_duration: {
+            type: String,
+            required: false,
+            default: "",
+        },
+        report_messages: {
+            type: String,
+            default: "there is no reports",
+        },
+        accepted_user_id: {
+            type: ObjectId,
+            default: null,
+            required: false,
+        },
 
-    //todo: don't forget handle the size of images max < 16MB when upload it to our cloud or server
-    //todo: we can use CDN (s3 aws, cloudnary) after some developing
-    job_img_url: {
-      type: Array,
-      default: [
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png",
-      ],
+        //todo: don't forget handle the size of images max < 16MB when upload it to our cloud or server
+        //todo: we can use CDN (s3 aws, cloudnary) after some developing
+        job_img_url: {
+            type: Array,
+            default: [
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png",
+            ],
+        },
+        rating: {
+            type: Number,
+            default: 0,
+        },
+        total_Nrating: {
+            type: Number,
+            default: 0,
+        },
     },
-    rating: {
-      type: Number,
-      default: 0,
-    },
-    total_Nrating: {
-      type: Number,
-      default: 0,
-    },
-  },
-  {
-    timestamps: true,
-    autoIndex: true,
-  }
+    {
+        timestamps: true,
+        autoIndex: true,
+    }
 );
 
 job_post_schema.pre("save", async function (next) {
-  const job = this;
-  let skills_arr = [];
-  this.job_skills.forEach((skill) => {
-    skills_arr.push(skill.toUpperCase());
-  });
-  this.job_skills = skills_arr;
-  next();
+    const job = this;
+    let skills_arr = [];
+    this.job_skills.forEach((skill) => {
+        skills_arr.push(skill.toUpperCase());
+    });
+    this.job_skills = skills_arr;
+    next();
 });
 
 job_post_schema.pre("save", async function (next) {
-  const notification = new Notification({
-    action: "creating new job",
-    from_id: this.posted_by_id,
-    for_admin: true,
-    // todo: check if it get error
-    job_post_id: this._id,
-  });
-  await notification.save();
-  next();
+    const notification = new Notification({
+        action: "creating new job",
+        from_id: this.posted_by_id,
+        for_admin: true,
+        // todo: check if it get error
+        job_post_id: this._id,
+    });
+    await notification.save();
+    next();
 });
 
-job_post_schema.index({ job_name: "text", job_description: "text" });
-job_post_schema.index({ posted_by_id: 1 });
+job_post_schema.index({job_name: "text", job_description: "text"});
+job_post_schema.index({posted_by_id: 1});
 
 const job_post_model = mongoose.model("job_post", job_post_schema);
 module.exports = job_post_model;
