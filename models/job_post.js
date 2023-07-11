@@ -41,17 +41,20 @@ const job_post_schema = new mongoose.Schema(
       default: "ALL",
       enum: ["ALL", "beginner", "intermediate", "expert"],
     },
+      // it's false when the offer is accepted
     is_active: {
       type: Boolean,
       required: false,
       default: true,
     },
-    is_hidden: {
+      // it's true when the report is accepted, and take hidden action for it
+      is_hidden: {
       type: Boolean,
       required: false,
       default: false,
     },
-    is_reported: {
+      // it's false when the offer is accepted
+      is_reported: {
       type: Boolean,
       required: false,
       default: false,
@@ -70,7 +73,8 @@ const job_post_schema = new mongoose.Schema(
       type: String,
       default: "there is no reports",
     },
-    is_finished: {
+      //  it's true when the user finish the job
+      is_finished: {
       type: Boolean,
       default: false,
     },

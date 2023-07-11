@@ -437,6 +437,52 @@ GET /offer/6496dfef6feefd920273f024
 DELETE /offer/6496dfef6feefd920273f024
 
 ```
+### admin request (need authentication & admin privilege)
+
+``` 
+GET /admin
+
+```
+
+### admin to upgrade an user privilege to admin privilege
+```
+                         /----- user id ----------/
+POST /admin/user/upgrade/6496dfef6feefd920273f024
+```
+### admin to upgrade other admin privilege to user privilege
+```
+                           /----- user id ----------/
+POST /admin/user/downgrade/6496dfef6feefd920273f024
+```
+### admin to block a user
+```
+                       /----- user id ----------/
+POST /admin/user/block/6496dfef6feefd920273f024
+```
+### admin to unblock a user
+```
+                         /----- user id ----------/
+POST /admin/user/unblock/6496dfef6feefd920273f024
+```
+### admin to delete(actually hidden & block) a user account
+```
+                         /----- user id ----------/
+POST /admin/user/unblock/6496dfef6feefd920273f024
+```
+
+
+### admin to delete a job
+```
+                       /----- job id ----------/
+POST /admin/job/delete/6496dfef6feefd920273f024
+```
+
+### admin to delete a job & the owner
+```
+                            /----- job id ----------/
+POST /admin/job/delete_both/6496dfef6feefd920273f024
+```
+
 
 ---
 

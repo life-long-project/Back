@@ -15,16 +15,8 @@ const {
 } = require("../../middlewares/validation/job_post");
 const {cities, cities_with_code, code_with_cities} = require("../../cities");
 const User = require("../../models/user");
-/*
-options / route
 
-
-sort
-filter-skills
-cities
-
-
- */
+// options / route
 
 router.get("/options", async (req, res) => {
     try {
@@ -157,13 +149,6 @@ router.get("/", async (req, res) => {
 
 
         const jobs = await Job_post.aggregate([
-            {
-                $match: {
-                    is_hidden: {
-                        $ne: true,
-                    },
-                },
-            },
             {
                 $match: {
                     $and: [
@@ -341,7 +326,6 @@ router.get("/", async (req, res) => {
         res.status(500).json({message: err.message});
     }
 });
-
 
 // random jobs
 router.get('/related', async (req, res) => {
