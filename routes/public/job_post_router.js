@@ -166,7 +166,7 @@ router.get("/", async (req, res) => {
             },
             {
                 $match: {
-                    $and:[
+                    $and: [
                         {is_active: true},
                         {is_finished: false},
                     ],
@@ -279,7 +279,7 @@ router.get("/", async (req, res) => {
             },
             {
                 $match: {
-                    $and:[
+                    $and: [
                         {is_active: true},
                         {is_finished: false},
                     ],
@@ -385,17 +385,19 @@ router.post(
                     f_response.push(result.secure_url);
                 }
             }
-
+            let req_skills;
+            // console.log(req.body.skills)
+            req_skills = (typeof (req.body.skills) === "string") ? (JSON.parse(req.body.skills)) : (req.body.skills)
             const job = new Job_post({
                 posted_by_id: mongoose.Types.ObjectId(
                     req.user._id || "641b0c2e95e465087359ee93"
                 ),
-                job_name: req.body.title.toLowerCase() || "",
-                job_description: req.body.description.toLowerCase() || "",
-                job_skills: req.body.skills.toLowerCase() || [""],
-                job_type: req.body.type.toLowerCase() || "full-time",
-                job_location: req.body.location.toLowerCase() || "Cairo",
-                required_experience: req.body.required_experience.toLowerCase() || "ALL",
+                job_name: req.body.title || "",
+                job_description: req.body.description || "",
+                job_skills: req_skills || [""],
+                job_type: req.body.type || "full-time",
+                job_location: (req.body.location || "Cairo").toLowerCase(),
+                required_experience: req.body.required_experience || "ALL",
                 // is_active: req.body.is_active,
                 // is_hidden: req.body.is_hidden,
                 salary: req.body.salary || "1000",

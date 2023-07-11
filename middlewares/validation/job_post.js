@@ -40,7 +40,9 @@ exports.validate_job_post_create = [
 
     check('skills')
         .notEmpty().withMessage('skills required!')
-        .isArray().withMessage('Skills must be an array of strings'),
+
+    // .isArray().withMessage('Skills must be an array of strings')
+    ,
 
     check('type')
         .notEmpty().withMessage('Job type required! as "full-time" , "part-time", "service".')
