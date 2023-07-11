@@ -1,8 +1,6 @@
 const Job_post = require("../../models/job_post")
-// const Reported_job_post = require("../../models/reported_jobs")
 const User = require("../../models/user")
-// const Reported_user = require("../../models/reported_users")
-
+const Activity = require("../../models/activity_log")
 
 const express = require('express')
 const router = express.Router()
@@ -37,6 +35,8 @@ router.get('/', async (req, res) => {
     const reported_job_posts = await Job_post.find({'is_reported': true})
     const total_reported_job_posts = await Job_post.find({'is_reported': true}).countDocuments();
 
+// get activity
+    const activity = await Activity.find();
 
 // todo: recently activities
     res.status(200).json({
@@ -47,7 +47,8 @@ router.get('/', async (req, res) => {
         job_posts,
         total_job_posts,
         reported_job_posts,
-        total_reported_job_posts
+        total_reported_job_posts,
+        activity
     })
 });
 
@@ -65,18 +66,42 @@ router.post('/user/:action/:user_id', async (req, res) => {
             switch (action) {
                 case 'upgrade':
                     await User.findByIdAndUpdate(user_id, {is_admin: true})
+                    await Activity.create({
+                        activity_message: "User is upgraded",
+                        posted_by_id: req.user._id,
+                        category: 'user',
+                        for_id: user_id
+                    })
                     res.status(200).json({message: "User is upgraded"})
                     break;
                 case 'downgrade':
                     await User.findByIdAndUpdate(user_id, {is_admin: false})
+                    await Activity.create({
+                        activity_message: "User is downgraded",
+                        posted_by_id: req.user._id,
+                        category: 'user',
+                        for_id: user_id
+                    })
                     res.status(200).json({message: "User is downgraded"})
                     break;
                 case 'block':
                     await User.findByIdAndUpdate(user_id, {is_blocked: true})
+                    await Activity.create({
+                        activity_message: "User is blocked",
+                        posted_by_id: req.user._id,
+                        category: 'user',
+                        for_id: user_id
+                    })
                     res.status(200).json({message: "User is blocked"})
                     break;
                 case 'unblock':
                     await User.findByIdAndUpdate(user_id, {is_blocked: false})
+                    await Activity.create({
+                        activity_message: "User is unblocked",
+                        posted_by_id: req.user._id,
+                        category: 'user',
+                        for_id: user_id
+                    })
                     res.status(200).json({message: "User is unblocked"})
                     break;
                 case 'delete':
@@ -88,10 +113,22 @@ router.post('/user/:action/:user_id', async (req, res) => {
                             is_admin: false
                         }
                     })
+                    await Activity.create({
+                        activity_message: "User is deleted",
+                        posted_by_id: req.user._id,
+                        category: 'user',
+                        for_id: user_id
+                    })
                     res.status(200).json({message: "User is deleted"})
                     break;
                 case 'verify':
                     await User.findByIdAndUpdate(user_id, {is_verified: true})
+                    await Activity.create({
+                        activity_message: "User is verified",
+                        posted_by_id: req.user._id,
+                        category: 'user',
+                        for_id: user_id
+                    })
                     res.status(200).json({message: "User is verified"})
                     break;
             }
@@ -114,6 +151,12 @@ router.post('/job/:action/:job_id', async (req, res) => {
                 case 'delete':
                     // actually it's hidden the job
                     await Job_post.findByIdAndUpdate(job_id, {is_hidden: true})
+                    await Activity.create({
+                        activity_message: "Job is deleted",
+                        posted_by_id: req.user._id,
+                        category: 'job',
+                        for_id: job_id
+                    })
                     res.status(200).json({message: "Job is deleted"})
 
                     break;
@@ -127,6 +170,19 @@ router.post('/job/:action/:job_id', async (req, res) => {
                             is_admin: false
                         }
                     })
+                    await Activity.create({
+                        activity_message: "Job is deleted",
+                        posted_by_id: req.user._id,
+                        category: 'job',
+                        for_id: job_id
+                    })
+                    await Activity.create({
+                        activity_message: "User is deleted",
+                        posted_by_id: req.user._id,
+                        category: 'user',
+                        for_id: job['posted_by_id']
+                    })
+
                     res.status(200).json({message: "Job & user are deleted"})
                     break;
             }

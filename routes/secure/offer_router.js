@@ -11,6 +11,7 @@ const {
   validate_apply_offer,
   offer_validation,
 } = require("../../middlewares/validation/offer");
+const Activity = require("../../models/activity_log");
 
 // todo: adding to readme later
 
@@ -89,6 +90,13 @@ router.post("/accept/:offer_id", async (req, res) => {
         job_post_id: offer["job_post_id"],
       });
       await notification.save();
+
+      await Activity.create({
+        activity_message: "Offer is accepted",
+        posted_by_id: req.user._id,
+        category: 'job',
+        for_id: offer["applicant_id"]
+      })
 
       res.status(201).json({ message: "offer accepted" });
     }

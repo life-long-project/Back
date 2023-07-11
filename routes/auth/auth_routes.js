@@ -8,6 +8,8 @@ const {
     user_validation,
 } = require("../../middlewares/validation/user");
 const User = require("../../models/user");
+const Activity = require("../../models/activity_log")
+
 
 const router = express.Router();
 
@@ -32,6 +34,12 @@ router.post(
             };
             token = jwt.sign({user: body}, jwt_secret);
             message = "Signup ,Login successful";
+            await Activity.create({
+                activity_message: message,
+                posted_by_id: user._id,
+                category: 'user',
+                for_id: user._id
+            })
         });
         res.status(201).json({
             message: message,

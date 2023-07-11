@@ -1,4 +1,6 @@
 const upload = require("../../multer");
+const Activity = require("../../models/activity_log");
+
 const {
     uploadImage,
     uploadIDs,
@@ -25,6 +27,12 @@ router.post(
             f_response.push(result.secure_url);
             const user = User.findByIdAndUpdate(req.user._id, {
                 profile_url: f_response[0],
+            })
+            await Activity.create({
+                activity_message: "User uploaded profile image",
+                posted_by_id: req.user._id,
+                category: 'user',
+                for_id: req.user._id
             })
             res.send({message: "Profile image uploaded", url: f_response[0]})
 
@@ -63,8 +71,14 @@ router.post(
             });
 
             // todo: just here make comparison between user elements and the text you get from the OCR
+            await Activity.create({
+                activity_message: "User uploaded ID image",
+                posted_by_id: req.user._id,
+                category: 'user',
+                for_id: req.user._id
+            })
 
-            res.send({
+            res.json({
                 url: result.secure_url,
                 data,
                 pure_result

@@ -7,6 +7,7 @@ const {isValidObjectId} = require("mongoose");
 const passport = require("passport");
 const upload = require("../../multer");
 const {uploadImage} = require("../../cloudinary");
+const Activity = require("../../models/activity_log");
 
 const {
     validate_job_post_create,
@@ -388,6 +389,12 @@ router.post(
             console.log(req.user._id);
             const user = await User.findById(req.user._id);
             // console.log(user)
+            await Activity.create({
+                activity_message: "Job is created",
+                posted_by_id: new_job_post.posted_by_id,
+                category: 'job',
+                for_id: new_job_post._id
+            })
 
             res.status(201).json({
                 _id: new_job_post._id,
@@ -484,6 +491,12 @@ router.patch(
                 action: "updated",
                 updated_jop_post,
             });
+            await Activity.create({
+                activity_message: "Job is updated",
+                posted_by_id: updated_jop_post.posted_by_id,
+                category: 'job',
+                for_id: updated_jop_post._id
+            })
             res.status(201).json({
                 _id: updated_jop_post._id,
                 title: updated_jop_post.job_name,
@@ -521,7 +534,13 @@ router.delete(
     get_job_post,
     async (req, res) => {
         try {
-            await res.job_post.remove();
+            await res.job_post.updateOne({is_hidden: true});
+            await Activity.create({
+                activity_message: "Job is deleted",
+                posted_by_id: res.job_post.posted_by_id,
+                category: 'job',
+                for_id: res.job_post._id
+            })
             res.status(200).json({message: "job post is deleted"});
         } catch (err) {
             res.status(400).json({message: err.message});
@@ -564,13 +583,6 @@ async function get_job_post_details(req, res, next) {
         try {
             job_post = await Job_post.aggregate([
                 // Match job post
-                {
-                    $match: {
-                        is_hidden: {
-                            $ne: true,
-                        },
-                    },
-                },
                 {
                     $match: {
                         _id: new mongoose.Types.ObjectId(job_id),
@@ -650,6 +662,12 @@ router.post("/update_status/:id", get_job_post, async (req, res) => {
     res.job_post.is_finished = req.body.is_finished;
     try {
         const updated_jop_post = await res.job_post.save();
+        await Activity.create({
+            activity_message: "Job is finished",
+            posted_by_id: updated_jop_post['accepted_user_id'],
+            category: 'job',
+            for_id: updated_jop_post._id
+        })
         res.status(201).json({
             message: "the job is now finished",
             is_finished: updated_jop_post.is_finished,

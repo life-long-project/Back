@@ -3,6 +3,7 @@ const UserModel = require("../../models/user");
 const jobs = require("../../models/job_post");
 const Report = require("../../models/report");
 const passport = require("passport");
+const Activity = require("../../models/activity_log");
 
 
 const router = require("express").Router();
@@ -23,7 +24,6 @@ router.get("/reported_jobs", async (req, res) => {
                     report_messages: job.report_messages,
                 };
             });
-
             console.log(jobsWithReportMessages)
             res.status(200).json(jobsWithReportMessages);
         }
@@ -72,13 +72,12 @@ router.post("/report_job/:id",
                 job.report_messages = report_messages
                 job.save();
 
-                // // Create a new report document in your database with the job ID and message
-                // const report = await Report.create({
-                //   reportedId: id,
-                //   report_messages: report_messages,
-                //   reporterId: reporterId,
-                //   // Add other relevant fields like reporterId, reportedUserId, timestamp as needed
-                // });
+                await Activity.create({
+                    activity_message: "Job is reported",
+                    posted_by_id: req.user._id,
+                    category: 'job',
+                    for_id: job['_id']
+                })
 
                 res.status(200).json({
                     message: "thank you for helping us !",
@@ -108,13 +107,12 @@ router.post("/report_user/:id",
                 user.report_messages = report_messages
                 user.save();
 
-                // Create a new report document in your database with the user ID and message
-                // const report = await Report.create({
-                //   reportedId: id,
-                //   report_messages: report_messages,
-                //   reporterId: reporterId,
-                //   // Add other relevant fields like reporterId, timestamp as needed
-                // });
+                await Activity.create({
+                    activity_message: "user is reported",
+                    posted_by_id: req.user._id,
+                    category: 'user',
+                    for_id: user['_id']
+                })
 
                 res.status(200).json({
                     message: "Thank you for helping us!",

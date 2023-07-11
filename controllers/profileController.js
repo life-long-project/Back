@@ -1,4 +1,6 @@
 const Profile = require("../models/user");
+const Activity = require("../models/activity_log");
+
 
 exports.createProfile = async (req, res, next) => {
   try {
