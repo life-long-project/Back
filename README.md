@@ -437,7 +437,7 @@ GET /offer/6496dfef6feefd920273f024
 DELETE /offer/6496dfef6feefd920273f024
 
 ```
-### admin request (need authentication & admin privilege)
+### admin panel request (need authentication & admin privilege)
 
 ``` 
 GET /admin
