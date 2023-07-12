@@ -187,10 +187,17 @@ router.get('/profile/:user_id', async (req, res) => {
                         from: 'users',
                         localField: 'job.posted_by_id',
                         foreignField: '_id',
-                        as: 'job.owner',
+                        as: 'job.user',
                     },
                 },
-            ])
+                {
+                    $unwind: {
+                        path: '$job.user',
+                        preserveNullAndEmptyArrays: true,
+                    },
+                },
+            ]);
+
 
             res.status(200).json({
                 user: user,
