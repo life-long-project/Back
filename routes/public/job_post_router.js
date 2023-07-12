@@ -600,12 +600,12 @@ async function get_job_post_details(req, res, next) {
                         required_experience: 1,
                         is_active: 1,
                         is_hidden: 1,
-                        is_reported:1,
+                        is_reported: 1,
                         is_finished: 1,
                         salary: 1,
                         job_duration: 1,
-                        report_messages:1,
-                        accepted_user_id:1,
+                        report_messages: 1,
+                        accepted_user_id: 1,
                         job_img_url: 1,
                         rating: 1,
                         total_Nrating: 1,
@@ -671,6 +671,33 @@ router.post("/update_status/:id", get_job_post, async (req, res) => {
             category: 'job',
             for_id: updated_jop_post._id
         })
+
+        const owner = await User.findById(res.job_post.posted_by_id)
+        const employee = await User.findById(res.job_post.accepted_user_id)
+
+        const salary = res.job_post.salary
+        const owner_wallet = owner.wallet - salary
+        const owner_total_payments = owner.total_payments + salary
+
+        const employee_wallet = employee.wallet + salary
+        const employee_total_earning = employee.wallet + salary
+
+        // owner
+        await User.findByIdAndUpdate(res.job_post.posted_by_id, {
+            $set: {
+                wallet: owner_wallet,
+                total_payments: owner_total_payments
+            }
+        })
+        // employee
+        await User.findByIdAndUpdate(res.job_post.accepted_user_id,  {
+            $set: {
+                wallet: employee_wallet,
+                total_earning: employee_total_earning
+            }
+        })
+
+
         res.status(201).json({
             message: "the job is now finished",
             is_finished: updated_jop_post.is_finished,

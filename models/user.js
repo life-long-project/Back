@@ -102,6 +102,19 @@ const UserSchema = new Schema(
             type: String,
             default: "there is no reports",
         },
+        total_earning: {
+            type: Number,
+            default: 0,
+        },
+        total_payments: {
+            type: Number,
+            default: 0,
+        },
+        wallet: {
+            type: Number,
+            default: 500
+        }
+
     },
     {
         timestamps: true,

@@ -77,6 +77,7 @@ router.post("/accept/:offer_id", async (req, res) => {
         {
           $set: {
             accepted_user_id: offer["applicant_id"],
+            salary: offer['price'],
             is_active: false,
           },
         },
