@@ -637,14 +637,55 @@ async function get_job_post_details(req, res, next) {
                         as: "comments",
                     },
                 },
+                //
                 {
                     $lookup: {
                         from: "offers",
-                        localField: "_id",
-                        foreignField: "job_post_id",
+                        let: {job_id: "$_id"},
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {$eq: ["$job_post_id", "$$job_id"]},
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "users",
+                                    localField: "applicant_id",
+                                    foreignField: "_id",
+                                    as: "owner",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$owner",
+                                    preserveNullAndEmptyArrays: true,
+                                },
+                            },
+                        ],
                         as: "offers",
                     },
                 },
+
+                //
+                // {
+                //     $lookup: {
+                //         from: "offers",
+                //         localField: "_id",
+                //         foreignField: "job_post_id",
+                //         as: "offers",
+                //     },
+                // },
+                // // Join offers with its owner user
+                // {
+                //     $lookup: {
+                //         from: "users",
+                //         localField: "offers.applicant_id",
+                //         foreignField: "_id",
+                //         as: "offers.owner",
+                //     },
+                // },
+
             ]);
             if (job_post == null) {
                 return res
@@ -690,7 +731,7 @@ router.post("/update_status/:id", get_job_post, async (req, res) => {
             }
         })
         // employee
-        await User.findByIdAndUpdate(res.job_post.accepted_user_id,  {
+        await User.findByIdAndUpdate(res.job_post.accepted_user_id, {
             $set: {
                 wallet: employee_wallet,
                 total_earning: employee_total_earning
