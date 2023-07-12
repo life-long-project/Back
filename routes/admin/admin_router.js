@@ -24,7 +24,49 @@ router.get('/', async (req, res) => {
     const users = await User.find();
     const total_users = await User.countDocuments();
 // get all jobs
-    const job_posts = await Job_post.find();
+//     const job_posts = await Job_post.find();
+    const job_posts = await Job_post.aggregate([
+        {
+            $sort: 1,
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "posted_by_id",
+                foreignField: "_id",
+                as: "user",
+            },
+        },
+        {
+            $unwind: {
+                path: "$user",
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                job_name: 1,
+                posted_by_id: 1,
+                job_description: 1,
+                job_skills: 1,
+                job_type: 1,
+                job_location: 1,
+                required_experience: 1,
+                is_active: 1,
+                is_hidden: 1,
+                salary: 1,
+                job_duration: 1,
+                job_img_url: 1,
+                rating: 1,
+                total_Nrating: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                user: 1,
+                is_finished: 1,
+            },
+        },
+    ]);
     const total_job_posts = await Job_post.countDocuments();
 
 // get reported users
@@ -32,7 +74,54 @@ router.get('/', async (req, res) => {
     const total_reported_users = await User.find({'is_reported': true}).countDocuments();
 
 // get reported jobs
-    const reported_job_posts = await Job_post.find({'is_reported': true})
+//     const reported_job_posts = await Job_post.find({'is_reported': true})
+    const reported_job_posts = await Job_post.aggregate([
+        {
+            $match: {
+                is_reported: true,
+            },
+        },
+        {
+            $sort: 1,
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "posted_by_id",
+                foreignField: "_id",
+                as: "user",
+            },
+        },
+        {
+            $unwind: {
+                path: "$user",
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                job_name: 1,
+                posted_by_id: 1,
+                job_description: 1,
+                job_skills: 1,
+                job_type: 1,
+                job_location: 1,
+                required_experience: 1,
+                is_active: 1,
+                is_hidden: 1,
+                salary: 1,
+                job_duration: 1,
+                job_img_url: 1,
+                rating: 1,
+                total_Nrating: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                user: 1,
+                is_finished: 1,
+            },
+        },
+    ]);
     const total_reported_job_posts = await Job_post.find({'is_reported': true}).countDocuments();
 
 // get activity
