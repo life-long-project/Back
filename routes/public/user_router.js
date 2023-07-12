@@ -164,22 +164,30 @@ router.get('/profile/:user_id', async (req, res) => {
             const pending_offers = await Offer.aggregate([
                 {
                     $match: {
-                        'applicant_id': new mongoose.Types.ObjectId(user_id),
-                        'status': 'pending',
+                        applicant_id: new mongoose.Types.ObjectId(user_id),
+                        status: 'pending',
                     },
                 },
                 {
                     $lookup: {
-                        from: "job_posts",
-                        localField: "job_post_id",
-                        foreignField: "_id",
-                        as: "job",
+                        from: 'job_posts',
+                        localField: 'job_post_id',
+                        foreignField: '_id',
+                        as: 'job',
                     },
                 },
                 {
                     $unwind: {
-                        path: "$job",
+                        path: '$job',
                         preserveNullAndEmptyArrays: true,
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'job.posted_by_id',
+                        foreignField: '_id',
+                        as: 'job.owner',
                     },
                 },
             ])
