@@ -3,6 +3,7 @@ const Job = require("../../models/job_post")
 const express = require('express')
 const router = express.Router()
 const Rate = require("../../models/user_rate")
+const Offer = require('../../models/offer')
 const mongoose = require("mongoose");
 const {isValidObjectId, ObjectId} = require("mongoose");
 
@@ -160,12 +161,35 @@ router.get('/profile/:user_id', async (req, res) => {
             // rates for the user
             const rates = await Rate.find({'rated_id': user_id})
 
+            const pending_offers = await Offer.aggregate([
+                {
+                    $match: {
+                        'applicant_id': new mongoose.Types.ObjectId(user_id),
+                        'status': 'pending',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "job_posts",
+                        localField: "job_post_id",
+                        foreignField: "_id",
+                        as: "job",
+                    },
+                },
+                {
+                    $unwind: {
+                        path: "$job",
+                        preserveNullAndEmptyArrays: true,
+                    },
+                },
+            ])
 
             res.status(200).json({
                 user: user,
                 user_jobs: user_jobs,
                 accepted_jobs: accepted_jobs,
-                rates: rates
+                rates: rates,
+                pending_offers: pending_offers
             })
         } catch (e) {
             res.status(500).json({

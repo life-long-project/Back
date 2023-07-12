@@ -39,6 +39,7 @@ exports.validate_job_post_create = [
         .isLength({min: 3, max: 400}).withMessage('Job description must be between 3 and 400 characters'),
 
     check('skills')
+
         .notEmpty().withMessage('skills required!')
 
     // .isArray().withMessage('Skills must be an array of strings')
