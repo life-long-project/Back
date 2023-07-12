@@ -27,9 +27,6 @@ router.get('/', async (req, res) => {
 //     const job_posts = await Job_post.find();
     const job_posts = await Job_post.aggregate([
         {
-            $sort: 1,
-        },
-        {
             $lookup: {
                 from: "users",
                 localField: "posted_by_id",
@@ -65,6 +62,9 @@ router.get('/', async (req, res) => {
                 user: 1,
                 is_finished: 1,
             },
+        },
+        {
+            $sort: {updatedAt: 1},
         },
     ]);
     const total_job_posts = await Job_post.countDocuments();
@@ -82,9 +82,6 @@ router.get('/', async (req, res) => {
             },
         },
         {
-            $sort: 1,
-        },
-        {
             $lookup: {
                 from: "users",
                 localField: "posted_by_id",
@@ -120,6 +117,9 @@ router.get('/', async (req, res) => {
                 user: 1,
                 is_finished: 1,
             },
+        },
+        {
+            $sort: {updatedAt:1},
         },
     ]);
     const total_reported_job_posts = await Job_post.find({'is_reported': true}).countDocuments();
