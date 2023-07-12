@@ -34,7 +34,6 @@ const job_post_schema = new mongoose.Schema(
             required: true,
             default: "test",
         },
-        // todo : edit readme
         required_experience: {
             type: String,
             required: false,

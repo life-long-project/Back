@@ -15,7 +15,7 @@ fields required for rating from owner
 exports.validate_rate=[
     check('rating')
         .notEmpty().withMessage('rating is required')
-        .isInt({min: 1, max: 5}).withMessage('Rating must be between 1 and 5'),
+        .isFloat({min: 1, max: 5}).withMessage('Rating must be between 1 and 5'),
     check('feedback')
         .optional()
         .trim()
