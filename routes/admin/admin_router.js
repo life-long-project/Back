@@ -64,7 +64,7 @@ router.get('/', async (req, res) => {
             },
         },
         {
-            $sort: {updatedAt: 1},
+            $sort: {updatedAt: -1},
         },
     ]);
     const total_job_posts = await Job_post.countDocuments();
@@ -119,7 +119,7 @@ router.get('/', async (req, res) => {
             },
         },
         {
-            $sort: {updatedAt:1},
+            $sort: {updatedAt: -1},
         },
     ]);
     const total_reported_job_posts = await Job_post.find({'is_reported': true}).countDocuments();
