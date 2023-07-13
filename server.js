@@ -13,16 +13,16 @@ const server = require("http").createServer(app);
 const io = socketio(server);
 require("./socket/index")(io);
 
-io.on("connection", (socket) => {
-  // console.log("a user connected");
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-    const user = getUser(receiverId);
-    io.to(user.socketId).emit("newMessage", {
-      senderId,
-      text,
-    });
-  });
-});
+// io.on("connection", (socket) => {
+//   // console.log("a user connected");
+//   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+//     const user = getUser(receiverId);
+//     io.to(user.socketId).emit("newMessage", {
+//       senderId,
+//       text,
+//     });
+//   });
+// });
 
 // Mongo db
 mongoose.set("strictQuery", false);
