@@ -75,8 +75,6 @@ GET  https://back-ph2h.onrender.com/jobs/?job_type=full-time,part-time,service
 GET  https://back-ph2h.onrender.com/jobs/?city=tanta
 ```
 
-
-
 ##### to sort the jobs by specific column and ascending order
 
 ```
@@ -122,8 +120,9 @@ GET https://back-ph2h.onrender.com/user
 ```
 
 #### related
+
 ```
-                                      
+
 GET https://back-ph2h.onrender.com/jobs/related
 ```
 
@@ -437,52 +436,62 @@ GET /offer/6496dfef6feefd920273f024
 DELETE /offer/6496dfef6feefd920273f024
 
 ```
+
 ### admin panel request (need authentication & admin privilege)
 
-``` 
+```
 GET /admin
 
 ```
 
 ### admin to upgrade an user privilege to admin privilege
+
 ```
                          /----- user id ----------/
 POST /admin/user/upgrade/6496dfef6feefd920273f024
 ```
+
 ### admin to upgrade other admin privilege to user privilege
+
 ```
                            /----- user id ----------/
 POST /admin/user/downgrade/6496dfef6feefd920273f024
 ```
+
 ### admin to block a user
+
 ```
                        /----- user id ----------/
 POST /admin/user/block/6496dfef6feefd920273f024
 ```
+
 ### admin to unblock a user
-```
-                         /----- user id ----------/
-POST /admin/user/unblock/6496dfef6feefd920273f024
-```
-### admin to delete(actually hidden & block) a user account
+
 ```
                          /----- user id ----------/
 POST /admin/user/unblock/6496dfef6feefd920273f024
 ```
 
+### admin to delete(actually hidden & block) a user account
+
+```
+                         /----- user id ----------/
+POST /admin/user/unblock/6496dfef6feefd920273f024
+```
 
 ### admin to delete a job
+
 ```
                        /----- job id ----------/
 POST /admin/job/delete/6496dfef6feefd920273f024
 ```
 
 ### admin to delete a job & the owner
+
 ```
                             /----- job id ----------/
 POST /admin/job/delete_both/6496dfef6feefd920273f024
 ```
-
 
 ---
 
@@ -574,7 +583,7 @@ https://back-ph2h.onrender.com/conversation/chats/6463b901b377ff4bae1c9c1a
 
 ### to report a job post or a user (need auth_token)
 
-post request "/report/report_job/64a893b7205107f13de57c2d"
+post request "/report/reported_jobs/64a893b7205107f13de57c2d"
 this /:id refers to the (job post id )
 the body should have :
 {
