@@ -103,7 +103,7 @@ router.get("/chats/:userId", async (req, res) => {
         conversations.map(async (conversation) => {
           const lastMessage = await message_model
             .findOne({
-              conversation: conversation._id,
+              conversationId: conversation._id,
             })
             .sort({ createdAt: -1 });
           return { conversation, lastMessage };
@@ -119,5 +119,4 @@ router.get("/chats/:userId", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch user chats" });
   }
 });
-
 module.exports = router;
