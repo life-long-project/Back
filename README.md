@@ -588,7 +588,6 @@ this /:id refers to the (job post id )
 the body should have :
 {
 "report_messages":"this doesn't make sense to me",
-"reporterId":"64a16604493228d42c997761"
 }
 
 ################################################################
