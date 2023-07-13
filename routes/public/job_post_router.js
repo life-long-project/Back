@@ -165,6 +165,11 @@ router.get("/", async (req, res) => {
             },
             {
                 $match: {
+                    is_reported: false,
+                },
+            },
+            {
+                $match: {
                     $or: [
                         {
                             job_name: {
@@ -252,6 +257,7 @@ router.get("/", async (req, res) => {
                     updatedAt: 1,
                     user: 1,
                     is_finished: 1,
+                    is_reported: 1,
                 },
             },
         ]);
@@ -413,6 +419,7 @@ router.post(
                 createdAt: new_job_post.createdAt,
                 updatedAt: new_job_post.updatedAt,
                 is_finished: new_job_post.is_finished,
+                is_reported: new_job_post.is_reported,
                 user: user,
             });
         } catch (error) {
@@ -462,6 +469,9 @@ router.patch(
         }
         if (req.body.duration != null) {
             res.job_post.job_duration = req.body.duration;
+        }
+        if (req.body.is_reported != null) {
+            res.job_post.is_reported = req.body.duration;
         }
         if (req.files != null) {
             // console.log(req.body, files);
@@ -601,7 +611,6 @@ async function get_job_post_details(req, res, next) {
                         is_active: 1,
                         is_hidden: 1,
                         is_reported: 1,
-                        is_finished: 1,
                         salary: 1,
                         job_duration: 1,
                         report_messages: 1,
@@ -612,6 +621,8 @@ async function get_job_post_details(req, res, next) {
                         createdAt: 1,
                         updatedAt: 1,
                         user: 1,
+                        is_finished: 1,
+                        is_reported: 1,
                     },
                 },
                 // Join with users collection
