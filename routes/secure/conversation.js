@@ -101,9 +101,11 @@ router.get("/chats/:userId", async (req, res) => {
       // Get the last message of each conversation
       const conversationsWithLastMessage = await Promise.all(
         conversations.map(async (conversation) => {
-          const lastMessage = await Message.findOne({
-            conversation: conversation._id,
-          }).sort({ createdAt: -1 });
+          const lastMessage = await message_model
+            .findOne({
+              conversation: conversation._id,
+            })
+            .sort({ createdAt: -1 });
           return { conversation, lastMessage };
         })
       );
