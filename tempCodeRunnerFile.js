@@ -1,0 +1,1 @@
+mongodb+srv://xmosb7:xmosb7@cluster0.hpsckra.mongodb.net/shaghlny?retryWrites=true&w=majority

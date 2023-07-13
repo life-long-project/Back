@@ -146,6 +146,11 @@ router.get("/", async (req, res) => {
       },
       {
         $match: {
+          is_reported: false,
+        },
+      },
+      {
+        $match: {
           is_hidden: false,
         },
       },
@@ -221,6 +226,7 @@ router.get("/", async (req, res) => {
           updatedAt: 1,
           user: 1,
           is_finished: 1,
+          is_reported: 1,
         },
       },
     ]);
@@ -361,6 +367,7 @@ router.post(
         createdAt: new_job_post.createdAt,
         updatedAt: new_job_post.updatedAt,
         is_finished: new_job_post.is_finished,
+        is_reported: new_job_post.is_reported,
         user: user,
       });
     } catch (error) {
@@ -404,6 +411,9 @@ router.patch(
     }
     if (req.body.salary != null) {
       res.job_post.salary = req.body.salary;
+    }
+    if (req.body.is_reported != null) {
+      res.job_post.is_reported = req.body.duration;
     }
     if (req.body.is_finished != null) {
       res.job_post.is_finished = req.body.is_finished;
@@ -455,6 +465,7 @@ router.patch(
         createdAt: updated_jop_post.createdAt,
         updatedAt: updated_jop_post.updatedAt,
         is_finished: updated_jop_post.is_finished,
+        is_reported: updated_jop_post.is_reported,
       });
     } catch (err) {
       res.status(400).json({ message: err.message });
@@ -552,6 +563,7 @@ async function get_job_post_details(req, res, next) {
             updatedAt: 1,
             user: 1,
             is_finished: 1,
+            is_reported: 1,
           },
         },
         // Join with users collection
