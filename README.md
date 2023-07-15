@@ -494,6 +494,14 @@ POST /admin/job/delete_both/6496dfef6feefd920273f024
 ```
 
 ---
+### chatgpt API
+``` 
+POST /chat
+
+```
+
+
+---
 
 #### the profile api contains :
 

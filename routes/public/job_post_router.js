@@ -277,6 +277,11 @@ router.get("/", async (req, res) => {
             },
             {
                 $match: {
+                    is_reported: false,
+                },
+            },
+            {
+                $match: {
                     $or: [
                         {
                             job_name: {
@@ -317,6 +322,8 @@ router.get("/", async (req, res) => {
                     },
                 },
             },
+
+
         ]);
         const response = {
             error: false,
