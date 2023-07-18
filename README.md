@@ -505,24 +505,33 @@ POST /chat
 
 #### the profile api contains :
 
-- getting one profile (by direct click on the user_name or by search method) (get)
+## getting one profile (by direct click on the user_name or by search method) (get)
 
+```
 - https://back-ph2h.onrender.com/profile/64a37fe71eb603da27a61e72
+```
 
-- updating the user profile (patch)
+## updating the user profile (patch)
+
+```
 - https://back-ph2h.onrender.com/profile/64a37fe71eb603da27a61e72
 - {
   "phone":"5555555"
   }
+```
 
-- getting all the profiles (only by admin)(not accessable by this user )
+## getting all the profiles (only by admin)(not accessable by this user )
+
+```
 - https://back-ph2h.onrender.com/profile/
+```
 
-- deleting user profile (only by admin) -https://back-ph2h.onrender.com/profile/the user id
+### deleting user profile (only by admin)
 
-- creating a new profile (only in sign up) X X X X X X X X X X X
+```
+https://back-ph2h.onrender.com/profile/the user id
 
-##################################################################################################################################################################
+```
 
 ##### the conversation api contains
 
@@ -542,18 +551,17 @@ POST /chat
 ```
 post request :
 https://back-ph2h.onrender.com/conversation/first_message
+```
 
 in the body of this request you should provide :
-senderId :
-receiverId :
-text :
-|||||||||||||| the body
 {
 "senderId":"6463b901b377ff4bae1c9c1a",
 "receiverId":"6450ca3370ca0d14ce63542d",
 "text" :"heyy this is my second mrssage as a reply"
 }
-|||||||||||||
+
+```
+
 ```
 
 ### to send messeges insdie the conversation
@@ -563,16 +571,11 @@ post request
 https://back-ph2h.onrender.com/conversation/new_message
 
 in the body of this request you should provide :
-sender:
-conversationId:
-text:
-|||||||||||||| the body
 {
 "sender":"64500e8576088eaedd21fff0",
 "conversationId":"6465190867734265dde8bfb9",
 "text" :"heyy this is my third mrssage"
 }
-||||||||||||||
 ```
 
 ### to get the conversation content (messeges)
@@ -589,38 +592,59 @@ get request "/conversation/chats/:userId"
 https://back-ph2h.onrender.com/conversation/chats/6463b901b377ff4bae1c9c1a
 ```
 
-### to report a job post or a user (need auth_token)
+#### to report a job post
 
+```
 post request "/report/reported_jobs/64a893b7205107f13de57c2d"
-this /:id refers to the (job post id )
+```
+
 the body should have :
 {
 "report_messages":"this doesn't make sense to me",
 }
 
-################################################################
+```
 
+```
+
+#### to report a user
+
+```
 post request "/report/report_user/64a8b01ba074b1554a7dc4c5"
-this /:id refers to the (reported user id )
 the body should have :
 {
 "report_messages":"this user violates the service conditions",
 "reporterId":"64a8b01ba074b1554a7dc4c5"
 }
+```
 
-################################################################
-and for the admin he can get the reported users or the repoted job posts :
+#### and for the admin he can get the reported users or the repoted job posts :
 
-. to get the reported job posts :
+```
+
+```
+
+### to get the reported job posts :
+
+```
 get request "/report/reported_jobs"
+```
 
-. to get the reported users :
+### to get the reported users :
+
+```
 get request "/report/reported_users"
-##################################################################
-change the job status :
+```
+
+### change the job status :
+
 post request "/jobs/update_status/64a89e201697e8996e61bbed"
 
 with a body content of :
 {
 "is_finished":"true"
 }
+
+```
+
+```
