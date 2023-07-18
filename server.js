@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const socketio = require("socket.io");
 const nodemon = require("nodemon");
+const dotenv = require("dotenv");
 const expressValidator = require("express-validator");
 
 const server = require("http").createServer(app);
@@ -23,13 +24,11 @@ require("./socket/index")(io);
 //     });
 //   });
 // });
+dotenv.config({ path: "./.env" });
 
 // Mongo db
 mongoose.set("strictQuery", false);
-mongoose.connect(
-  //process.env.DB_URL
-  "mongodb+srv://xmosb7:xmosb7@cluster0.hpsckra.mongodb.net/shaghlny?retryWrites=true&w=majority"
-);
+mongoose.connect(process.env.DB_URL);
 const db = mongoose.connection;
 db.on("error", (error) =>
   console.error("Error while connecting to mongodb " + error)
