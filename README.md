@@ -494,12 +494,13 @@ POST /admin/job/delete_both/6496dfef6feefd920273f024
 ```
 
 ---
+
 ### chatgpt API
-``` 
+
+```
 POST /chat
 
 ```
-
 
 ---
 
@@ -551,7 +552,7 @@ https://back-ph2h.onrender.com/profile/the user id
 ```
 post request :
 https://back-ph2h.onrender.com/conversation/first_message
-```
+
 
 in the body of this request you should provide :
 {
@@ -560,7 +561,7 @@ in the body of this request you should provide :
 "text" :"heyy this is my second mrssage as a reply"
 }
 
-```
+
 
 ```
 
@@ -596,7 +597,6 @@ https://back-ph2h.onrender.com/conversation/chats/6463b901b377ff4bae1c9c1a
 
 ```
 post request "/report/reported_jobs/64a893b7205107f13de57c2d"
-```
 
 the body should have :
 {
@@ -605,12 +605,11 @@ the body should have :
 
 ```
 
-```
-
 #### to report a user
 
 ```
 post request "/report/report_user/64a8b01ba074b1554a7dc4c5"
+
 the body should have :
 {
 "report_messages":"this user violates the service conditions",
@@ -619,10 +618,6 @@ the body should have :
 ```
 
 #### and for the admin he can get the reported users or the repoted job posts :
-
-```
-
-```
 
 ### to get the reported job posts :
 
@@ -638,13 +633,11 @@ get request "/report/reported_users"
 
 ### change the job status :
 
+```
 post request "/jobs/update_status/64a89e201697e8996e61bbed"
 
 with a body content of :
 {
 "is_finished":"true"
 }
-
-```
-
 ```
