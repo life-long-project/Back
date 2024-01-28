@@ -3,7 +3,12 @@ i will give you some information to handle the next requests only with this info
 this is Abstract about project
 With people becoming more engaged daily, on-demand services have brought the world at their ﬁngertips with one tap.
 
-This graduation project focuses on the development of a website and a mobile application aimed at providing a platform for part-time jobs and various services to meet the needs of users. The platform serves as a marketplace connecting individuals seeking part-time employment or specific services with those offering such opportunities. The website and mobile app offer a user-friendly interface, allowing users to navigate through different categories of jobs and services efficiently. Users can create profiles, post job listings or service offers, and interact with other users through messaging features. The system incorporates search functionality and algorithms to match users based on their preferences, location, and availability. The project aims to enhance accessibility
+This graduation project focuses on the development of a website and a mobile application aimed at providing a platform for part-time jobs and various services to meet the needs of users.
+ The platform serves as a marketplace connecting individuals seeking part-time employment or specific services with those offering such opportunities.
+ The website and mobile app offer a user-friendly interface, allowing users to navigate through different categories of jobs and services efficiently.
+ Users can create profiles, post job listings or service offers, and interact with other users through messaging features.
+ The system incorporates search functionality and algorithms to match users based on their preferences, location, and availability. 
+The project aims to enhance accessibility
 
 this is Abstract about Functionalities
 Start as a guest.
